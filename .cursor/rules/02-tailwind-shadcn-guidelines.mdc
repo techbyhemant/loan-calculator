@@ -1,0 +1,21 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Styling + design-system rules for Tailwind & shadcn/ui
+alwaysApply: true
+---
+
+- **Never hard-code CSS values.**  
+  Use `theme()` tokens defined in `tailwind.config.ts`.  
+- **Spacing scale:** only multiples of `0.5rem` (2 → `p-2`, `mx-4`, …).  
+- **Color naming:** use semantic names (`bg-primary/10`, `text-muted-foreground`).  
+- **Shadow / radius:** `shadow-sm | shadow-md | shadow-lg`, `rounded-sm | rounded-lg`.  
+- **Dark mode:** class strategy. Use `data-[theme=dark]:` utilities for ad-hoc cases.  
+- **shadcn components:**  
+  - Extend via `className` prop, not by editing generated files.  
+  - Re-export customised variants from `/components/ui` to keep imports short.  
+- **Animations:** prefer `tailwindcss-animate`; keep keyframes in `tailwind.config.ts` extension.
+

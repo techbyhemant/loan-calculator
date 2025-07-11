@@ -1,0 +1,36 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Global coding standards for this project
+alwaysApply: true
+---
+
+# Global Principles
+- **Use semantic HTML** (`header`, `main`, `section`, `nav`, `button`, etc.).  
+  Avoid unnecessary wrapper `<div>`s.  
+- **Flatten the DOM:** never nest more than three levels unless a11y demands it.  
+- **Keep components atomic:** 1 file ≈ 1 responsibility; colocate only what belongs together.
+- **File structure** follows *feature-first* convention:  
+/features/[domain]/
+component.tsx
+component.test.tsx
+index.ts
+
+- **Imports:** always use absolute paths (`@/components/...`) via `tsconfig.json` paths.
+
+# Preferred libraries & patterns
+- UI primitives: `@/components/ui/*` exported from shadcn.  
+- Animation: `framer-motion`; hide variants in `/lib/animations`.
+- State:  React Context ➜ Zustand ➜ Redux Toolkit (only if unavoidable).
+
+# Code Style
+- Use **TypeScript strict mode**.  
+- Props interfaces are named `XxxProps`.  
+- No `any`; fallback to `unknown` + type-guard.  
+- Separate UI and side-effects (hooks live in `/lib/hooks`).
+
+# Commit message convention
+`<type>(scope): summary` — e.g. `feat(button): add loading state`

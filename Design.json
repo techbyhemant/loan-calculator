@@ -1,0 +1,265 @@
+{
+  "shadcn": {
+    "tailwind.config.js": {
+      "theme": {
+        "extend": {
+          "colors": {
+            "border": "hsl(var(--border))",
+            "input": "hsl(var(--input))",
+            "ring": "hsl(var(--ring))",
+            "background": "hsl(var(--background))",
+            "foreground": "hsl(var(--foreground))",
+            "primary": {
+              "DEFAULT": "hsl(var(--primary))",
+              "foreground": "hsl(var(--primary-foreground))"
+            },
+            "secondary": {
+              "DEFAULT": "hsl(var(--secondary))",
+              "foreground": "hsl(var(--secondary-foreground))"
+            },
+            "destructive": {
+              "DEFAULT": "hsl(var(--destructive))",
+              "foreground": "hsl(var(--destructive-foreground))"
+            },
+            "muted": {
+              "DEFAULT": "hsl(var(--muted))",
+              "foreground": "hsl(var(--muted-foreground))"
+            },
+            "accent": {
+              "DEFAULT": "hsl(var(--accent))",
+              "foreground": "hsl(var(--accent-foreground))"
+            },
+            "popover": {
+              "DEFAULT": "hsl(var(--popover))",
+              "foreground": "hsl(var(--popover-foreground))"
+            },
+            "card": {
+              "DEFAULT": "hsl(var(--card))",
+              "foreground": "hsl(var(--card-foreground))"
+            },
+            "chart": {
+              "1": "hsl(var(--chart-1))",
+              "2": "hsl(var(--chart-2))",
+              "3": "hsl(var(--chart-3))",
+              "4": "hsl(var(--chart-4))",
+              "5": "hsl(var(--chart-5))"
+            },
+            "sidebar": {
+              "DEFAULT": "hsl(var(--sidebar-background))",
+              "foreground": "hsl(var(--sidebar-foreground))",
+              "primary": "hsl(var(--sidebar-primary))",
+              "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+              "accent": "hsl(var(--sidebar-accent))",
+              "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+              "border": "hsl(var(--sidebar-border))",
+              "ring": "hsl(var(--sidebar-ring))"
+            }
+          },
+          "borderRadius": {
+            "lg": "var(--radius)",
+            "md": "calc(var(--radius) - 2px)",
+            "sm": "calc(var(--radius) - 4px)"
+          },
+          "fontFamily": {
+            "sans": ["Inter", "system-ui", "sans-serif"],
+            "mono": ["ui-monospace", "SF Mono", "monospace"]
+          },
+          "animation": {
+            "accordion-down": "accordion-down 0.2s ease-out",
+            "accordion-up": "accordion-up 0.2s ease-out",
+            "collapsible-down": "collapsible-down 0.2s ease-out",
+            "collapsible-up": "collapsible-up 0.2s ease-out"
+          },
+          "keyframes": {
+            "accordion-down": {
+              "from": { "height": "0" },
+              "to": { "height": "var(--radix-accordion-content-height)" }
+            },
+            "accordion-up": {
+              "from": { "height": "var(--radix-accordion-content-height)" },
+              "to": { "height": "0" }
+            },
+            "collapsible-down": {
+              "from": { "height": "0" },
+              "to": { "height": "var(--radix-collapsible-content-height)" }
+            },
+            "collapsible-up": {
+              "from": { "height": "var(--radix-collapsible-content-height)" },
+              "to": { "height": "0" }
+            }
+          }
+        }
+      }
+    },
+    "globals.css": {
+      "lightMode": {
+        "--background": "210 20% 98%",
+        "--foreground": "222.2 84% 4.9%",
+        "--card": "0 0% 100%",
+        "--card-foreground": "222.2 84% 4.9%",
+        "--popover": "0 0% 100%",
+        "--popover-foreground": "222.2 84% 4.9%",
+        "--primary": "210 40% 20%",
+        "--primary-foreground": "210 40% 98%",
+        "--secondary": "210 40% 96%",
+        "--secondary-foreground": "222.2 84% 4.9%",
+        "--muted": "210 40% 96%",
+        "--muted-foreground": "215.4 16.3% 46.9%",
+        "--accent": "158 64% 52%",
+        "--accent-foreground": "210 40% 98%",
+        "--destructive": "0 84.2% 60.2%",
+        "--destructive-foreground": "210 40% 98%",
+        "--border": "214.3 31.8% 91.4%",
+        "--input": "214.3 31.8% 91.4%",
+        "--ring": "158 64% 52%",
+        "--chart-1": "210 40% 20%",
+        "--chart-2": "43 96% 56%",
+        "--chart-3": "158 64% 52%",
+        "--chart-4": "215.4 16.3% 46.9%",
+        "--chart-5": "0 84.2% 60.2%",
+        "--sidebar-background": "0 0% 98%",
+        "--sidebar-foreground": "240 5.3% 26.1%",
+        "--sidebar-primary": "240 5.9% 10%",
+        "--sidebar-primary-foreground": "0 0% 98%",
+        "--sidebar-accent": "240 4.8% 95.9%",
+        "--sidebar-accent-foreground": "240 5.9% 10%",
+        "--sidebar-border": "220 13% 91%",
+        "--sidebar-ring": "217.2 10.6% 64.9%",
+        "--radius": "0.5rem"
+      },
+      "darkMode": {
+        "--background": "222.2 84% 4.9%",
+        "--foreground": "210 40% 98%",
+        "--card": "222.2 84% 4.9%",
+        "--card-foreground": "210 40% 98%",
+        "--popover": "222.2 84% 4.9%",
+        "--popover-foreground": "210 40% 98%",
+        "--primary": "158 64% 52%",
+        "--primary-foreground": "222.2 84% 4.9%",
+        "--secondary": "217.2 32.6% 17.5%",
+        "--secondary-foreground": "210 40% 98%",
+        "--muted": "217.2 32.6% 17.5%",
+        "--muted-foreground": "215 20.2% 65.1%",
+        "--accent": "158 64% 52%",
+        "--accent-foreground": "222.2 84% 4.9%",
+        "--destructive": "0 62.8% 30.6%",
+        "--destructive-foreground": "210 40% 98%",
+        "--border": "217.2 32.6% 17.5%",
+        "--input": "217.2 32.6% 17.5%",
+        "--ring": "158 64% 52%",
+        "--chart-1": "158 64% 52%",
+        "--chart-2": "43 96% 56%",
+        "--chart-3": "210 40% 20%",
+        "--chart-4": "215 20.2% 65.1%",
+        "--chart-5": "0 62.8% 30.6%",
+        "--sidebar-background": "240 5.9% 10%",
+        "--sidebar-foreground": "240 4.8% 95.9%",
+        "--sidebar-primary": "224.3 76.3% 94.1%",
+        "--sidebar-primary-foreground": "240 5.9% 10%",
+        "--sidebar-accent": "240 3.7% 15.9%",
+        "--sidebar-accent-foreground": "240 4.8% 95.9%",
+        "--sidebar-border": "240 3.7% 15.9%",
+        "--sidebar-ring": "217.2 10.6% 64.9%",
+        "--radius": "0.5rem"
+      }
+    }
+  },
+  "componentMappings": {
+    "loanCalculator": {
+      "card": "Card",
+      "button": "Button",
+      "input": "Input",
+      "label": "Label",
+      "badge": "Badge",
+      "table": "Table",
+      "progress": "Progress",
+      "alert": "Alert",
+      "tooltip": "Tooltip"
+    },
+    "financialComponents": {
+      "emiCard": {
+        "component": "Card",
+        "variants": {
+          "default": "border-border bg-card text-card-foreground",
+          "highlighted": "border-accent bg-card text-card-foreground shadow-lg"
+        }
+      },
+      "calculateButton": {
+        "component": "Button",
+        "variant": "default",
+        "className": "bg-accent text-accent-foreground hover:bg-accent/90"
+      },
+      "savingsAlert": {
+        "component": "Alert",
+        "variant": "default",
+        "className": "border-chart-3 bg-chart-3/10 text-chart-3-foreground"
+      },
+      "interestBadge": {
+        "component": "Badge",
+        "variant": "destructive",
+        "className": "bg-destructive text-destructive-foreground"
+      },
+      "statusBadge": {
+        "component": "Badge",
+        "variants": {
+          "approved": "bg-chart-3 text-chart-3-foreground",
+          "pending": "bg-chart-2 text-chart-2-foreground",
+          "rejected": "bg-destructive text-destructive-foreground"
+        }
+      }
+    }
+  },
+  "customComponents": {
+    "EMIChart": {
+      "description": "Pie chart for principal vs interest breakdown",
+      "colors": {
+        "principal": "hsl(var(--chart-1))",
+        "interest": "hsl(var(--chart-2))",
+        "savings": "hsl(var(--chart-3))"
+      }
+    },
+    "LoanTable": {
+      "description": "Amortization schedule table",
+      "styling": {
+        "header": "bg-muted text-muted-foreground",
+        "row": "border-b border-border",
+        "alternateRow": "bg-muted/50"
+      }
+    },
+    "InterestSavingsCard": {
+      "description": "Highlight savings from prepayments",
+      "styling": {
+        "container": "border-chart-3 bg-chart-3/10 text-foreground",
+        "title": "text-chart-3 font-semibold",
+        "amount": "text-chart-3 text-2xl font-bold"
+      }
+    }
+  },
+  "usage": {
+    "installation": {
+      "steps": [
+        "npx shadcn-ui@latest init",
+        "Copy the CSS variables to your globals.css",
+        "Update your tailwind.config.js with the extended theme",
+        "Install required components: npx shadcn-ui@latest add button card input label badge table progress alert tooltip"
+      ]
+    },
+    "examples": {
+      "basicEMICard": {
+        "jsx": "<Card className=\"p-6\"><CardHeader><CardTitle>EMI Calculator</CardTitle></CardHeader><CardContent><div className=\"space-y-4\"><div><Label htmlFor=\"amount\">Loan Amount</Label><Input id=\"amount\" placeholder=\"Enter amount\" /></div><Button className=\"w-full\">Calculate EMI</Button></div></CardContent></Card>"
+      },
+      "savingsAlert": {
+        "jsx": "<Alert className=\"border-chart-3 bg-chart-3/10\"><AlertDescription>You can save ₹15,000 in interest with a prepayment of ₹50,000</AlertDescription></Alert>"
+      },
+      "statusBadge": {
+        "jsx": "<Badge className=\"bg-chart-3 text-chart-3-foreground\">Loan Approved</Badge>"
+      }
+    }
+  },
+  "notes": {
+    "compatibility": "This configuration is fully compatible with shadcn/ui v0.8.0+",
+    "colorSystem": "Uses HSL color space as required by shadcn",
+    "customization": "All colors can be customized by modifying the CSS variables",
+    "charts": "Chart colors are mapped to your financial data visualization needs"
+  }
+}

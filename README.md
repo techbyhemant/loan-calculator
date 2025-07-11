@@ -20,6 +20,15 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Features
+
+### Loan Calculator (In Progress)
+
+- Enter loan amount, interest rate, and tenure
+- View EMI, total interest, and total payment
+- See a detailed amortization table (year/month breakdown)
+- Feature code: `/features/loan-calculator/`
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

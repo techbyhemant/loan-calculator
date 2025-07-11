@@ -1,0 +1,35 @@
+---
+description: 
+globs: **/*.test.tsx
+alwaysApply: false
+---
+
+# React Component Template Rule
+
+When generating a new React component, follow this layout:
+
+```tsx
+// /components/<Name>/<Name>.tsx
+"use client";
+
+import { cn } from "@/lib/utils";
+
+export interface <Name>Props {
+  label: string;
+  onClick?: () => void;
+}
+
+export default function <Name>({ label, onClick }: <Name>Props) {
+  return (
+    <section className={cn("p-4 text-foreground")} role="region">
+      <button onClick={onClick}>{label}</button>
+    </section>
+  );
+}
+```
+
+- Keep files short and focused.
+- Separate logic into a hook: `/components/<Name>/use<Name>.ts`
+- Create `/components/<Name>/index.ts` to export all parts.
+- Create minimal test in `<Name>.test.tsx`.
+

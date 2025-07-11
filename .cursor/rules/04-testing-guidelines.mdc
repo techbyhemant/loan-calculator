@@ -1,0 +1,15 @@
+---
+description: Unit-test conventions (React Testing Library + Jest)
+globs:
+  - "**/*.test.tsx"
+alwaysApply: false
+---
+
+# Testing Standards
+
+- Use `@testing-library/react` with `user-event`.
+- Use screen queries (`getByRole`, `findByText`) instead of test IDs.
+- Mock external APIs using `msw`.
+- Keep tests under 15 lines each.
+- Use a custom `renderWithProviders` if context/state is needed.
+- Group test utilities under `/test-utils/`

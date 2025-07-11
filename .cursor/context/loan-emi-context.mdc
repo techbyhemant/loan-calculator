@@ -1,0 +1,91 @@
+# Loan EMI Calculator – Cursor Project Context
+
+## 🧠 Purpose
+A single-page app to help users calculate EMI, amortization schedule, and compare loan reduction strategies with/without part-payments. The app is built with Next.js 14, TailwindCSS, and shadcn/ui. All calculations are done client-side.
+
+---
+
+## 🔢 Inputs (User-provided)
+- Loan Amount (₹)
+- Interest Rate (annual %)
+- Loan Tenure (Years + Months)
+- EMI Start Date (Month & Year)
+- Optional Part-Payments:
+  - Can be applied to selected months
+  - A toggle lets user choose:
+    - Reduce EMI
+    - Reduce Tenure
+
+---
+
+## 📈 Outputs
+- Monthly EMI (rounded to 2 decimals)
+- Amortization table (year-wise expandable into months)
+  - Yearly:
+    - Total Principal Paid
+    - Total Interest Paid
+    - Total Payment
+    - Balance at Year End
+    - % of Loan Paid
+  - Monthly:
+    - Principal
+    - Interest
+    - Total
+    - Balance
+    - Part Payment (if any)
+- Interest Saved and Months Saved (only if part-payments exist)
+- Chart:
+  - Bar: Principal + Interest/year
+  - Line: Remaining Balance
+- Export Options: PDF, Excel, CSV
+
+---
+
+## 🧮 Technical Notes
+- Reducing balance interest
+- Monthly compounding
+- Interest re-calculated in same month if part-payment is made
+- Last EMI may be a non-standard amount
+- Cumulative principal/interest should be shown
+- Part-payment applied per user-selected month, treated individually
+- Rounding: 2 decimal places (no ₹ rounding)
+- `/lib/loan.ts`: all calculation logic
+- `/components`: fully modular, split by role
+- Only expanded years render monthly rows (performance)
+- Charts are lazy-loaded (e.g., react-chartjs-2)
+- Numbers formatted using `Intl.NumberFormat('en-IN')`
+- No backend or shareable links
+
+---
+
+## 🧱 Folder Suggestions
+
+```
+/app
+/components
+  /inputs
+  /output
+  /charts
+  /table
+/lib
+  loan.ts
+/types
+  loan.ts
+/styles
+```
+
+---
+
+## ✅ Rules Reminder
+- Always use Tailwind theme tokens
+- Never use inline CSS or custom pixel values
+- Follow modular atomic component structure
+- Use semantic HTML, not div nesting
+- Avoid unnecessary re-renders (useMemo, lazy loading)
+
+---
+
+## ❌ Not in Scope
+- Rate change tables
+- Prepayment penalty configuration
+- Saving state or shareable URLs
