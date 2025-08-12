@@ -185,6 +185,8 @@ export function LoanCalculatorProvider({
         ...row,
         idx,
         calendarYear: currentDate.getFullYear(),
+        // 0-based month index (0 = Jan, 3 = Apr)
+        calendarMonthIndex: currentDate.getMonth(),
         calendarMonth: currentDate.toLocaleDateString("en-US", {
           month: "short",
         }),

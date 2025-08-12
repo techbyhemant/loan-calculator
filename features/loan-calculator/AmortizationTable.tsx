@@ -135,6 +135,7 @@ const MobileInputRow: React.FC<MobileInputRowProps> = ({
 export type AmortizationRowWithExtras = {
   idx: number;
   calendarYear: number;
+  calendarMonthIndex?: number;
   calendarMonth: string;
   calendarLabel: string;
   groupKey?: string; // Make optional
@@ -229,9 +230,11 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
 
   // Helper for financial year label
   function getFinancialYearLabel(row: AmortizationRowWithExtras) {
-    const { calendarYear, month } = row;
+    const { calendarYear, calendarMonthIndex, month } = row;
+    const index =
+      typeof calendarMonthIndex === "number" ? calendarMonthIndex : month - 1; // fallback
     const year = calendarYear;
-    if (month >= 4) {
+    if (index >= 3) {
       // Apr-Mar: FY is current year–next year
       return `FY ${year}-${String(year + 1).slice(-2)}`;
     } else {
