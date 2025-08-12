@@ -66,6 +66,15 @@ export function YearlyBreakdownBar({ schedule }: YearlyBreakdownBarProps) {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
+  // Early return if no schedule data
+  if (!schedule || schedule.length === 0) {
+    return (
+      <div className="w-full h-72 sm:h-96 flex items-center justify-center text-gray-500">
+        No data available for chart
+      </div>
+    );
+  }
+
   // Group by year
   const years = Array.from(new Set(schedule.map((r) => r.year)));
   const principalPerYear = years.map((y) =>
@@ -149,20 +158,9 @@ export function YearlyBreakdownBar({ schedule }: YearlyBreakdownBarProps) {
           },
           padding: isMobile ? 12 : 16,
           usePointStyle: true,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          generateLabels: function (chart: any) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            return chart.data.datasets.map((dataset: any, i: number) => ({
-              text: dataset.label,
-              fillStyle: dataset.backgroundColor || dataset.borderColor,
-              strokeStyle: dataset.borderColor || dataset.backgroundColor,
-              lineWidth: 2,
-              pointStyle: "circle",
-              usePointStyle: true,
-              hidden: !chart.isDatasetVisible(i),
-              datasetIndex: i,
-            }));
-          },
+          pointStyle: "circle",
+          boxWidth: isMobile ? 12 : 15,
+          boxHeight: isMobile ? 12 : 15,
         },
       },
       tooltip: {
