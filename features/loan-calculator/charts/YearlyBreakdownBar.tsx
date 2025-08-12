@@ -3,10 +3,12 @@ import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   BarElement,
+  BarController,
+  LineElement,
+  LineController,
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement,
   Legend,
   Tooltip,
 } from "chart.js";
@@ -15,10 +17,12 @@ import type { AmortizationRow } from "@/lib/utils";
 
 ChartJS.register(
   BarElement,
+  BarController,
+  LineElement,
+  LineController,
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement,
   Legend,
   Tooltip
 );
