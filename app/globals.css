@@ -304,6 +304,24 @@ input[type="range"].green-slider:focus {
   outline: none;
 }
 
+/* Accordion animation for table row expansion */
+.tr-accordion {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.tr-accordion-open {
+  max-height: 1000px; /* Large enough for your content */
+  opacity: 1;
+}
+
+/* Optional: Remove border from nested table for cleaner look */
+.tr-accordion table {
+  border: none;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

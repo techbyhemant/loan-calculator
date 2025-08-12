@@ -38,15 +38,62 @@ export function calculateLoan({
   partPaymentMode = "emi",
   emiIncreases = {},
 }: LoanCalculationInput): LoanCalculationResult {
+  // Validate inputs
+  if (!amount || amount <= 0) {
+    return {
+      emi: 0,
+      totalInterest: 0,
+      totalPayment: 0,
+      schedule: [],
+    };
+  }
+
+  if (!tenure || tenure <= 0) {
+    return {
+      emi: 0,
+      totalInterest: 0,
+      totalPayment: 0,
+      schedule: [],
+    };
+  }
+
+  if (!rate || rate <= 0) {
+    return {
+      emi: amount,
+      totalInterest: 0,
+      totalPayment: amount,
+      schedule: Array.from({ length: tenure * 12 }, (_, i) => ({
+        year: Math.floor(i / 12) + 1,
+        month: (i % 12) + 1,
+        principal: amount / (tenure * 12),
+        interest: 0,
+        total: amount / (tenure * 12),
+        balance: amount - (amount / (tenure * 12)) * (i + 1),
+      })),
+    };
+  }
+
   const n = tenure * 12;
   const r = rate / 12 / 100;
   let balance = amount;
   let totalInterest = 0;
   const schedule: AmortizationRow[] = [];
   let remainingMonths = n;
-  let emi =
-    (balance * r * Math.pow(1 + r, remainingMonths)) /
-    (Math.pow(1 + r, remainingMonths) - 1);
+
+  // Calculate initial EMI
+  let emi = 0;
+  if (r > 0) {
+    const denominator = Math.pow(1 + r, remainingMonths) - 1;
+    if (denominator > 0) {
+      emi = (balance * r * Math.pow(1 + r, remainingMonths)) / denominator;
+    } else {
+      // Fallback for very small rates
+      emi = balance / remainingMonths;
+    }
+  } else {
+    emi = balance / remainingMonths;
+  }
+
   let nextEmi = emi;
 
   for (let i = 0; i < n; i++) {
@@ -58,25 +105,38 @@ export function calculateLoan({
         nextEmi = emi + emiIncreases[i].value;
       }
     }
+
     // Apply part-payment if any
     if (partPayments[i]) {
       balance -= partPayments[i];
       if (partPaymentMode === "emi") {
         // Recalculate EMI for remaining period, but apply from next month
         remainingMonths = n - i;
-        nextEmi =
-          balance > 0 && remainingMonths > 0
-            ? (balance * r * Math.pow(1 + r, remainingMonths)) /
-              (Math.pow(1 + r, remainingMonths) - 1)
-            : 0;
+        if (balance > 0 && remainingMonths > 0) {
+          if (r > 0) {
+            const denominator = Math.pow(1 + r, remainingMonths) - 1;
+            if (denominator > 0) {
+              nextEmi =
+                (balance * r * Math.pow(1 + r, remainingMonths)) / denominator;
+            } else {
+              nextEmi = balance / remainingMonths;
+            }
+          } else {
+            nextEmi = balance / remainingMonths;
+          }
+        } else {
+          nextEmi = 0;
+        }
       }
       // else, for 'tenure', keep EMI the same and let the loop run until balance <= 0
     }
+
     // Use the current EMI for this month
     const interest = balance * r;
     const principal = emi - interest;
     totalInterest += interest;
     balance -= principal;
+
     schedule.push({
       year: Math.floor(i / 12) + 1,
       month: (i % 12) + 1,
@@ -85,6 +145,7 @@ export function calculateLoan({
       total: Math.max(emi, 0),
       balance: Math.max(balance, 0),
     });
+
     emi = nextEmi; // Update EMI for next month
     if (balance <= 0) break;
   }
