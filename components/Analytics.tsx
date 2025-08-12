@@ -12,7 +12,7 @@ function sendPageview(url: string) {
   window.gtag?.("config", GA_MEASUREMENT_ID, { page_path: url });
 }
 
-export function Analytics(): JSX.Element | null {
+export function Analytics(): React.ReactElement | null {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
