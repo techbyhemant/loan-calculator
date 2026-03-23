@@ -4,7 +4,7 @@ import React from "react";
 import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
 
-const GA_MEASUREMENT_ID = "G-GK1QBG7BRK";
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";
 
 function sendPageview(url: string) {
   if (!GA_MEASUREMENT_ID) return;

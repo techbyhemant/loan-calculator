@@ -1,0 +1,276 @@
+"use client";
+
+import { useState, useMemo } from "react";
+
+import type { Loan, TaxProfile } from "@/types";
+
+import { calculateLoanTaxBenefits } from "@/lib/calculations/taxCalcs";
+import { formatINR } from "@/lib/utils/formatters";
+import { trpcReact } from "@/lib/trpc/hooks";
+
+import { ProGate } from "@/components/ui/ProGate";
+import NumericInput from "@/components/ui/NumericInput";
+
+function SkeletonBlock() {
+  return (
+    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6 animate-pulse">
+      <div className="h-5 bg-gray-200 rounded w-1/3 mb-4" />
+      <div className="h-4 bg-gray-100 rounded w-full mb-2" />
+      <div className="h-4 bg-gray-100 rounded w-2/3" />
+    </div>
+  );
+}
+
+export default function TaxPage() {
+  return (
+    <ProGate feature="Tax Benefits Dashboard">
+      <TaxContent />
+    </ProGate>
+  );
+}
+
+function TaxContent() {
+  const { data: loansRaw, isLoading } = trpcReact.loans.getAll.useQuery();
+  const loans = useMemo(
+    () => (loansRaw ?? []) as unknown as Loan[],
+    [loansRaw],
+  );
+
+  const [grossIncome, setGrossIncome] = useState<number | "">(1500000);
+  const [existing80C, setExisting80C] = useState<number | "">(50000);
+  const [taxRegime, setTaxRegime] = useState<"old" | "new">("old");
+
+  const homeLoans = loans.filter((l) => l.type === "home");
+
+  const benefits = useMemo(() => {
+    if (homeLoans.length === 0 || !grossIncome) return null;
+    const profile: TaxProfile = {
+      grossIncome: (grossIncome as number) || 0,
+      taxRegime,
+      existing80CInvestments: (existing80C as number) || 0,
+    };
+    return calculateLoanTaxBenefits(homeLoans, profile);
+  }, [homeLoans, grossIncome, existing80C, taxRegime]);
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <SkeletonBlock />
+        <SkeletonBlock />
+      </div>
+    );
+  }
+
+  if (homeLoans.length === 0) {
+    return (
+      <div>
+        <h1 className="text-xl font-semibold text-gray-900 mb-6">
+          Tax Benefits Dashboard
+        </h1>
+        <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-8 text-center">
+          <p className="text-sm text-gray-600">
+            Add a home loan to see your tax benefits under Section 80C and
+            24(b).
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const inputClass =
+    "w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none";
+
+  return (
+    <div>
+      <h1 className="text-xl font-semibold text-gray-900 mb-6">
+        Tax Benefits Dashboard
+      </h1>
+
+      {/* Profile Inputs */}
+      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 sm:p-6 mb-6">
+        <h2 className="text-sm font-semibold text-gray-900 mb-4">
+          Your Tax Profile
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Gross Annual Income (&rupee;)
+            </label>
+            <NumericInput
+              value={grossIncome}
+              onChange={setGrossIncome}
+              placeholder="15,00,000"
+              min={0}
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Other 80C Investments (&rupee;)
+            </label>
+            <NumericInput
+              value={existing80C}
+              onChange={setExisting80C}
+              placeholder="50,000"
+              min={0}
+              className={inputClass}
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              EPF + ELSS + LIC + PPF
+            </p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Tax Regime
+            </label>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setTaxRegime("old")}
+                className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                  taxRegime === "old"
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-white text-gray-700 border-gray-200"
+                }`}
+              >
+                Old
+              </button>
+              <button
+                type="button"
+                onClick={() => setTaxRegime("new")}
+                className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                  taxRegime === "new"
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-white text-gray-700 border-gray-200"
+                }`}
+              >
+                New
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {benefits && (
+        <>
+          {/* Deduction Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 text-center">
+              <p className="text-sm text-gray-600 mb-1">
+                Section 24(b)
+              </p>
+              <p className="text-xl font-bold text-blue-700">
+                {formatINR(benefits.sec24Deduction)}
+              </p>
+              <p className="text-xs text-gray-500">Interest deduction</p>
+            </div>
+            <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 text-center">
+              <p className="text-sm text-gray-600 mb-1">
+                Section 80C
+              </p>
+              <p className="text-xl font-bold text-green-700">
+                {formatINR(benefits.sec80CDeduction)}
+              </p>
+              <p className="text-xs text-gray-500">Principal deduction</p>
+            </div>
+            <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 text-center">
+              <p className="text-sm text-gray-600 mb-1">Tax Saved</p>
+              <p className="text-xl font-bold text-purple-700">
+                {formatINR(benefits.taxSaved)}
+              </p>
+              <p className="text-xs text-gray-500">this financial year</p>
+            </div>
+          </div>
+
+          {/* Regime Recommendation */}
+          <div
+            className={`rounded-xl p-4 border mb-6 ${
+              benefits.recommendedRegime === "old"
+                ? "bg-amber-50 border-amber-200"
+                : "bg-blue-50 border-blue-200"
+            }`}
+          >
+            <p
+              className={`text-sm font-semibold ${
+                benefits.recommendedRegime === "old"
+                  ? "text-amber-800"
+                  : "text-blue-800"
+              }`}
+            >
+              {benefits.recommendedRegime === "old" ? "Old" : "New"} regime
+              saves you more
+            </p>
+            <p
+              className={`text-sm mt-1 ${
+                benefits.recommendedRegime === "old"
+                  ? "text-amber-700"
+                  : "text-blue-700"
+              }`}
+            >
+              Difference: {formatINR(benefits.regimeDifference)} per year
+            </p>
+          </div>
+
+          {/* Breakdown Table */}
+          <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+            <div className="px-4 py-3 border-b border-gray-100">
+              <h3 className="text-base font-semibold text-gray-900">
+                Deduction Breakdown
+              </h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="text-left px-4 py-3 font-medium text-gray-700">
+                      Section
+                    </th>
+                    <th className="text-right px-4 py-3 font-medium text-gray-700">
+                      Deduction
+                    </th>
+                    <th className="text-right px-4 py-3 font-medium text-gray-700">
+                      Max Limit
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  <tr>
+                    <td className="px-4 py-3 text-gray-900">
+                      24(b) &mdash; Interest
+                    </td>
+                    <td className="px-4 py-3 text-right font-medium">
+                      {formatINR(benefits.sec24Deduction)}
+                    </td>
+                    <td className="px-4 py-3 text-right text-gray-500">
+                      {formatINR(200000)}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 text-gray-900">
+                      80C &mdash; Principal
+                    </td>
+                    <td className="px-4 py-3 text-right font-medium">
+                      {formatINR(benefits.sec80CDeduction)}
+                    </td>
+                    <td className="px-4 py-3 text-right text-gray-500">
+                      {formatINR(150000)} (shared)
+                    </td>
+                  </tr>
+                  <tr className="bg-gray-50 font-semibold">
+                    <td className="px-4 py-3 text-gray-900">Total</td>
+                    <td className="px-4 py-3 text-right">
+                      {formatINR(benefits.totalDeduction)}
+                    </td>
+                    <td className="px-4 py-3 text-right text-gray-500">
+                      {formatINR(350000)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

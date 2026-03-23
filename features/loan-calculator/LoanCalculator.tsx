@@ -5,13 +5,11 @@ import { LoanSummary } from "./components/LoanSummary";
 import { AmortizationSection } from "./components/AmortizationSection";
 import { DownloadButtons } from "./components/DownloadButtons";
 import { YearlyBreakdownSection } from "./components/YearlyBreakdownSection";
-import { Header } from "@/components/ui/Header";
 
 export default function LoanCalculator() {
   return (
     <LoanCalculatorProvider>
       <div className="bg-[#F9FAFB] min-h-screen font-inter">
-        <Header />
         <main className="max-w-6xl w-auto mx-auto py-4 sm:py-6 px-3 sm:px-4">
           {/* Top flex: Inputs and Pie+Summary - stack vertically on mobile */}
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">

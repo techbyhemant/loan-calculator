@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, ReactNode } from "react";
+import React, { createContext, useContext, useReducer, useEffect, useRef, ReactNode } from "react";
 import { loanTypeConfigs, LoanType } from "../loanTypeConfigs";
 import { calculateLoan } from "@/lib/utils";
 import type { AmortizationRowWithExtras } from "../AmortizationTable";
@@ -51,6 +51,7 @@ interface LoanContextType extends LoanState {
   handleTenureSlider: (val: number) => void;
   handleExportPDF: () => Promise<void>;
   handleExportExcel: () => void;
+  handleShareURL: () => void;
 }
 
 // Action types
@@ -149,7 +150,64 @@ interface LoanCalculatorProviderProps {
 export function LoanCalculatorProvider({
   children,
 }: LoanCalculatorProviderProps) {
-  const [state, dispatch] = useReducer(loanReducer, initialState);
+  const [state, dispatch] = useReducer(loanReducer, initialState, (init) => {
+    // Read URL search params on mount to pre-fill calculator
+    if (typeof window === "undefined") return init;
+    const params = new URLSearchParams(window.location.search);
+    const merged = { ...init };
+
+    const type = params.get("type");
+    if (type && (type === "home" || type === "personal" || type === "car")) {
+      merged.loanType = type;
+    }
+
+    const amount = params.get("amount");
+    if (amount && !isNaN(Number(amount)) && Number(amount) > 0) {
+      merged.amount = Number(amount);
+    }
+
+    const rate = params.get("rate");
+    if (rate && !isNaN(Number(rate)) && Number(rate) >= 0) {
+      merged.rate = Number(rate);
+    }
+
+    const tenure = params.get("tenure");
+    if (tenure && !isNaN(Number(tenure)) && Number(tenure) > 0) {
+      merged.tenure = Number(tenure);
+    }
+
+    const tu = params.get("tu");
+    if (tu === "years" || tu === "months") {
+      merged.tenureUnit = tu;
+    }
+
+    const sd = params.get("sd");
+    if (sd && /^\d{4}-\d{2}$/.test(sd)) {
+      merged.startDate = sd;
+    }
+
+    return merged;
+  });
+
+  // Sync state to URL search params (debounced via ref)
+  const syncTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current);
+    syncTimeoutRef.current = setTimeout(() => {
+      const params = new URLSearchParams();
+      params.set("type", state.loanType);
+      params.set("amount", String(state.amount));
+      params.set("rate", String(state.rate));
+      params.set("tenure", String(state.tenure));
+      if (state.tenureUnit !== "years") params.set("tu", state.tenureUnit);
+      if (state.startDate !== defaultStart) params.set("sd", state.startDate);
+      const url = `${window.location.pathname}?${params.toString()}`;
+      window.history.replaceState(null, "", url);
+    }, 300);
+    return () => {
+      if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current);
+    };
+  }, [state.loanType, state.amount, state.rate, state.tenure, state.tenureUnit, state.startDate]);
 
   // Computed values
   const config = loanTypeConfigs[state.loanType];
@@ -293,7 +351,7 @@ export function LoanCalculatorProvider({
     const showLoanPaid = !(hasPartPayments && hasEmiIncreases);
 
     // Import XLSX dynamically to avoid SSR issues
-    import("xlsx").then((XLSX) => {
+    import("xlsx-js-style").then((XLSX) => {
       import("file-saver").then(({ saveAs }) => {
         const worksheet = XLSX.utils.json_to_sheet([
           {
@@ -481,6 +539,26 @@ export function LoanCalculatorProvider({
     pdfMake.createPdf(docDefinition).download("amortization.pdf");
   }, [state, scheduleWithCalendar, formatINR, loanPaidPct]);
 
+  const [shareToast, setShareToast] = React.useState(false);
+
+  const handleShareURL = React.useCallback(() => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      setShareToast(true);
+      setTimeout(() => setShareToast(false), 3000);
+    }).catch(() => {
+      // Fallback for browsers without clipboard API
+      const textarea = document.createElement("textarea");
+      textarea.value = url;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+      setShareToast(true);
+      setTimeout(() => setShareToast(false), 3000);
+    });
+  }, []);
+
   const contextValue: LoanContextType = {
     ...state,
     config,
@@ -503,11 +581,18 @@ export function LoanCalculatorProvider({
     handleTenureSlider,
     handleExportPDF,
     handleExportExcel,
+    handleShareURL,
   };
 
   return (
     <LoanCalculatorContext.Provider value={contextValue}>
       {children}
+      {/* Share toast notification */}
+      {shareToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-gray-900 text-white text-sm px-4 py-3 rounded-lg shadow-lg animate-in fade-in slide-in-from-bottom-4">
+          Link copied! Share with family to plan together
+        </div>
+      )}
     </LoanCalculatorContext.Provider>
   );
 }
