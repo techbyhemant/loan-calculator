@@ -33,24 +33,46 @@ export function AmortizationSection() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Use refs so the render callback stays stable across state changes
+  const partPaymentsRef = React.useRef(partPayments);
+  partPaymentsRef.current = partPayments;
+  const emiIncreasesRef = React.useRef(emiIncreases);
+  emiIncreasesRef.current = emiIncreases;
+  const isMobileRef = React.useRef(isMobile);
+  isMobileRef.current = isMobile;
+
   const renderPartPaymentCell = React.useCallback(
     (
       row: { idx: number },
       reduceMode: "emi" | "tenure",
       inputType?: "partPayment" | "emiIncrease"
     ) => {
+      const pp = partPaymentsRef.current;
+      const ei = emiIncreasesRef.current;
+      const mobile = isMobileRef.current;
+
       // For mobile nested rows with specific input types
-      if (isMobile && inputType) {
+      if (mobile && inputType) {
         if (inputType === "partPayment") {
           return (
             <input
+              key={`pp-${row.idx}`}
               type="number"
-              value={partPayments[row.idx]?.toString() ?? ""}
+              defaultValue={pp[row.idx]?.toString() ?? ""}
+              onBlur={(e) => {
+                const num = Number(e.target.value);
+                if (!isNaN(num) && num >= 0) {
+                  setPartPayments({
+                    ...partPaymentsRef.current,
+                    [row.idx]: num,
+                  });
+                }
+              }}
               onChange={(e) => {
                 const num = Number(e.target.value);
                 if (!isNaN(num) && num >= 0) {
                   setPartPayments({
-                    ...partPayments,
+                    ...partPaymentsRef.current,
                     [row.idx]: num,
                   });
                 }
@@ -64,13 +86,23 @@ export function AmortizationSection() {
         } else if (inputType === "emiIncrease") {
           return (
             <input
+              key={`ei-${row.idx}`}
               type="number"
-              value={emiIncreases[row.idx]?.value?.toString() ?? ""}
+              defaultValue={ei[row.idx]?.value?.toString() ?? ""}
+              onBlur={(e) => {
+                const num = Number(e.target.value);
+                if (!isNaN(num) && num >= 0) {
+                  setEmiIncreases({
+                    ...emiIncreasesRef.current,
+                    [row.idx]: { type: "value", value: num },
+                  });
+                }
+              }}
               onChange={(e) => {
                 const num = Number(e.target.value);
                 if (!isNaN(num) && num >= 0) {
                   setEmiIncreases({
-                    ...emiIncreases,
+                    ...emiIncreasesRef.current,
                     [row.idx]: { type: "value", value: num },
                   });
                 }
@@ -86,17 +118,27 @@ export function AmortizationSection() {
       }
 
       // For mobile nested rows without specific input type (legacy support)
-      if (isMobile) {
+      if (mobile) {
         return (
           <div className="flex gap-2">
             <input
+              key={`pp-${row.idx}`}
               type="number"
-              value={partPayments[row.idx]?.toString() ?? ""}
+              defaultValue={pp[row.idx]?.toString() ?? ""}
+              onBlur={(e) => {
+                const num = Number(e.target.value);
+                if (!isNaN(num) && num >= 0) {
+                  setPartPayments({
+                    ...partPaymentsRef.current,
+                    [row.idx]: num,
+                  });
+                }
+              }}
               onChange={(e) => {
                 const num = Number(e.target.value);
                 if (!isNaN(num) && num >= 0) {
                   setPartPayments({
-                    ...partPayments,
+                    ...partPaymentsRef.current,
                     [row.idx]: num,
                   });
                 }
@@ -108,13 +150,23 @@ export function AmortizationSection() {
             />
             {reduceMode === "tenure" && (
               <input
+                key={`ei-${row.idx}`}
                 type="number"
-                value={emiIncreases[row.idx]?.value?.toString() ?? ""}
+                defaultValue={ei[row.idx]?.value?.toString() ?? ""}
+                onBlur={(e) => {
+                  const num = Number(e.target.value);
+                  if (!isNaN(num) && num >= 0) {
+                    setEmiIncreases({
+                      ...emiIncreasesRef.current,
+                      [row.idx]: { type: "value", value: num },
+                    });
+                  }
+                }}
                 onChange={(e) => {
                   const num = Number(e.target.value);
                   if (!isNaN(num) && num >= 0) {
                     setEmiIncreases({
-                      ...emiIncreases,
+                      ...emiIncreasesRef.current,
                       [row.idx]: { type: "value", value: num },
                     });
                   }
@@ -129,17 +181,27 @@ export function AmortizationSection() {
         );
       }
 
-      // Desktop layout remains unchanged
+      // Desktop layout
       return (
         <div className="flex gap-2 items-center">
           <input
+            key={`pp-${row.idx}`}
             type="number"
-            value={partPayments[row.idx]?.toString() ?? ""}
+            defaultValue={pp[row.idx]?.toString() ?? ""}
+            onBlur={(e) => {
+              const num = Number(e.target.value);
+              if (!isNaN(num) && num >= 0) {
+                setPartPayments({
+                  ...partPaymentsRef.current,
+                  [row.idx]: num,
+                });
+              }
+            }}
             onChange={(e) => {
               const num = Number(e.target.value);
               if (!isNaN(num) && num >= 0) {
                 setPartPayments({
-                  ...partPayments,
+                  ...partPaymentsRef.current,
                   [row.idx]: num,
                 });
               }
@@ -151,13 +213,23 @@ export function AmortizationSection() {
           />
           {reduceMode === "tenure" && (
             <input
+              key={`ei-${row.idx}`}
               type="number"
-              value={emiIncreases[row.idx]?.value?.toString() ?? ""}
+              defaultValue={ei[row.idx]?.value?.toString() ?? ""}
+              onBlur={(e) => {
+                const num = Number(e.target.value);
+                if (!isNaN(num) && num >= 0) {
+                  setEmiIncreases({
+                    ...emiIncreasesRef.current,
+                    [row.idx]: { type: "value", value: num },
+                  });
+                }
+              }}
               onChange={(e) => {
                 const num = Number(e.target.value);
                 if (!isNaN(num) && num >= 0) {
                   setEmiIncreases({
-                    ...emiIncreases,
+                    ...emiIncreasesRef.current,
                     [row.idx]: { type: "value", value: num },
                   });
                 }
@@ -171,7 +243,7 @@ export function AmortizationSection() {
         </div>
       );
     },
-    [partPayments, setPartPayments, emiIncreases, setEmiIncreases, isMobile]
+    [setPartPayments, setEmiIncreases]
   );
 
   return (

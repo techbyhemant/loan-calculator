@@ -15,7 +15,7 @@ function getResend(): Resend | null {
   return new Resend(apiKey);
 }
 
-const FROM_EMAIL = "alerts@emipartpay.com";
+const FROM_EMAIL = "alerts@lastemi.com";
 
 export async function sendMonthlySummary(
   to: string,
@@ -78,14 +78,14 @@ export async function sendMonthlySummary(
       }
 
       <p style="margin-top:24px">
-        <a href="https://emipartpay.com/dashboard"
+        <a href="https://lastemi.com/dashboard"
            style="background:#2563eb;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:14px">
           View Dashboard
         </a>
       </p>
 
       <p style="color:#9ca3af;font-size:12px;margin-top:24px">
-        You're receiving this because you have an account on EMIPartPay.
+        You're receiving this because you have an account on LastEMI.
         <br/>Visit your dashboard to manage preferences.
       </p>
     </div>
@@ -127,7 +127,7 @@ export async function sendPartPaymentAlert(
       </div>
 
       <p>
-        <a href="https://emipartpay.com/dashboard"
+        <a href="https://lastemi.com/dashboard"
            style="background:#2563eb;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:14px">
           View Updated Schedule
         </a>

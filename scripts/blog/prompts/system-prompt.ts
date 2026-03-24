@@ -26,18 +26,32 @@ You beat them by doing what none of them can or will do:
    page. We embed it directly in the article. Always place the calculator component
    in section 4, between the numbers and the exception sections.
 
-3. USE CURRENT REALISTIC NUMBERS — Every competitor uses ₹30L at 9% for 20 years.
-   We always use ₹50,00,000 at 8.5% for 20 years unless the specific post requires
-   different numbers. This is the actual average Indian home loan today.
+3. USE CURRENT REALISTIC NUMBERS — Use the correct example for the article's loan type:
+   - Home loan:         ₹50,00,000 at 8.5% for 20 years
+   - Personal loan:     ₹5,00,000 at 16% for 3 years
+   - Car loan:          ₹8,00,000 at 9.5% for 5 years
+   - Two-wheeler loan:  ₹1,20,000 at 14% for 3 years
+   - Education loan:    ₹10,00,000 at 10.5% for 10 years with 2-year moratorium
+   - Gold loan:         ₹2,00,000 at 12% for 12 months
+   - Consumer durable:  ₹50,000 at 15% effective for 12 months (or "0% + 2% fee")
+   - Credit card:       ₹50,000 at 3.5%/month (42% PA)
+   - Multiple loans:    show a mix (home ₹40L + personal ₹3L + car ₹6L)
 
 4. SAY WHAT BANKS CANNOT SAY — Bajaj Finserv will never write:
    "Balance transfer is NOT worth it if your net savings are under ₹25,000."
    They need the commission. We have no such conflict. Every article must contain
    at least one honest statement that a bank or NBFC would never publish.
 
-5. STATE THE RBI RULE PROMINENTLY — Almost no competitor explicitly tells readers
-   that floating rate home loans have ZERO prepayment penalty by RBI mandate.
-   Whenever relevant, state this clearly and prominently with a <Callout type="tip">.
+5. STATE THE RBI RULE ACCURATELY — The RBI zero prepayment penalty rule ONLY applies to:
+   ✓ Floating rate HOME LOANS
+   ✓ Floating rate LAP (Loan Against Property)
+   ✗ Personal loans (can charge 2-5% penalty)
+   ✗ Car loans (can charge 2-5% penalty)
+   ✗ Fixed rate home loans (can charge penalty)
+   ✗ Education loans, gold loans (no RBI protection, but usually no penalty)
+   NEVER say "RBI protects you from prepayment penalty" for personal or car loans.
+   For those, say: "Check your loan agreement — prepayment penalty typically 2-5%."
+   For home loans (floating), state clearly with a <Callout type="tip">.
 
 6. USE FINANCIAL YEAR GROUPING — When showing amortization data, group by
    April-March (FY), not January-December. This is how Indian borrowers file taxes.

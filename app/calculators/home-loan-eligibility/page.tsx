@@ -1,9 +1,10 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import EligibilityCalc from "@/components/calculators/EligibilityCalc";
+import { getFAQSchema } from "@/lib/seo/schema";
 
 export const metadata: Metadata = {
-  title: "Home Loan Eligibility Calculator — Check Your Loan Amount | EMIPartPay",
+  title: "Home Loan Eligibility Calculator — Check Your Loan Amount | LastEMI",
   description:
     "Check how much home loan you can get based on your salary, existing EMIs and interest rate. Compare eligibility across SBI, HDFC, ICICI, and Kotak with the FOIR method.",
   keywords: [
@@ -17,19 +18,39 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Home Loan Eligibility Calculator — How Much Can You Borrow?",
     url: "/calculators/home-loan-eligibility",
-    siteName: "EMIPartPay",
+    siteName: "LastEMI",
     locale: "en_IN",
     type: "website",
   },
   robots: { index: true, follow: true },
 };
 
+const faqs = [
+  {
+    question: "How much home loan can I get on my salary?",
+    answer:
+      "Banks typically allow EMI up to 50-60% of your net monthly income (called FOIR). On a \u20B91 lakh salary with no other EMIs, you can get approximately \u20B952-65 lakh home loan at 8.5% for 20 years.",
+  },
+  {
+    question: "Does a co-applicant increase home loan eligibility?",
+    answer:
+      "Yes, adding a co-applicant (usually spouse) clubs their income with yours, potentially doubling your eligible loan amount. Both incomes are considered for FOIR calculation.",
+  },
+  {
+    question: "What is FOIR in home loan eligibility?",
+    answer:
+      "FOIR (Fixed Obligation to Income Ratio) is the percentage of your monthly income that goes toward EMIs. Banks prefer FOIR below 50-60%. Lower FOIR means higher loan eligibility.",
+  },
+];
+
 export default function HomeLoanEligibilityPage() {
+  const faqSchema = getFAQSchema(faqs);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Home Loan Eligibility Calculator",
-    url: "https://emipartpay.com/calculators/home-loan-eligibility",
+    url: "https://lastemi.com/calculators/home-loan-eligibility",
     applicationCategory: "FinanceApplication",
     operatingSystem: "Web",
     description:
@@ -46,6 +67,10 @@ export default function HomeLoanEligibilityPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
@@ -122,6 +147,18 @@ export default function HomeLoanEligibilityPage() {
               pay with proper documentation. Banks consider up to 50% of variable income.
             </li>
           </ul>
+
+          <h2 className="text-xl font-semibold text-gray-900">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-gray-900">{faq.question}</dt>
+                <dd className="mt-1 text-gray-600">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
             <p className="text-blue-800 font-medium">

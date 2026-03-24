@@ -1,9 +1,10 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import SipVsPrepaymentCalc from "@/components/calculators/SipVsPrepaymentCalc";
+import { getFAQSchema } from "@/lib/seo/schema";
 
 export const metadata: Metadata = {
-  title: "SIP vs Home Loan Prepayment Calculator — Which is Better? | EMIPartPay",
+  title: "SIP vs Home Loan Prepayment Calculator — Which is Better? | LastEMI",
   description:
     "Should you invest your extra money in SIP mutual funds or prepay your home loan? Compare returns after LTCG tax, interest saved, and find the optimal split.",
   keywords: [
@@ -17,19 +18,39 @@ export const metadata: Metadata = {
   openGraph: {
     title: "SIP vs Home Loan Prepayment — Which Saves More?",
     url: "/calculators/sip-vs-prepayment",
-    siteName: "EMIPartPay",
+    siteName: "LastEMI",
     locale: "en_IN",
     type: "website",
   },
   robots: { index: true, follow: true },
 };
 
+const faqs = [
+  {
+    question: "Should I invest in SIP or prepay my home loan?",
+    answer:
+      "If your loan rate is below 9% and you're in the 30% tax bracket, SIP in equity mutual funds (12-15% historical returns) usually wins over the long term. But if your loan rate is above 10% or you have no tax benefit, prepaying is almost always better.",
+  },
+  {
+    question: "What is the effective home loan rate after tax benefit?",
+    answer:
+      "For a home loan at 8.5% with Section 24(b) deduction in the 30% tax bracket, the effective rate drops to about 6.3%. This makes SIP more attractive since equity returns typically exceed 6.3%.",
+  },
+  {
+    question: "Can I do both SIP and prepayment?",
+    answer:
+      "Yes, splitting your surplus 50-50 between SIP and prepayment is often the optimal strategy. This gives you wealth creation plus debt reduction.",
+  },
+];
+
 export default function SipVsPrepaymentPage() {
+  const faqSchema = getFAQSchema(faqs);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "SIP vs Home Loan Prepayment Calculator",
-    url: "https://emipartpay.com/calculators/sip-vs-prepayment",
+    url: "https://lastemi.com/calculators/sip-vs-prepayment",
     applicationCategory: "FinanceApplication",
     operatingSystem: "Web",
     description:
@@ -46,6 +67,10 @@ export default function SipVsPrepaymentPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
@@ -116,6 +141,18 @@ export default function SipVsPrepaymentPage() {
             are volatile in the short term — if your loan tenure is less than 5 years, prepayment
             is almost always the safer and better choice.
           </p>
+
+          <h2 className="text-xl font-semibold text-gray-900">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-gray-900">{faq.question}</dt>
+                <dd className="mt-1 text-gray-600">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
             <p className="text-blue-800 font-medium">

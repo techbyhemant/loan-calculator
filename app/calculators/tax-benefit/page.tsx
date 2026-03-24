@@ -1,9 +1,10 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import TaxBenefitCalc from "@/components/calculators/TaxBenefitCalc";
+import { getFAQSchema } from "@/lib/seo/schema";
 
 export const metadata: Metadata = {
-  title: "Home Loan Tax Benefit Calculator — Section 80C & 24(b) | EMIPartPay",
+  title: "Home Loan Tax Benefit Calculator — Section 80C & 24(b) | LastEMI",
   description:
     "Calculate your home loan tax benefits under Section 80C and 24(b). Compare old vs new regime savings and find which tax regime saves you more money.",
   keywords: [
@@ -17,19 +18,39 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Home Loan Tax Benefit Calculator — Section 80C & 24(b)",
     url: "/calculators/tax-benefit",
-    siteName: "EMIPartPay",
+    siteName: "LastEMI",
     locale: "en_IN",
     type: "website",
   },
   robots: { index: true, follow: true },
 };
 
+const faqs = [
+  {
+    question: "What tax benefits are available on home loan in India?",
+    answer:
+      "Home loans offer two main tax benefits: Section 80C allows deduction of up to \u20B91.5 lakh on principal repayment, and Section 24(b) allows deduction of up to \u20B92 lakh on interest for self-occupied property.",
+  },
+  {
+    question: "Is home loan tax benefit available under new tax regime?",
+    answer:
+      "Under the new tax regime, Section 80C deduction is NOT available. Section 24(b) deduction is also not available for self-occupied property. The old regime is usually better for home loan borrowers.",
+  },
+  {
+    question: "Can I claim tax benefit on both home loan principal and interest?",
+    answer:
+      "Yes, principal repayment qualifies under Section 80C (\u20B91.5 lakh limit shared with other 80C investments) and interest qualifies under Section 24(b) (\u20B92 lakh limit for self-occupied property).",
+  },
+];
+
 export default function TaxBenefitPage() {
+  const faqSchema = getFAQSchema(faqs);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Home Loan Tax Benefit Calculator",
-    url: "https://emipartpay.com/calculators/tax-benefit",
+    url: "https://lastemi.com/calculators/tax-benefit",
     applicationCategory: "FinanceApplication",
     operatingSystem: "Web",
     description:
@@ -46,6 +67,10 @@ export default function TaxBenefitPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
@@ -65,7 +90,7 @@ export default function TaxBenefitPage() {
           </h2>
           <p>
             A home loan in India offers significant tax deductions under two sections of the Income
-            Tax Act. These deductions can reduce your taxable income by up to <strong>&rupee;3.5 lakh
+            Tax Act. These deductions can reduce your taxable income by up to <strong>₹3.5 lakh
             per year</strong>, translating to substantial tax savings depending on your tax bracket.
           </p>
 
@@ -73,7 +98,7 @@ export default function TaxBenefitPage() {
             Section 80C: Deduction on Principal Repayment
           </h2>
           <p>
-            Under Section 80C, you can claim a deduction of up to <strong>&rupee;1.5 lakh per year</strong> on
+            Under Section 80C, you can claim a deduction of up to <strong>₹1.5 lakh per year</strong> on
             the principal portion of your home loan EMI. However, this limit is shared with other
             80C-eligible investments like EPF contributions, ELSS mutual funds, PPF, life insurance
             premiums, and children&apos;s school fees. If your other 80C investments already exhaust the
@@ -87,7 +112,7 @@ export default function TaxBenefitPage() {
           <p>
             Section 24(b) allows you to deduct the interest paid on your home loan from your taxable
             income. For a <strong>self-occupied property</strong>, the maximum deduction is capped at
-            <strong> &rupee;2 lakh per year</strong>. For a <strong>rented-out property</strong>, there
+            <strong> ₹2 lakh per year</strong>. For a <strong>rented-out property</strong>, there
             is no upper limit on the interest deduction &mdash; you can claim the entire interest paid.
             This makes Section 24(b) particularly valuable in the early years of your loan when the
             interest component of your EMI is highest.
@@ -103,9 +128,21 @@ export default function TaxBenefitPage() {
             rates but removes most deductions including Section 80C and Section 24(b) for self-occupied
             properties. For rented-out properties, Section 24(b) deduction is still available under
             the new regime. As a general rule, if your total deductions (80C + 80D + 24b + HRA etc.)
-            exceed &rupee;3.75 lakh, the old regime is usually better. Our calculator compares both
+            exceed ₹3.75 lakh, the old regime is usually better. Our calculator compares both
             regimes side by side so you can make the right choice.
           </p>
+
+          <h2 className="text-xl font-semibold text-gray-900">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-gray-900">{faq.question}</dt>
+                <dd className="mt-1 text-gray-600">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
             <p className="text-blue-800 font-medium">

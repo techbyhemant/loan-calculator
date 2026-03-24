@@ -76,19 +76,14 @@ type LoanAction =
     }
   | { type: "RESET_TO_DEFAULTS" };
 
-// Initial state
-const today = new Date();
-const defaultStart = `${today.getFullYear()}-${String(
-  today.getMonth() + 1
-).padStart(2, "0")}`;
-
+// Initial state — startDate is set in the lazy initializer to avoid hydration mismatch
 const initialState: LoanState = {
   loanType: "home",
   amount: 7500000,
   rate: 8.5,
   tenure: 20,
   tenureUnit: "years",
-  startDate: defaultStart,
+  startDate: "", // set in lazy initializer below
   yearGrouping: "calendar",
   reduceMode: "emi",
   expanded: {},
@@ -151,63 +146,43 @@ export function LoanCalculatorProvider({
   children,
 }: LoanCalculatorProviderProps) {
   const [state, dispatch] = useReducer(loanReducer, initialState, (init) => {
-    // Read URL search params on mount to pre-fill calculator
-    if (typeof window === "undefined") return init;
+    // Compute default start date here (runs once, client-only avoids hydration mismatch)
+    const today = new Date();
+    const defaultStart = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}`;
+    const merged = { ...init, startDate: defaultStart };
+
+    // Read shared token from URL on mount (e.g. ?s=<base64token>)
+    if (typeof window === "undefined") return merged;
     const params = new URLSearchParams(window.location.search);
-    const merged = { ...init };
 
-    const type = params.get("type");
-    if (type && (type === "home" || type === "personal" || type === "car")) {
-      merged.loanType = type;
-    }
-
-    const amount = params.get("amount");
-    if (amount && !isNaN(Number(amount)) && Number(amount) > 0) {
-      merged.amount = Number(amount);
-    }
-
-    const rate = params.get("rate");
-    if (rate && !isNaN(Number(rate)) && Number(rate) >= 0) {
-      merged.rate = Number(rate);
-    }
-
-    const tenure = params.get("tenure");
-    if (tenure && !isNaN(Number(tenure)) && Number(tenure) > 0) {
-      merged.tenure = Number(tenure);
-    }
-
-    const tu = params.get("tu");
-    if (tu === "years" || tu === "months") {
-      merged.tenureUnit = tu;
-    }
-
-    const sd = params.get("sd");
-    if (sd && /^\d{4}-\d{2}$/.test(sd)) {
-      merged.startDate = sd;
+    const token = params.get("s");
+    if (token) {
+      try {
+        const json = JSON.parse(atob(token.replace(/-/g, "+").replace(/_/g, "/")));
+        if (json.t && (json.t === "home" || json.t === "personal" || json.t === "car")) merged.loanType = json.t;
+        if (typeof json.a === "number" && json.a > 0) merged.amount = json.a;
+        if (typeof json.r === "number" && json.r >= 0) merged.rate = json.r;
+        if (typeof json.n === "number" && json.n > 0) merged.tenure = json.n;
+        if (json.u === "years" || json.u === "months") merged.tenureUnit = json.u;
+        if (typeof json.d === "string" && /^\d{4}-\d{2}$/.test(json.d)) merged.startDate = json.d;
+      } catch {
+        // Invalid token, ignore
+      }
     }
 
     return merged;
   });
 
-  // Sync state to URL search params (debounced via ref)
-  const syncTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Clean up URL params after reading shared token on mount
+  const hasCleanedUrl = useRef(false);
   useEffect(() => {
-    if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current);
-    syncTimeoutRef.current = setTimeout(() => {
-      const params = new URLSearchParams();
-      params.set("type", state.loanType);
-      params.set("amount", String(state.amount));
-      params.set("rate", String(state.rate));
-      params.set("tenure", String(state.tenure));
-      if (state.tenureUnit !== "years") params.set("tu", state.tenureUnit);
-      if (state.startDate !== defaultStart) params.set("sd", state.startDate);
-      const url = `${window.location.pathname}?${params.toString()}`;
-      window.history.replaceState(null, "", url);
-    }, 300);
-    return () => {
-      if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current);
-    };
-  }, [state.loanType, state.amount, state.rate, state.tenure, state.tenureUnit, state.startDate]);
+    if (!hasCleanedUrl.current && typeof window !== "undefined") {
+      hasCleanedUrl.current = true;
+      if (window.location.search) {
+        window.history.replaceState(null, "", window.location.pathname);
+      }
+    }
+  }, []);
 
   // Computed values
   const config = loanTypeConfigs[state.loanType];
@@ -542,12 +517,25 @@ export function LoanCalculatorProvider({
   const [shareToast, setShareToast] = React.useState(false);
 
   const handleShareURL = React.useCallback(() => {
-    const url = window.location.href;
+    // Encode calculator state into a compact base64url token
+    const payload = {
+      t: state.loanType,
+      a: state.amount,
+      r: state.rate,
+      n: state.tenure,
+      ...(state.tenureUnit !== "years" ? { u: state.tenureUnit } : {}),
+      ...(state.startDate ? { d: state.startDate } : {}),
+    };
+    const token = btoa(JSON.stringify(payload))
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+    const url = `${window.location.origin}${window.location.pathname}?s=${token}`;
+
     navigator.clipboard.writeText(url).then(() => {
       setShareToast(true);
       setTimeout(() => setShareToast(false), 3000);
     }).catch(() => {
-      // Fallback for browsers without clipboard API
       const textarea = document.createElement("textarea");
       textarea.value = url;
       document.body.appendChild(textarea);
@@ -557,7 +545,7 @@ export function LoanCalculatorProvider({
       setShareToast(true);
       setTimeout(() => setShareToast(false), 3000);
     });
-  }, []);
+  }, [state.loanType, state.amount, state.rate, state.tenure, state.tenureUnit, state.startDate]);
 
   const contextValue: LoanContextType = {
     ...state,

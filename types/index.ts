@@ -1,11 +1,6 @@
-export type LoanType =
-  | "home"
-  | "car"
-  | "personal"
-  | "gold"
-  | "education"
-  | "credit_card"
-  | "other";
+// Import and re-export the canonical LoanType from the config layer
+import type { LoanType as _LoanType } from "@/lib/calculations/loanTypeConfig";
+export type LoanType = _LoanType;
 
 export type RateType = "fixed" | "floating";
 export type ReduceType = "emi" | "tenure";
@@ -180,3 +175,41 @@ export interface DashboardStats {
   debtFreeDate: Date | null;
   loanCount: number;
 }
+
+// ─── Credit Card Types ───────────────────────────────────────
+
+export interface CreditCard {
+  _id: string;
+  userId: string;
+  name: string; // e.g. "HDFC Regalia"
+  issuer: string; // e.g. "HDFC Bank"
+  creditLimit: number;
+  currentOutstanding: number;
+  monthlyRate: number; // default 0.035 (3.5%/month = 42% PA)
+  minimumDuePercent: number; // default 0.05 (5%)
+  billingDate: number; // 1-28
+  dueDate: number; // 1-28
+  isActive: boolean;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type CreditCardInput = Omit<
+  CreditCard,
+  "_id" | "userId" | "isActive" | "createdAt" | "updatedAt"
+>;
+
+// Re-export CC calculation types for convenience
+export type {
+  CCPayoffResult,
+  CCMonthlyBreakdown,
+  CCMinimumDueResult,
+  CCScenarioComparison,
+  CCVsPersonalLoanResult,
+  MultiCardPayoffResult,
+  CardPayoffSchedule,
+  CreditUtilization,
+  CreditCardInput as CCCalcInput,
+  PersonalLoanInput as PLCalcInput,
+} from "@/lib/calculations/creditCardCalcs";

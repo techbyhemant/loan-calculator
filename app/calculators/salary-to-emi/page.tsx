@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import SalaryToEmiCalc from "@/components/calculators/SalaryToEmiCalc";
 
@@ -19,6 +19,19 @@ export const metadata = buildMetadata({
   ],
 });
 
+const faqs = [
+  {
+    question: "How much home loan can I get on 1 lakh salary?",
+    answer:
+      "On a \u20B91 lakh monthly salary with no other EMIs, you can typically get \u20B952-65 lakh home loan at 8.5% for 20 years. Banks allow EMI up to 50-60% of net income.",
+  },
+  {
+    question: "What percentage of salary should go to EMI?",
+    answer:
+      "Financial advisors recommend keeping total EMIs below 40% of net monthly income. Going above 50% puts significant strain on your budget and leaves no room for emergencies.",
+  },
+];
+
 export default function SalaryToEmiPage() {
   const calcSchema = getCalculatorSchema({
     name: "Salary to Home Loan Calculator",
@@ -33,10 +46,13 @@ export default function SalaryToEmiPage() {
     { name: "Salary to EMI", url: "https://lastemi.com/calculators/salary-to-emi" },
   ]);
 
+  const faqSchema = getFAQSchema(faqs);
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
           How Much Home Loan Can I Get on My Salary?
@@ -74,6 +90,18 @@ export default function SalaryToEmiPage() {
             <li><strong>Choose a longer tenure:</strong> 25-30 years reduces the EMI, letting you qualify for more.</li>
             <li><strong>Improve your CIBIL score:</strong> Above 750 gets you lower rates, which means higher loan for the same EMI.</li>
           </ul>
+
+          <h2 className="text-xl font-semibold text-gray-900">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-gray-900">{faq.question}</dt>
+                <dd className="mt-1 text-gray-600">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
             <p className="text-blue-800 font-medium">

@@ -8,7 +8,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "EMI Part Payment Calculator",
-    url: "https://emipartpay.com/",
+    url: "https://lastemi.com/",
     applicationCategory: "FinanceApplication",
     operatingSystem: "Web",
     description:

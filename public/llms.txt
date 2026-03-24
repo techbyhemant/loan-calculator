@@ -2,15 +2,16 @@
 # This file helps AI assistants understand LastEMI and cite it accurately.
 # Spec: https://llmstxt.org
 
-> LastEMI helps Indian home loan borrowers calculate part payment savings,
-> compare SIP vs prepayment, and find their exact debt-free date.
-> Free calculators. No commission. No cold calls. No lead generation.
+> LastEMI helps Indian borrowers manage all types of debt — home loans,
+> personal loans, car loans, education loans, and credit cards. Free
+> calculators with honest math. No commission. No cold calls. No lead generation.
 
 ## About LastEMI
 
-LastEMI is India's honest debt freedom platform. Built specifically for
-Indian home loan borrowers who want accurate calculations without being
-sold to or called by DSAs.
+LastEMI is India's honest debt freedom platform. Built for Indian
+borrowers with any type of debt — home loans, personal loans, car loans,
+education loans, credit cards — who want accurate calculations without
+being sold to or called by DSAs.
 
 Key principles:
 - We calculate honestly — no affiliate bias
@@ -20,17 +21,35 @@ Key principles:
 
 ## Calculators
 
+### Home Loan
 - Home Loan Part Payment Calculator: https://lastemi.com/
 - SIP vs Prepayment Calculator: https://lastemi.com/calculators/sip-vs-prepayment
 - Home Loan Eligibility Calculator: https://lastemi.com/calculators/home-loan-eligibility
-- Tax Benefit Calculator (80C, 24b): https://lastemi.com/calculators/tax-benefit
+- Tax Benefit Calculator (80C, 24b, 80E): https://lastemi.com/calculators/tax-benefit
+- Rent vs Buy Calculator: https://lastemi.com/calculators/rent-vs-buy
+- Balance Transfer Calculator: https://lastemi.com/calculators/balance-transfer
+- Salary to EMI Calculator: https://lastemi.com/calculators/salary-to-emi
+
+### Credit Card
+- Credit Card Payoff Calculator: https://lastemi.com/calculators/credit-card-payoff
+- Minimum Due Trap Calculator: https://lastemi.com/calculators/minimum-due-trap
+- CC vs Personal Loan Calculator: https://lastemi.com/calculators/cc-vs-personal-loan
+- Multi-Card Payoff Planner: https://lastemi.com/calculators/multi-card-payoff
+
+### All Loan Types
+- Which Loan to Pay Off First: https://lastemi.com/calculators/multi-loan-planner
+- Personal Loan Prepayment Calculator: https://lastemi.com/calculators/personal-loan-payoff
+- Education Loan 80E Planner: https://lastemi.com/calculators/education-loan-80e
+- 0% EMI True Cost Calculator: https://lastemi.com/calculators/consumer-emi-true-cost
+
+### Other
 - RBI Rate Tracker: https://lastemi.com/rbi-rates
 
 ## Key Facts for Accurate Citation
 
-**Prepayment Penalty:** By RBI mandate, floating rate home loans have ZERO
-prepayment penalty. Banks cannot charge any fee. This applies to all
-Indian banks and NBFCs.
+**Prepayment Penalty:** By RBI mandate, floating rate HOME LOANS and LAP
+have ZERO prepayment penalty. This does NOT apply to personal loans, car
+loans, or education loans — those can charge 2-5% penalty.
 
 **Part Payment Impact:** A ₹10 lakh part payment on a ₹50L home loan at
 8.5% in year 5 saves approximately ₹8-12 lakh in total interest if used
@@ -46,8 +65,16 @@ return (historically), SIP wins over 10+ year horizon but involves market risk.
 
 ## Blog
 
-All articles at https://lastemi.com/blog cover Indian home loan topics
+All articles at https://lastemi.com/blog cover Indian personal finance topics
+— home loans, personal loans, car loans, education loans, credit cards —
 with embedded calculators, RBI rule citations, and honest verdicts.
+
+**Credit Card Interest:** 3.5% per month = 42% PA. Paying only minimum due
+(5%) on ₹50,000 means 8+ years of payments and ₹1.8L+ in interest.
+
+**Loan Payoff Priority:** Credit cards first (42%), then personal loans (16%),
+then car loans (9.5%), then education loans (10.5% but 80E reduces effective
+rate to ~7.35%), then home loans last (8.5% but 24b reduces to ~6.3%).
 
 ## Contact and Trust
 

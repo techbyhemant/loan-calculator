@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 export function Footer() {
   const pathname = usePathname();
 
-  // Don't show global footer on dashboard pages
   if (pathname.startsWith("/dashboard")) return null;
 
   return (
@@ -98,7 +97,7 @@ export function Footer() {
           {/* About */}
           <div>
             <h3 className="text-sm font-semibold text-gray-900 mb-3">
-              EMIPartPay
+              LastEMI
             </h3>
             <p className="text-sm text-gray-600">
               India&apos;s honest debt freedom platform. No hidden fees, no lead gen
@@ -109,7 +108,7 @@ export function Footer() {
 
         <div className="border-t border-gray-100 pt-4 text-center">
           <p className="text-xs text-gray-500">
-            &copy; {new Date().getFullYear()} EMIPartPay. All rights reserved.
+            &copy; 2026 LastEMI. All rights reserved.
           </p>
         </div>
       </div>

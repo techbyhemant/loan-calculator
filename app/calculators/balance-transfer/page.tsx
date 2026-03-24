@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import BalanceTransferCalc from "@/components/calculators/BalanceTransferCalc";
 
@@ -19,6 +19,24 @@ export const metadata = buildMetadata({
   ],
 });
 
+const faqs = [
+  {
+    question: "Is home loan balance transfer worth it?",
+    answer:
+      "Balance transfer is worth it if the net saving (after processing fees and legal charges) exceeds \u20B925,000 and you have at least 5+ years remaining on your loan. For smaller savings, the paperwork hassle outweighs the benefit.",
+  },
+  {
+    question: "Can my bank charge prepayment penalty when I transfer my home loan?",
+    answer:
+      "No. RBI mandates zero prepayment penalty on floating rate home loans. Your current bank cannot charge any fee for closing the loan before transfer.",
+  },
+  {
+    question: "How long does home loan balance transfer take?",
+    answer:
+      "The process typically takes 2-4 weeks including property valuation, legal verification, and NOC from the old bank.",
+  },
+];
+
 export default function BalanceTransferPage() {
   const calcSchema = getCalculatorSchema({
     name: "Home Loan Balance Transfer Calculator",
@@ -32,10 +50,13 @@ export default function BalanceTransferPage() {
     { name: "Balance Transfer", url: "https://lastemi.com/calculators/balance-transfer" },
   ]);
 
+  const faqSchema = getFAQSchema(faqs);
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
           Home Loan Balance Transfer Calculator: Is It Worth Switching?
@@ -80,6 +101,18 @@ export default function BalanceTransferPage() {
           <p>
             Before going through the transfer process, call your current bank and ask for a rate reduction. Show them the competing offer. Banks often match or come close to retain existing customers — especially if you have a good repayment track record and CIBIL score above 750.
           </p>
+
+          <h2 className="text-xl font-semibold text-gray-900">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-gray-900">{faq.question}</dt>
+                <dd className="mt-1 text-gray-600">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
             <p className="text-blue-800 font-medium">

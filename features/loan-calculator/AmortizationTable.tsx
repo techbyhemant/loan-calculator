@@ -399,7 +399,7 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
         cell: ({ row }) => {
           if (row.original.isGroup) {
             return (
-              <span className="font-bold text-emerald-600">
+              <span className="font-bold text-emerald-700">
                 {formatINR(Math.round(row.original.totalInterest || 0))}
               </span>
             );
@@ -773,7 +773,7 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
                   <span
                     className={`flex items-center justify-start ${
                       isMobile ? "w-3 h-4" : "w-4 h-6"
-                    } cursor-pointer text-emerald-500 ${
+                    } cursor-pointer text-emerald-700 ${
                       isMobile ? "text-sm" : ""
                     }`}
                   >
@@ -841,9 +841,9 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
   });
 
   return (
-    <div className="w-full">
-      {headerRow}
-      <div className="overflow-x-auto">{allRows}</div>
+    <div className="w-full" role="table" aria-label="Amortization Schedule">
+      <div role="rowgroup">{headerRow}</div>
+      <div className="overflow-x-auto" role="rowgroup">{allRows}</div>
     </div>
   );
 };

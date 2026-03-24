@@ -1,6 +1,8 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { FaFilePdf, FaFileExcel, FaShareAlt } from "react-icons/fa";
+import { FaFilePdf } from "react-icons/fa6";
+import { FaFileExcel } from "react-icons/fa6";
+import { FaShareNodes } from "react-icons/fa6";
 import { useLoanCalculator } from "../context/LoanCalculatorContext";
 
 export function DownloadButtons() {
@@ -12,7 +14,7 @@ export function DownloadButtons() {
         type="button"
         variant="default"
         onClick={handleExportPDF}
-        className="bg-[#10B981] text-white rounded-full text-sm px-4 py-2 flex items-center gap-2 hover:bg-emerald-600 hover:text-white transition-colors"
+        className="bg-emerald-700 text-white rounded-full text-sm px-4 py-2 flex items-center gap-2 hover:bg-emerald-800 hover:text-white transition-colors"
       >
         <FaFilePdf /> Download PDF
       </Button>
@@ -20,7 +22,7 @@ export function DownloadButtons() {
         type="button"
         variant="default"
         onClick={handleExportExcel}
-        className="bg-[#10B981] text-white rounded-full text-sm px-4 py-2 flex items-center gap-2 hover:bg-emerald-600 hover:text-white transition-colors"
+        className="bg-emerald-700 text-white rounded-full text-sm px-4 py-2 flex items-center gap-2 hover:bg-emerald-800 hover:text-white transition-colors"
       >
         <FaFileExcel /> Download Excel
       </Button>
@@ -28,9 +30,9 @@ export function DownloadButtons() {
         type="button"
         variant="default"
         onClick={handleShareURL}
-        className="bg-[#10B981] text-white rounded-full text-sm px-4 py-2 flex items-center gap-2 hover:bg-emerald-600 hover:text-white transition-colors"
+        className="bg-emerald-700 text-white rounded-full text-sm px-4 py-2 flex items-center gap-2 hover:bg-emerald-800 hover:text-white transition-colors"
       >
-        <FaShareAlt /> Share
+        <FaShareNodes /> Share
       </Button>
     </div>
   );

@@ -4,7 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import type { LoanType, RateType } from "@/types";
+import type { RateType } from "@/types";
+import type { LoanType } from "@/lib/calculations/loanTypeConfig";
+import {
+  LOAN_TYPE_DISPLAY,
+  LOAN_TYPE_FINANCIALS,
+  isRBIZeroPenaltyApplicable,
+} from "@/lib/calculations/loanTypeConfig";
 
 import { calculateEMI } from "@/lib/calculations/loanCalcs";
 import { formatINR } from "@/lib/utils/formatters";
@@ -12,28 +18,13 @@ import { trpcReact } from "@/lib/trpc/hooks";
 
 import NumericInput from "@/components/ui/NumericInput";
 
-const LOAN_TYPES: { value: LoanType; label: string; icon: string }[] = [
-  { value: "home", label: "Home Loan", icon: "\u{1F3E0}" },
-  { value: "car", label: "Car Loan", icon: "\u{1F697}" },
-  { value: "personal", label: "Personal Loan", icon: "\u{1F4BC}" },
-  { value: "gold", label: "Gold Loan", icon: "\u{1F947}" },
-  { value: "education", label: "Education Loan", icon: "\u{1F393}" },
-  { value: "credit_card", label: "Credit Card", icon: "\u{1F4B3}" },
-  { value: "other", label: "Other", icon: "\u{1F4CB}" },
-];
-
-const DEFAULTS: Record<
-  string,
-  { rate: number; tenureYears: number; rateType: RateType }
-> = {
-  home: { rate: 8.5, tenureYears: 20, rateType: "floating" },
-  car: { rate: 9, tenureYears: 5, rateType: "fixed" },
-  personal: { rate: 14, tenureYears: 3, rateType: "fixed" },
-  gold: { rate: 9.5, tenureYears: 2, rateType: "fixed" },
-  education: { rate: 8.5, tenureYears: 7, rateType: "floating" },
-  credit_card: { rate: 36, tenureYears: 1, rateType: "fixed" },
-  other: { rate: 12, tenureYears: 5, rateType: "fixed" },
-};
+const LOAN_TYPES: { value: LoanType; label: string; icon: string }[] = (
+  Object.keys(LOAN_TYPE_DISPLAY) as LoanType[]
+).map((type) => ({
+  value: type,
+  label: LOAN_TYPE_DISPLAY[type].label,
+  icon: LOAN_TYPE_DISPLAY[type].icon,
+}));
 
 export default function NewLoanPage() {
   const router = useRouter();
@@ -69,12 +60,15 @@ export default function NewLoanPage() {
 
   const handleTypeChange = (type: LoanType) => {
     setLoanType(type);
-    const defaults = DEFAULTS[type];
-    setRate(defaults.rate);
-    setTenureYears(defaults.tenureYears);
-    setTenureMonths(0);
-    setRateType(defaults.rateType);
-    if (defaults.rateType === "floating") setPenalty(0);
+    const fin = LOAN_TYPE_FINANCIALS[type];
+    setRate(fin.defaultRatePA * 100);
+    setTenureYears(Math.floor(fin.defaultTenureMonths / 12));
+    setTenureMonths(fin.defaultTenureMonths % 12);
+    const defaultRateType = (type === "home" || type === "education" || type === "lap") ? "floating" as RateType : "fixed" as RateType;
+    setRateType(defaultRateType);
+    if (defaultRateType === "floating" && isRBIZeroPenaltyApplicable(type, "floating")) setPenalty(0);
+    setOriginalAmount(fin.defaultAmountINR);
+    setOutstanding(fin.defaultAmountINR);
   };
 
   const totalTenureMonths =
@@ -117,7 +111,7 @@ export default function NewLoanPage() {
       startDate,
       tenureMonths: totalTenureMonths,
       rateType,
-      prepaymentPenalty: rateType === "floating" ? 0 : ((penalty as number) || 0),
+      prepaymentPenalty: isRBIZeroPenaltyApplicable(loanType, rateType) ? 0 : ((penalty as number) || 0),
       notes: "",
     });
   };
@@ -212,7 +206,7 @@ export default function NewLoanPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Original Loan Amount (&rupee;) *
+              Original Loan Amount (₹) *
             </label>
             <NumericInput
               value={originalAmount}
@@ -228,7 +222,7 @@ export default function NewLoanPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Current Outstanding (&rupee;) *
+              Current Outstanding (₹) *
             </label>
             <NumericInput
               value={outstanding}
@@ -258,7 +252,7 @@ export default function NewLoanPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Monthly EMI (&rupee;)
+              Monthly EMI (₹)
             </label>
             <NumericInput
               value={emi}
@@ -273,7 +267,7 @@ export default function NewLoanPage() {
             />
             {calculatedEMI > 0 && !emi && (
               <p className="text-xs text-gray-500 mt-1">
-                Auto-calculated: &rupee;
+                Auto-calculated: ₹
                 {formatINR(calculatedEMI).replace("₹", "")}
               </p>
             )}
@@ -390,8 +384,14 @@ export default function NewLoanPage() {
           )}
           {rateType === "floating" && (
             <div className="flex items-end">
-              <p className="text-xs text-green-700 bg-green-50 border border-green-200 rounded-lg p-2.5">
-                Floating rate loans have 0% prepayment penalty (RBI mandated)
+              <p className={`text-xs rounded-lg p-2.5 ${
+                isRBIZeroPenaltyApplicable(loanType, "floating")
+                  ? "text-green-700 bg-green-50 border border-green-200"
+                  : "text-gray-600 bg-gray-50 border border-gray-200"
+              }`}>
+                {isRBIZeroPenaltyApplicable(loanType, "floating")
+                  ? "RBI mandated: Zero prepayment penalty on this floating rate loan"
+                  : "Floating rate selected. Check your agreement for prepayment terms."}
               </p>
             </div>
           )}

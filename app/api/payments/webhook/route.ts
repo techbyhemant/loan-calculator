@@ -1,6 +1,6 @@
 // Razorpay webhook handler
 // Requires: RAZORPAY_WEBHOOK_SECRET in .env.local
-// Configure webhook URL in Razorpay dashboard: https://emipartpay.com/api/payments/webhook
+// Configure webhook URL in Razorpay dashboard: https://lastemi.com/api/payments/webhook
 
 import { NextRequest } from "next/server";
 import crypto from "crypto";

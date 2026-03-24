@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "RBI Repo Rate 2026 — Impact on Home Loan EMI | EMIPartPay",
+  title: "RBI Repo Rate 2026 — Impact on Home Loan EMI | LastEMI",
   description:
     "Track the latest RBI repo rate and understand how it affects your floating rate home loan EMI. Historical rate data and EMI impact calculator.",
   keywords: [
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "RBI Repo Rate 2026 — Impact on Your Home Loan",
     url: "/rbi-rates",
-    siteName: "EMIPartPay",
+    siteName: "LastEMI",
     locale: "en_IN",
     type: "website",
   },
@@ -40,7 +40,7 @@ export default function RBIRatesPage() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: "RBI Repo Rate Tracker",
-    url: "https://emipartpay.com/rbi-rates",
+    url: "https://lastemi.com/rbi-rates",
     description: metadata.description,
   };
 

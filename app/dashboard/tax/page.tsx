@@ -94,7 +94,7 @@ function TaxContent() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Gross Annual Income (&rupee;)
+              Gross Annual Income (₹)
             </label>
             <NumericInput
               value={grossIncome}
@@ -106,7 +106,7 @@ function TaxContent() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Other 80C Investments (&rupee;)
+              Other 80C Investments (₹)
             </label>
             <NumericInput
               value={existing80C}

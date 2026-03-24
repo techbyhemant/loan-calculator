@@ -1,0 +1,1274 @@
+{
+  "timestamp": "2026-03-23T22:11:05.534Z",
+  "baseUrl": "http://localhost:3000",
+  "thresholds": {
+    "performance": 90,
+    "accessibility": 95,
+    "best-practices": 90,
+    "seo": 95
+  },
+  "summary": {
+    "totalPages": 13,
+    "passing": 13,
+    "failing": 0
+  },
+  "results": [
+    {
+      "url": "http://localhost:3000/",
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.7 s",
+        "FID": "70 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "30 ms",
+        "SI": "1.2 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 86,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.7 s"
+        },
+        {
+          "id": "max-potential-fid",
+          "title": "Max Potential First Input Delay",
+          "score": 99,
+          "description": "The maximum potential First Input Delay that your users could experience is the duration of the longest task. [Learn more about the Maximum Potential First Input Delay metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-max-potential-fid/).",
+          "displayValue": "70 ms"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 94,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "3.3 s"
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 163 KiB",
+          "items": [
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158167,
+              "wastedBytes": 73688
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 68969
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 24244
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 140 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 168
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3000/calculators/sip-vs-prepayment",
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.6 s",
+        "FID": "60 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "10 ms",
+        "SI": "0.8 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 87,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.6 s"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 91,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "3.6 s"
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 212 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 116088
+            },
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158167,
+              "wastedBytes": 73146
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 27557
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 120 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 152
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3000/calculators/home-loan-eligibility",
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.6 s",
+        "FID": "60 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "0 ms",
+        "SI": "0.8 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 87,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.6 s"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 97,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "2.8 s"
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 212 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 116088
+            },
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158164,
+              "wastedBytes": 73145
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 27557
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 120 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 151
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3000/calculators/tax-benefit",
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.6 s",
+        "FID": "60 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "10 ms",
+        "SI": "0.8 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 87,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.6 s"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 92,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "3.5 s"
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 212 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 116088
+            },
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158167,
+              "wastedBytes": 73146
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 27557
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 140 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 152
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3000/calculators/salary-to-emi",
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.6 s",
+        "FID": "50 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "0 ms",
+        "SI": "0.8 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 88,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.6 s"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 91,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "3.7 s"
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 212 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 116088
+            },
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158164,
+              "wastedBytes": 73145
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 27681
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 80 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 152
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3000/calculators/rent-vs-buy",
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.6 s",
+        "FID": "60 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "0 ms",
+        "SI": "0.8 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 87,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.6 s"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 88,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "3.9 s"
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 212 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 116088
+            },
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158164,
+              "wastedBytes": 73145
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 27681
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 100 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 152
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3000/calculators/balance-transfer",
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.6 s",
+        "FID": "60 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "10 ms",
+        "SI": "0.8 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 87,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.6 s"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 88,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "3.9 s"
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 212 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 116088
+            },
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158164,
+              "wastedBytes": 73145
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 27681
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 100 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 152
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3000/blog",
+      "scores": {
+        "performance": 97,
+        "accessibility": 98,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.6 s",
+        "FID": "60 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "10 ms",
+        "SI": "0.8 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 87,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.6 s"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 86,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "4.2 s"
+        },
+        {
+          "id": "heading-order",
+          "title": "Heading elements are not in a sequentially-descending order",
+          "score": 0,
+          "description": "Properly ordered headings that do not skip levels convey the semantic structure of the page, making it easier to navigate and understand when using assistive technologies. [Learn more about heading order](https://dequeuniversity.com/rules/axe/4.11/heading-order).",
+          "displayValue": null,
+          "items": [
+            {
+              "selector": "div.max-w-6xl > div.grid > div > h3.text-sm",
+              "snippet": "<h3 class=\"text-sm font-semibold text-gray-900 mb-3\">"
+            }
+          ]
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 212 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 116088
+            },
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158324,
+              "wastedBytes": 73023
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 27994
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 130 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 151
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3000/rbi-rates",
+      "scores": {
+        "performance": 98,
+        "accessibility": 96,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.5 s",
+        "FID": "60 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "10 ms",
+        "SI": "0.8 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 90,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.5 s"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 92,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "3.5 s"
+        },
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "score": 0,
+          "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.11/color-contrast).",
+          "displayValue": null,
+          "items": [
+            {
+              "selector": "main.max-w-4xl > div.bg-white > p.text-sm > span.text-green-600",
+              "snippet": "<span class=\"text-green-600\">"
+            },
+            {
+              "selector": "tbody.divide-y > tr > td.px-4 > span.text-green-600",
+              "snippet": "<span class=\"text-green-600\">"
+            },
+            {
+              "selector": "tbody.divide-y > tr > td.px-4 > span.text-gray-400",
+              "snippet": "<span class=\"text-gray-400\">"
+            }
+          ]
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 212 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 116088
+            },
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158167,
+              "wastedBytes": 73146
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 27994
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 130 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 151
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3000/pricing",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.5 s",
+        "FID": "60 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "10 ms",
+        "SI": "0.8 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 90,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.5 s"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 89,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "3.8 s"
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 212 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 116088
+            },
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158167,
+              "wastedBytes": 73146
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 27994
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 130 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 151
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3000/about",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.5 s",
+        "FID": "60 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "10 ms",
+        "SI": "0.8 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 90,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.5 s"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 92,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "3.4 s"
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 212 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 116088
+            },
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158164,
+              "wastedBytes": 73145
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 27994
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 130 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 151
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3000/editorial-standards",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.5 s",
+        "FID": "80 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "20 ms",
+        "SI": "0.8 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 90,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.5 s"
+        },
+        {
+          "id": "max-potential-fid",
+          "title": "Max Potential First Input Delay",
+          "score": 99,
+          "description": "The maximum potential First Input Delay that your users could experience is the duration of the longest task. [Learn more about the Maximum Potential First Input Delay metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-max-potential-fid/).",
+          "displayValue": "80 ms"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 89,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "3.8 s"
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 212 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 116088
+            },
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158324,
+              "wastedBytes": 73023
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 27994
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 130 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 151
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3000/login",
+      "scores": {
+        "performance": 97,
+        "accessibility": 98,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "cwv": {
+        "LCP": "2.6 s",
+        "FID": "60 ms",
+        "CLS": "0",
+        "FCP": "0.8 s",
+        "TBT": "10 ms",
+        "SI": "0.8 s"
+      },
+      "issues": [
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 87,
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "displayValue": "2.6 s"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 88,
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "displayValue": "4.0 s"
+        },
+        {
+          "id": "landmark-one-main",
+          "title": "Document does not have a main landmark.",
+          "score": 0,
+          "description": "One main landmark helps screen reader users navigate a web page. [Learn more about landmarks](https://dequeuniversity.com/rules/axe/4.11/landmark-one-main).",
+          "displayValue": null,
+          "items": [
+            {
+              "selector": "html",
+              "snippet": "<html lang=\"en-IN\">"
+            }
+          ]
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 0,
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "displayValue": "Est savings of 212 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/0p-r3dzskxtbg.js",
+              "totalBytes": 126044,
+              "wastedBytes": 116088
+            },
+            {
+              "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+              "totalBytes": 158164,
+              "wastedBytes": 73145
+            },
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "totalBytes": 70772,
+              "wastedBytes": 27994
+            }
+          ]
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 0,
+          "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+          "displayValue": "Est savings of 14 KiB",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+              "wastedBytes": 13927
+            }
+          ]
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "displayValue": null,
+          "items": []
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "score": 0,
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+          "displayValue": "Est savings of 130 ms",
+          "items": [
+            {
+              "url": "http://localhost:3000/_next/static/chunks/025d8slwx78ti.css",
+              "totalBytes": 13511,
+              "wastedMs": 151
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

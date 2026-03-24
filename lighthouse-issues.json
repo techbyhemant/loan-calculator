@@ -1,0 +1,132 @@
+[
+  {
+    "page": "/",
+    "scores": {
+      "performance": 93,
+      "accessibility": 91,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "cwv": {
+      "LCP": "3.2 s",
+      "FID": "60 ms",
+      "CLS": "0",
+      "FCP": "0.8 s",
+      "TBT": "10 ms",
+      "SI": "1.1 s"
+    },
+    "topIssues": [
+      {
+        "id": "aria-valid-attr-value",
+        "title": "`[aria-*]` attributes do not have valid values",
+        "score": 0,
+        "description": "Assistive technologies, like screen readers, can't interpret ARIA attributes with invalid values. [Learn more about valid values for ARIA attributes](https://dequeuniversity.com/rules/axe/4.11/aria-valid-attr-value).",
+        "displayValue": null,
+        "items": [
+          {
+            "selector": "div.flex > div.flex > div.text-muted-foreground > button#radix-_R_4p9intb_-trigger-emi",
+            "snippet": "<button type=\"button\" role=\"tab\" aria-selected=\"true\" aria-controls=\"radix-_R_4p9intb_-content-emi\" data-state=\"active\" id=\"radix-_R_4p9intb_-trigger-emi\" data-slot=\"tabs-trigger\" class=\"data-[state=a"
+          },
+          {
+            "selector": "div.flex > div.flex > div.text-muted-foreground > button#radix-_R_599intb_-trigger-calendar",
+            "snippet": "<button type=\"button\" role=\"tab\" aria-selected=\"true\" aria-controls=\"radix-_R_599intb_-content-calendar\" data-state=\"active\" id=\"radix-_R_599intb_-trigger-calendar\" data-slot=\"tabs-trigger\" class=\"dat"
+          }
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+        "score": 0,
+        "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.11/color-contrast).",
+        "displayValue": null,
+        "items": [
+          {
+            "selector": "div.flex > div.flex > div.text-muted-foreground > button#radix-_R_4p9intb_-trigger-emi",
+            "snippet": "<button type=\"button\" role=\"tab\" aria-selected=\"true\" aria-controls=\"radix-_R_4p9intb_-content-emi\" data-state=\"active\" id=\"radix-_R_4p9intb_-trigger-emi\" data-slot=\"tabs-trigger\" class=\"data-[state=a"
+          },
+          {
+            "selector": "div.flex > div.flex > div.text-muted-foreground > button#radix-_R_599intb_-trigger-calendar",
+            "snippet": "<button type=\"button\" role=\"tab\" aria-selected=\"true\" aria-controls=\"radix-_R_599intb_-content-calendar\" data-state=\"active\" id=\"radix-_R_599intb_-trigger-calendar\" data-slot=\"tabs-trigger\" class=\"dat"
+          },
+          {
+            "selector": "div.bg-[#F9FAFB] > main.max-w-6xl > div.flex > button.justify-center",
+            "snippet": "<button data-slot=\"button\" class=\"justify-center whitespace-nowrap font-medium disabled:pointer-events-none …\" type=\"button\">"
+          }
+        ]
+      },
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "score": 0,
+        "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+        "displayValue": "Est savings of 167 KiB",
+        "items": [
+          {
+            "url": "https://www.googletagmanager.com/gtag/js?id=G-NGSGNLN0SE",
+            "totalBytes": 158167,
+            "wastedBytes": 73688
+          },
+          {
+            "url": "http://localhost:3000/_next/static/chunks/0s7gd8jxrk9wc.js",
+            "totalBytes": 131367,
+            "wastedBytes": 71544
+          },
+          {
+            "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+            "totalBytes": 70772,
+            "wastedBytes": 25456
+          }
+        ]
+      },
+      {
+        "id": "legacy-javascript-insight",
+        "title": "Legacy JavaScript",
+        "score": 0,
+        "description": "Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/articles/baseline-and-polyfills) features, unless you know you must support older browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://developer.chrome.com/docs/performance/insights/legacy-javascript)",
+        "displayValue": "Est savings of 14 KiB",
+        "items": [
+          {
+            "url": "http://localhost:3000/_next/static/chunks/00nvzi6qb_-1r.js",
+            "wastedBytes": 13927
+          }
+        ]
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "score": 0,
+        "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+        "displayValue": null,
+        "items": []
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render blocking requests",
+        "score": 0,
+        "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+        "displayValue": "Est savings of 110 ms",
+        "items": [
+          {
+            "url": "http://localhost:3000/_next/static/chunks/0ce2r0oy7hcn1.css",
+            "totalBytes": 13559,
+            "wastedMs": 153
+          }
+        ]
+      },
+      {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "score": 73,
+        "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "displayValue": "3.2 s"
+      },
+      {
+        "id": "interactive",
+        "title": "Time to Interactive",
+        "score": 94,
+        "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+        "displayValue": "3.3 s"
+      }
+    ]
+  }
+]

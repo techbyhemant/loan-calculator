@@ -6,16 +6,16 @@ export default function SEOJsonLd() {
   const org = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "EMIPartPay",
-    url: "https://emipartpay.com/",
-    logo: "https://emipartpay.com/file.svg",
+    name: "LastEMI",
+    url: "https://lastemi.com/",
+    logo: "https://lastemi.com/file.svg",
   };
 
   const webApp = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "EMIPartPay – EMI Calculator with Part Payment",
-    url: "https://emipartpay.com/",
+    name: "LastEMI – EMI Calculator with Part Payment",
+    url: "https://lastemi.com/",
     applicationCategory: "FinanceApplication",
     operatingSystem: "Web",
     description:

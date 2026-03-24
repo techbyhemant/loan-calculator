@@ -508,6 +508,29 @@ Page (app/...page.tsx)
 
 ## 6. STANDARD UI COMPONENTS — USE THESE, DON'T RECREATE
 
+### MANDATORY RULE: All calculators MUST use shared components
+
+Every calculator in `components/calculators/` MUST import from `components/calculators/shared.tsx`.
+NEVER use raw HTML `<button>`, `<div className="rounded-xl shadow-sm">`, or inline Tailwind for:
+- Cards → use `CalcSection`, `CalcCard`, `StatCard`, `TableCard` (wrap shadcn Card)
+- Buttons → use shadcn `Button` or `ToggleGroup` from shared.tsx
+- Labels → use `Label` from shared.tsx
+- Input class → use `CALC_INPUT_CLASS` from shared.tsx (matches shadcn Input tokens)
+- Verdicts → use `Verdict` from shared.tsx
+- Callouts → use `Callout` from shared.tsx
+
+This ensures: if you change the Card or Button theme, ALL calculators update automatically.
+
+```typescript
+// ✅ CORRECT — import from shared.tsx
+import { CalcSection, StatCard, ToggleGroup, Label, CALC_INPUT_CLASS } from "./shared";
+import { Button } from "@/components/ui/button";
+
+// ❌ WRONG — never do this in calculators
+<div className="bg-white border rounded-xl shadow-sm p-4">  // use CalcCard instead
+<button className="bg-blue-600 text-white px-4 py-2">       // use Button instead
+```
+
 ### Button
 ```typescript
 // components/ui/Button.tsx

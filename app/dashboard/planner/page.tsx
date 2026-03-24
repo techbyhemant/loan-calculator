@@ -76,7 +76,7 @@ function PlannerContent() {
       {/* Extra payment input */}
       <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 sm:p-6 mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Extra monthly payment you can afford (&rupee;)
+          Extra monthly payment you can afford (₹)
         </label>
         <div className="max-w-xs">
           <NumericInput

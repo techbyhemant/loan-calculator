@@ -5,10 +5,13 @@ export const LoanInputSchema = z.object({
   type: z.enum([
     "home",
     "car",
+    "two_wheeler",
     "personal",
-    "gold",
     "education",
-    "credit_card",
+    "gold",
+    "consumer_durable",
+    "lap",
+    "medical",
     "other",
   ]),
   lender: z.string().max(100).default(""),
@@ -21,6 +24,7 @@ export const LoanInputSchema = z.object({
   tenureMonths: z.number().int().positive(),
   rateType: z.enum(["fixed", "floating"]).default("floating"),
   prepaymentPenalty: z.number().min(0).max(10).default(0),
+  moratoriumEndDate: z.string().optional(), // ISO date, for education loans
   notes: z.string().max(500).optional(),
 });
 

@@ -27,7 +27,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo / Brand */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">EMIPartPay</h1>
+          <h1 className="text-2xl font-bold text-gray-900">LastEMI</h1>
           <p className="text-sm text-gray-600 mt-2">
             Track all your loans. Become debt-free faster.
           </p>

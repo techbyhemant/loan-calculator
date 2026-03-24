@@ -32,7 +32,7 @@ export function LoanSummary() {
           <div className="text-sm text-[#6B7280] mb-1">
             Total Interest Payable
           </div>
-          <div className="text-base sm:text-lg font-semibold text-[#F43F5E]">
+          <div className="text-base sm:text-lg font-semibold text-[#BE123C]">
             {formatINR(result.totalInterest)}
           </div>
         </div>
@@ -40,7 +40,7 @@ export function LoanSummary() {
           <div className="text-sm text-[#6B7280] mb-1">
             Total Payment (Principal + Interest)
           </div>
-          <div className="text-base sm:text-lg font-semibold text-[#10B981]">
+          <div className="text-base sm:text-lg font-semibold text-[#047857]">
             {formatINR(result.totalPayment)}
           </div>
         </div>

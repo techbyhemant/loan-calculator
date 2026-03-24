@@ -5,6 +5,7 @@ import dbConnect from "@/lib/mongodb";
 import { LoanModel } from "@/lib/models/Loan";
 import { FREE_LIMITS } from "@/lib/utils/planGating";
 import { LoanInputSchema } from "@/lib/validators/loanSchema";
+import { isRBIZeroPenaltyApplicable } from "@/lib/calculations/loanTypeConfig";
 
 export const loansRouter = router({
   getAll: protectedProcedure.query(async ({ ctx }) => {
@@ -49,7 +50,7 @@ export const loansRouter = router({
       }
 
       const prepaymentPenalty =
-        input.rateType === "floating" ? 0 : input.prepaymentPenalty;
+        isRBIZeroPenaltyApplicable(input.type, input.rateType) ? 0 : input.prepaymentPenalty;
 
       const loan = await LoanModel.create({
         ...input,

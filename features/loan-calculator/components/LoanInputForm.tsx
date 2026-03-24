@@ -2,6 +2,33 @@ import React from "react";
 import NumericInput from "@/components/ui/NumericInput";
 import { useLoanCalculator } from "../context/LoanCalculatorContext";
 
+// Piecewise-linear mapping: ticks get equal slider spacing, interpolate between.
+// Slider operates on 0–1000 internally.
+function amountToSlider(amount: number, ticks: number[]): number {
+  if (amount <= ticks[0]) return 0;
+  if (amount >= ticks[ticks.length - 1]) return 1000;
+  for (let i = 1; i < ticks.length; i++) {
+    if (amount <= ticks[i]) {
+      const segFraction = (amount - ticks[i - 1]) / (ticks[i] - ticks[i - 1]);
+      const segStart = ((i - 1) / (ticks.length - 1)) * 1000;
+      const segEnd = (i / (ticks.length - 1)) * 1000;
+      return segStart + segFraction * (segEnd - segStart);
+    }
+  }
+  return 1000;
+}
+
+function sliderToAmount(slider: number, ticks: number[], step: number): number {
+  if (slider <= 0) return ticks[0];
+  if (slider >= 1000) return ticks[ticks.length - 1];
+  const segCount = ticks.length - 1;
+  const segSize = 1000 / segCount;
+  const segIndex = Math.min(Math.floor(slider / segSize), segCount - 1);
+  const segFraction = (slider - segIndex * segSize) / segSize;
+  const raw = ticks[segIndex] + segFraction * (ticks[segIndex + 1] - ticks[segIndex]);
+  return Math.round(raw / step) * step;
+}
+
 export function LoanInputForm() {
   const {
     loanType,
@@ -35,7 +62,7 @@ export function LoanInputForm() {
               type="button"
               className={`px-3 sm:px-4 py-1.5 rounded-md font-medium text-xs sm:text-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
                 loanType === type
-                  ? "bg-emerald-500 text-white shadow"
+                  ? "bg-emerald-700 text-white shadow"
                   : "text-gray-700 bg-transparent"
               }`}
               onClick={() => setLoanType(type)}
@@ -77,32 +104,25 @@ export function LoanInputForm() {
             className="rounded-md border border-gray-300 px-3 py-2 text-sm w-full focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all pr-10 outline-none border-[1px]"
             maxLength={11}
           />
-          <span className="absolute right-2 top-2.5 text-sm text-gray-400">
+          <span className="absolute right-2 top-2.5 text-sm text-gray-500">
             {config.loanAmount.unit}
           </span>
         </div>
-        {/* Custom Slider with tooltip */}
+        {/* Custom Slider with tooltip — non-linear scale via ticks */}
         <div className="relative flex flex-col gap-1 mt-1">
           <input
             type="range"
-            min={config.loanAmount.min}
-            max={config.loanAmount.max}
-            step={10000}
-            value={amount}
+            min={0}
+            max={1000}
+            step={1}
+            aria-label="Loan Amount"
+            value={amountToSlider(amount, config.loanAmount.ticks)}
             onChange={(e) => {
-              setAmount(Number(e.target.value));
+              setAmount(sliderToAmount(Number(e.target.value), config.loanAmount.ticks, 10000));
             }}
-            className="w-full h-2 rounded-full bg-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 accent-emerald-500 slider-thumb"
+            className="w-full green-slider"
             style={{
-              background: `linear-gradient(to right, #10b981 0%, #10b981 ${
-                ((amount - config.loanAmount.min) /
-                  (config.loanAmount.max - config.loanAmount.min)) *
-                100
-              }%, #e5e7eb ${
-                ((amount - config.loanAmount.min) /
-                  (config.loanAmount.max - config.loanAmount.min)) *
-                100
-              }%, #e5e7eb 100%)`,
+              background: `linear-gradient(to right, #10b981 0%, #10b981 ${amountToSlider(amount, config.loanAmount.ticks) / 10}%, #e5e7eb ${amountToSlider(amount, config.loanAmount.ticks) / 10}%, #e5e7eb 100%)`,
             }}
           />
           <div className="flex justify-between text-xs text-gray-500 mt-1 px-1">
@@ -112,7 +132,7 @@ export function LoanInputForm() {
                   ? "₹0"
                   : tick >= 10000000
                   ? `₹${tick / 10000000}Cr`
-                  : `₹${tick / 10000000}L`}
+                  : `₹${tick / 100000}L`}
               </span>
             ))}
           </div>
@@ -150,7 +170,7 @@ export function LoanInputForm() {
             step={0.01}
             className="rounded-md border border-gray-300 px-3 py-2 text-sm w-full focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all pr-10 outline-none border-[1px]"
           />
-          <span className="absolute right-2 top-2.5 text-sm text-gray-400">
+          <span className="absolute right-2 top-2.5 text-sm text-gray-500">
             {config.interestRate.unit}
           </span>
         </div>
@@ -158,22 +178,17 @@ export function LoanInputForm() {
         <div className="relative flex flex-col gap-1 mt-1">
           <input
             type="range"
-            min={config.interestRate.min}
-            max={config.interestRate.max}
-            step={0.01}
-            value={rate}
-            onChange={(e) => setRate(Number(e.target.value))}
-            className="w-full h-2 rounded-full bg-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 accent-emerald-500 slider-thumb"
+            min={0}
+            max={1000}
+            step={1}
+            aria-label="Interest Rate"
+            value={amountToSlider(rate, config.interestRate.ticks)}
+            onChange={(e) => setRate(
+              Math.round(sliderToAmount(Number(e.target.value), config.interestRate.ticks, 0.01) * 100) / 100
+            )}
+            className="w-full green-slider"
             style={{
-              background: `linear-gradient(to right, #10b981 0%, #10b981 ${
-                ((rate - config.interestRate.min) /
-                  (config.interestRate.max - config.interestRate.min)) *
-                100
-              }%, #e5e7eb ${
-                ((rate - config.interestRate.min) /
-                  (config.interestRate.max - config.interestRate.min)) *
-                100
-              }%, #e5e7eb 100%)`,
+              background: `linear-gradient(to right, #10b981 0%, #10b981 ${amountToSlider(rate, config.interestRate.ticks) / 10}%, #e5e7eb ${amountToSlider(rate, config.interestRate.ticks) / 10}%, #e5e7eb 100%)`,
             }}
           />
           <div className="flex justify-between text-xs text-gray-500 mt-1 px-1">
@@ -200,7 +215,7 @@ export function LoanInputForm() {
               type="button"
               className={`px-2 py-1 rounded-md text-xs font-medium ${
                 tenureUnit === "years"
-                  ? "bg-emerald-500 text-white"
+                  ? "bg-emerald-700 text-white"
                   : "text-gray-600"
               }`}
               onClick={() => setTenureUnit("years")}
@@ -211,7 +226,7 @@ export function LoanInputForm() {
               type="button"
               className={`px-2 py-1 rounded-md text-xs font-medium ${
                 tenureUnit === "months"
-                  ? "bg-emerald-500 text-white"
+                  ? "bg-emerald-700 text-white"
                   : "text-gray-600"
               }`}
               onClick={() => setTenureUnit("months")}
@@ -258,48 +273,38 @@ export function LoanInputForm() {
             }
             className="rounded-md border border-gray-300 px-3 py-2 text-sm w-full focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all pr-10 outline-none border-[1px]"
           />
-          <span className="absolute right-2 top-2.5 text-sm text-gray-400">
+          <span className="absolute right-2 top-2.5 text-sm text-gray-500">
             {tenureUnit === "years" ? config.tenure.unit : "mo"}
           </span>
         </div>
         <div className="relative flex flex-col gap-1 mt-1">
           <input
             type="range"
-            min={
-              tenureUnit === "years"
-                ? config.tenure.min
-                : config.tenure.min * 12
-            }
-            max={
-              tenureUnit === "years"
-                ? config.tenure.max
-                : config.tenure.max * 12
-            }
+            min={0}
+            max={1000}
             step={1}
-            value={tenure}
-            onChange={(e) => handleTenureSlider(Number(e.target.value))}
-            className="w-full h-2 rounded-full bg-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 accent-emerald-500 slider-thumb"
+            aria-label="Loan Tenure"
+            value={amountToSlider(
+              tenure,
+              tenureUnit === "years"
+                ? config.tenure.ticks
+                : config.tenure.ticks.map((t) => t * 12)
+            )}
+            onChange={(e) => {
+              const ticks = tenureUnit === "years"
+                ? config.tenure.ticks
+                : config.tenure.ticks.map((t) => t * 12);
+              handleTenureSlider(Math.round(sliderToAmount(Number(e.target.value), ticks, 1)));
+            }}
+            className="w-full green-slider"
             style={{
-              background:
-                tenureUnit === "years"
-                  ? `linear-gradient(to right, #10b981 0%, #10b981 ${
-                      ((tenure - config.tenure.min) /
-                        (config.tenure.max - config.tenure.min)) *
-                      100
-                    }%, #e5e7eb ${
-                      ((tenure - config.tenure.min) /
-                        (config.tenure.max - config.tenure.min)) *
-                      100
-                    }%, #e5e7eb 100%)`
-                  : `linear-gradient(to right, #10b981 0%, #10b981 ${
-                      ((tenure - config.tenure.min * 12) /
-                        (config.tenure.max * 12 - config.tenure.min * 12)) *
-                      100
-                    }%, #e5e7eb ${
-                      ((tenure - config.tenure.min * 12) /
-                        (config.tenure.max * 12 - config.tenure.min * 12)) *
-                      100
-                    }%, #e5e7eb 100%)`,
+              background: (() => {
+                const ticks = tenureUnit === "years"
+                  ? config.tenure.ticks
+                  : config.tenure.ticks.map((t) => t * 12);
+                const pct = amountToSlider(tenure, ticks) / 10;
+                return `linear-gradient(to right, #10b981 0%, #10b981 ${pct}%, #e5e7eb ${pct}%, #e5e7eb 100%)`;
+              })(),
             }}
           />
           <div className="flex justify-between text-xs text-gray-500 mt-1 px-1">

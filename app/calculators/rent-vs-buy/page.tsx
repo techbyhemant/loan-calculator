@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import RentVsBuyCalc from "@/components/calculators/RentVsBuyCalc";
 
@@ -18,6 +18,19 @@ export const metadata = buildMetadata({
   ],
 });
 
+const faqs = [
+  {
+    question: "Is it better to rent or buy a house in India?",
+    answer:
+      "If the price-to-rent ratio in your city is above 25, renting is usually cheaper. In most tier-1 Indian cities, buying makes financial sense only if you plan to stay 7+ years and can make a 20%+ down payment.",
+  },
+  {
+    question: "What is the true cost of buying a house vs renting?",
+    answer:
+      "The true cost of buying includes EMI interest, property tax, maintenance, opportunity cost of down payment, and registration charges. Renting only costs rent plus the returns you earn on the money you didn\u2019t spend on down payment.",
+  },
+];
+
 export default function RentVsBuyPage() {
   const calcSchema = getCalculatorSchema({
     name: "Rent vs Buy Calculator",
@@ -31,10 +44,13 @@ export default function RentVsBuyPage() {
     { name: "Rent vs Buy", url: "https://lastemi.com/calculators/rent-vs-buy" },
   ]);
 
+  const faqSchema = getFAQSchema(faqs);
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
           Rent vs Buy: Should You Buy a House in India?
@@ -75,6 +91,18 @@ export default function RentVsBuyPage() {
             <li>You can invest the difference disciplined (SIPs, not spending)</li>
             <li>Your rent is less than 2% of the property value annually</li>
           </ul>
+
+          <h2 className="text-xl font-semibold text-gray-900">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-gray-900">{faq.question}</dt>
+                <dd className="mt-1 text-gray-600">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
             <p className="text-blue-800 font-medium">
