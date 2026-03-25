@@ -32,12 +32,12 @@ const MobileInputRow: React.FC<MobileInputRowProps> = ({
     React.useState(false);
 
   return (
-    <div className="bg-gray-50/50 border-l-4 border-l-emerald-200 px-4 py-2 relative space-y-2">
+    <div className="bg-muted/50 border-l-4 border-l-primary/20 px-4 py-2 relative space-y-2">
       {/* First line: Part Payment */}
       <div className="flex items-center gap-3">
         {/* Label with info icon */}
         <div className="flex items-center gap-1 min-w-0 relative">
-          <span className="text-gray-700 font-medium text-sm whitespace-nowrap">
+          <span className="text-foreground font-medium text-sm whitespace-nowrap">
             Part Payment
           </span>
           <button
@@ -47,7 +47,7 @@ const MobileInputRow: React.FC<MobileInputRowProps> = ({
             onTouchEnd={() =>
               setTimeout(() => setShowPartPaymentTooltip(false), 2000)
             }
-            className="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs hover:bg-emerald-200 transition-colors flex-shrink-0"
+            className="w-4 h-4 rounded-full bg-primary/10 text-positive flex items-center justify-center text-xs hover:bg-primary/20 transition-colors flex-shrink-0"
             type="button"
           >
             i
@@ -57,13 +57,13 @@ const MobileInputRow: React.FC<MobileInputRowProps> = ({
           {showPartPaymentTooltip && (
             <div className="absolute bottom-full left-0 mb-1 w-64 bg-gray-800 text-white text-xs rounded-lg p-3 z-50 shadow-lg">
               <div>
-                <span className="font-medium text-emerald-300">
+                <span className="font-medium text-primary">
                   Part Payment:
                 </span>{" "}
                 Make additional payments towards principal to reduce loan tenure
                 or EMI amount. This helps you save on total interest paid.
               </div>
-              <div className="text-gray-300 mt-2">
+              <div className="text-muted-foreground mt-2">
                 💡 Any extra amount you pay will directly reduce your
                 outstanding loan balance.
               </div>
@@ -84,7 +84,7 @@ const MobileInputRow: React.FC<MobileInputRowProps> = ({
       {reduceMode === "tenure" && (
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1 min-w-0 relative">
-            <span className="text-gray-700 font-medium text-sm whitespace-nowrap">
+            <span className="text-foreground font-medium text-sm whitespace-nowrap">
               EMI Increase
             </span>
             <button
@@ -94,7 +94,7 @@ const MobileInputRow: React.FC<MobileInputRowProps> = ({
               onTouchEnd={() =>
                 setTimeout(() => setShowEmiIncreaseTooltip(false), 2000)
               }
-              className="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs hover:bg-emerald-200 transition-colors flex-shrink-0"
+              className="w-4 h-4 rounded-full bg-primary/10 text-positive flex items-center justify-center text-xs hover:bg-primary/20 transition-colors flex-shrink-0"
               type="button"
             >
               i
@@ -104,14 +104,14 @@ const MobileInputRow: React.FC<MobileInputRowProps> = ({
             {showEmiIncreaseTooltip && (
               <div className="absolute bottom-full left-0 mb-1 w-64 bg-gray-800 text-white text-xs rounded-lg p-3 z-50 shadow-lg">
                 <div>
-                  <span className="font-medium text-emerald-300">
+                  <span className="font-medium text-primary">
                     EMI Increase:
                   </span>{" "}
                   Increase your monthly EMI to pay off the loan faster. This
                   reduces the total tenure and interest paid over the loan
                   lifetime.
                 </div>
-                <div className="text-gray-300 mt-2">
+                <div className="text-muted-foreground mt-2">
                   💡 Higher EMI means faster loan closure and significant
                   interest savings.
                 </div>
@@ -379,7 +379,7 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
         cell: ({ row }) => {
           if (row.original.isGroup) {
             return (
-              <span className="font-bold text-emerald-700">
+              <span className="font-bold text-primary">
                 {formatINR(Math.round(row.original.totalPrincipal || 0))}
               </span>
             );
@@ -399,7 +399,7 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
         cell: ({ row }) => {
           if (row.original.isGroup) {
             return (
-              <span className="font-bold text-emerald-700">
+              <span className="font-bold text-primary">
                 {formatINR(Math.round(row.original.totalInterest || 0))}
               </span>
             );
@@ -422,11 +422,11 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
           if (row.original.isGroup) {
             return (
               <div className="text-right">
-                <span className="font-bold text-emerald-800 block">
+                <span className="font-bold text-foreground block">
                   {formatINR(Math.round(row.original.totalPayment || 0))}
                 </span>
                 {isMobile && (
-                  <div className="text-xs text-gray-600 mt-1 space-y-0.5">
+                  <div className="text-xs text-muted-foreground mt-1 space-y-0.5">
                     <div className="font-medium">
                       P:{" "}
                       {formatINR(Math.round(row.original.totalPrincipal || 0))}
@@ -454,7 +454,7 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
                 {formatINR(Math.round(originalRow.total))}
               </span>
               {isMobile && (
-                <div className="text-xs text-gray-600 mt-1 space-y-0.5">
+                <div className="text-xs text-muted-foreground mt-1 space-y-0.5">
                   <div className="font-medium">
                     P: {formatINR(Math.round(originalRow.principal))}
                   </div>
@@ -485,12 +485,12 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
                 <span
                   className={`${
                     isMobile ? "font-medium text-sm" : "font-bold"
-                  } text-emerald-900 block`}
+                  } text-foreground block`}
                 >
                   {formatINR(Math.round(row.original.endBalance || 0))}
                 </span>
                 {isMobile && (
-                  <div className="text-xs font-semibold text-emerald-800 mt-1">
+                  <div className="text-xs font-semibold text-foreground mt-1">
                     {row.original.pctReduced?.toFixed(1) || "0.0"}% paid
                   </div>
                 )}
@@ -511,17 +511,9 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
                 {formatINR(Math.round(balance))}
               </span>
               {isMobile && (
-                <div
-                  className="text-xs font-semibold mt-1"
-                  style={{
-                    color:
-                      balance <= 100000
-                        ? "#10B981"
-                        : balance <= 500000
-                        ? "#F59E0B"
-                        : "#059669",
-                  }}
-                >
+                <div className={`text-xs font-semibold mt-1 ${
+                  balance <= 100000 ? "text-positive" : balance <= 500000 ? "text-warning" : "text-positive"
+                }`}>
                   {loanPaidPct(balance)}% paid
                 </div>
               )}
@@ -539,7 +531,7 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
         cell: ({ row }) => {
           if (row.original.isGroup) {
             return (
-              <span className="font-bold text-emerald-800">
+              <span className="font-bold text-foreground">
                 {row.original.pctReduced?.toFixed(1) || "0.0"}%
               </span>
             );
@@ -547,17 +539,9 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
           const balance = row.original.originalRow?.balance || 0;
           return (
             <div className="flex items-center gap-1 justify-end">
-              <span
-                className="text-xs font-medium text-right"
-                style={{
-                  color:
-                    balance <= 100000
-                      ? "#10B981"
-                      : balance <= 500000
-                      ? "#F59E0B"
-                      : "#059669",
-                }}
-              >
+              <span className={`text-xs font-medium text-right ${
+                balance <= 100000 ? "text-positive" : balance <= 500000 ? "text-warning" : "text-positive"
+              }`}>
                 {loanPaidPct(balance)}%
               </span>
             </div>
@@ -682,7 +666,7 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
         key={key}
         className={`grid w-full items-center ${
           isMobile ? "min-h-[60px]" : "min-h-[40px]"
-        } ${isHeader ? "font-semibold bg-white" : ""} ${className}`}
+        } ${isHeader ? "font-semibold bg-card" : ""} ${className}`}
         style={{
           display: "grid",
           gridTemplateColumns,
@@ -704,7 +688,7 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
               key={idx}
               className={`flex items-center h-full ${
                 isMobile ? "text-sm" : "text-xs"
-              } border-b border-zinc-200 ${
+              } border-b border-border ${
                 align === "right"
                   ? "text-right justify-end"
                   : align === "center"
@@ -737,7 +721,7 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
   const headerRow = renderGridRow({
     key: "header",
     isHeader: true,
-    className: `sticky top-[64px] sm:top-[96px] bg-white border-b border-gray-200 z-40 shadow-sm`,
+    className: `sticky top-[64px] sm:top-[96px] bg-card border-b border-border z-40 shadow-sm`,
     cells: visibleColumns.map((col) =>
       typeof col.header === "function"
         ? col.header(
@@ -761,9 +745,9 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
         <div key={row.id} className="relative">
           {renderGridRow({
             key: row.id,
-            className: `bg-emerald-50 font-semibold cursor-pointer ${
+            className: `bg-table-expanded font-semibold cursor-pointer ${
               isExpanded
-                ? "sticky top-0 z-30 shadow-sm border-b border-emerald-200"
+                ? "sticky top-0 z-30 shadow-sm border-b border-border"
                 : ""
             } ${isMobile ? "min-h-[50px] text-sm" : ""}`,
             onClick: row.getToggleExpandedHandler(),
@@ -773,7 +757,7 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
                   <span
                     className={`flex items-center justify-start ${
                       isMobile ? "w-3 h-4" : "w-4 h-6"
-                    } cursor-pointer text-emerald-700 ${
+                    } cursor-pointer text-primary ${
                       isMobile ? "text-sm" : ""
                     }`}
                   >
@@ -805,9 +789,9 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
                   <div key={subRow.id} className="relative">
                     {renderGridRow({
                       key: subRow.id,
-                      className: `bg-white hover:bg-gray-50 ${
+                      className: `bg-card hover:bg-accent ${
                         isMobile
-                          ? "border-l-2 border-l-emerald-100 text-sm"
+                          ? "border-l-2 border-l-primary/10 text-sm"
                           : ""
                       }`,
                       cells:

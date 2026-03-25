@@ -14,7 +14,7 @@ export function DownloadButtons() {
         type="button"
         variant="default"
         onClick={handleExportPDF}
-        className="bg-emerald-700 text-white rounded-full text-sm px-4 py-2 flex items-center gap-2 hover:bg-emerald-800 hover:text-white transition-colors"
+        className="bg-primary text-white rounded-full text-sm px-4 py-2 flex items-center gap-2 hover:bg-primary/90 hover:text-white transition-colors"
       >
         <FaFilePdf /> Download PDF
       </Button>
@@ -22,7 +22,7 @@ export function DownloadButtons() {
         type="button"
         variant="default"
         onClick={handleExportExcel}
-        className="bg-emerald-700 text-white rounded-full text-sm px-4 py-2 flex items-center gap-2 hover:bg-emerald-800 hover:text-white transition-colors"
+        className="bg-primary text-white rounded-full text-sm px-4 py-2 flex items-center gap-2 hover:bg-primary/90 hover:text-white transition-colors"
       >
         <FaFileExcel /> Download Excel
       </Button>
@@ -30,7 +30,7 @@ export function DownloadButtons() {
         type="button"
         variant="default"
         onClick={handleShareURL}
-        className="bg-emerald-700 text-white rounded-full text-sm px-4 py-2 flex items-center gap-2 hover:bg-emerald-800 hover:text-white transition-colors"
+        className="bg-primary text-white rounded-full text-sm px-4 py-2 flex items-center gap-2 hover:bg-primary/90 hover:text-white transition-colors"
       >
         <FaShareNodes /> Share
       </Button>

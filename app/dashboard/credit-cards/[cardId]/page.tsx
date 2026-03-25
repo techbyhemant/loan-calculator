@@ -22,9 +22,9 @@ export default function CreditCardDetailPage({ params }: { params: Promise<{ car
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <div className="bg-white rounded-xl shadow-sm p-6 animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4" />
-          <div className="h-4 bg-gray-200 rounded w-1/2" />
+        <div className="bg-card rounded-xl shadow-sm p-6 animate-pulse">
+          <div className="h-6 bg-border rounded w-1/3 mb-4" />
+          <div className="h-4 bg-border rounded w-1/2" />
         </div>
       </div>
     );
@@ -33,8 +33,8 @@ export default function CreditCardDetailPage({ params }: { params: Promise<{ car
   if (!card) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Card not found</p>
-        <Link href="/dashboard/credit-cards" className="text-emerald-600 underline text-sm mt-2 block">
+        <p className="text-muted-foreground">Card not found</p>
+        <Link href="/dashboard/credit-cards" className="text-primary underline text-sm mt-2 block">
           Back to cards
         </Link>
       </div>
@@ -63,32 +63,32 @@ export default function CreditCardDetailPage({ params }: { params: Promise<{ car
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <Link href="/dashboard/credit-cards" className="text-gray-400 hover:text-gray-600">
+        <Link href="/dashboard/credit-cards" className="text-muted-foreground hover:text-muted-foreground">
           &larr;
         </Link>
-        <h1 className="text-xl font-bold text-gray-900">{card.name}</h1>
-        {card.issuer && <span className="text-sm text-gray-500">{card.issuer as string}</span>}
+        <h1 className="text-xl font-bold text-foreground">{card.name}</h1>
+        {card.issuer && <span className="text-sm text-muted-foreground">{card.issuer as string}</span>}
       </div>
 
       {/* Overview Card */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
+      <div className="bg-card rounded-xl shadow-sm p-4">
         <div className="flex justify-between items-start mb-3">
           <div>
-            <p className="text-sm text-gray-500">Outstanding Balance</p>
-            <p className="text-2xl font-bold text-red-600">{formatINR(outstanding)}</p>
+            <p className="text-sm text-muted-foreground">Outstanding Balance</p>
+            <p className="text-2xl font-bold text-negative">{formatINR(outstanding)}</p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-gray-500">Credit Limit</p>
-            <p className="text-lg font-semibold text-gray-900">{formatINR(limit)}</p>
+            <p className="text-sm text-muted-foreground">Credit Limit</p>
+            <p className="text-lg font-semibold text-foreground">{formatINR(limit)}</p>
           </div>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+        <div className="w-full bg-border rounded-full h-2 mb-2">
           <div
-            className={`h-2 rounded-full ${utilPct <= 30 ? "bg-emerald-500" : utilPct <= 50 ? "bg-amber-500" : "bg-red-500"}`}
+            className={`h-2 rounded-full ${utilPct <= 30 ? "bg-primary" : utilPct <= 50 ? "bg-amber-500" : "bg-red-500"}`}
             style={{ width: `${Math.min(utilPct, 100)}%` }}
           />
         </div>
-        <div className="flex justify-between text-xs text-gray-500">
+        <div className="flex justify-between text-xs text-muted-foreground">
           <span>{utilPct.toFixed(1)}% utilization</span>
           <span>{formatINR(limit - outstanding)} available</span>
         </div>
@@ -96,31 +96,31 @@ export default function CreditCardDetailPage({ params }: { params: Promise<{ car
 
       {/* Key Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-white rounded-xl shadow-sm p-3 text-center">
-          <p className="text-xs text-gray-500">Interest Rate</p>
-          <p className="text-lg font-bold text-gray-900">{(rate * 100).toFixed(1)}%/mo</p>
-          <p className="text-xs text-gray-500">{annualRate.toFixed(0)}% PA</p>
+        <div className="bg-card rounded-xl shadow-sm p-3 text-center">
+          <p className="text-xs text-muted-foreground">Interest Rate</p>
+          <p className="text-lg font-bold text-foreground">{(rate * 100).toFixed(1)}%/mo</p>
+          <p className="text-xs text-muted-foreground">{annualRate.toFixed(0)}% PA</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-3 text-center">
-          <p className="text-xs text-gray-500">Monthly Interest</p>
+        <div className="bg-card rounded-xl shadow-sm p-3 text-center">
+          <p className="text-xs text-muted-foreground">Monthly Interest</p>
           <p className="text-lg font-bold text-amber-600">{formatINR(monthlyInterest)}</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-3 text-center">
-          <p className="text-xs text-gray-500">Minimum Due</p>
-          <p className="text-lg font-bold text-gray-900">
+        <div className="bg-card rounded-xl shadow-sm p-3 text-center">
+          <p className="text-xs text-muted-foreground">Minimum Due</p>
+          <p className="text-lg font-bold text-foreground">
             {formatINR(Math.max(outstanding * (card.minimumDuePercent as number), CC_DEFAULTS.minimumDueFloor))}
           </p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-3 text-center">
-          <p className="text-xs text-gray-500">Due Date</p>
-          <p className="text-lg font-bold text-gray-900">{card.dueDate as number}th</p>
+        <div className="bg-card rounded-xl shadow-sm p-3 text-center">
+          <p className="text-xs text-muted-foreground">Due Date</p>
+          <p className="text-lg font-bold text-foreground">{card.dueDate as number}th</p>
         </div>
       </div>
 
       {/* Payoff Projections */}
       {scenarios && (
-        <div className="bg-white rounded-xl shadow-sm p-4 space-y-3">
-          <h2 className="font-semibold text-gray-900">Payoff Options</h2>
+        <div className="bg-card rounded-xl shadow-sm p-4 space-y-3">
+          <h2 className="font-semibold text-foreground">Payoff Options</h2>
           <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-3">
             <p className="text-sm text-red-700">
               Paying only minimum due: <strong>{scenarios.minimumDue.monthsToPayoff} months</strong> ({(scenarios.minimumDue.monthsToPayoff / 12).toFixed(1)} years) and{" "}
@@ -129,9 +129,9 @@ export default function CreditCardDetailPage({ params }: { params: Promise<{ car
           </div>
           <div className="space-y-2">
             {paymentOptions.map((opt) => (
-              <div key={opt.label} className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
-                <span className="text-sm text-emerald-800">{opt.label}</span>
-                <span className="font-semibold text-emerald-700">{formatINR(opt.amount)}/mo</span>
+              <div key={opt.label} className="flex items-center justify-between bg-positive/10 border border-green-200 rounded-lg px-3 py-2">
+                <span className="text-sm text-positive">{opt.label}</span>
+                <span className="font-semibold text-positive">{formatINR(opt.amount)}/mo</span>
               </div>
             ))}
           </div>
@@ -139,8 +139,8 @@ export default function CreditCardDetailPage({ params }: { params: Promise<{ car
       )}
 
       {outstanding === 0 && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-center">
-          <p className="text-emerald-800 font-medium">No outstanding balance — great job!</p>
+        <div className="bg-positive/10 border border-green-200 rounded-lg p-4 text-center">
+          <p className="text-positive font-medium">No outstanding balance — great job!</p>
         </div>
       )}
 
@@ -152,7 +152,7 @@ export default function CreditCardDetailPage({ params }: { params: Promise<{ car
               deleteCard.mutate({ id: cardId });
             }
           }}
-          className="text-sm text-red-500 hover:text-red-700"
+          className="text-sm text-negative hover:text-negative"
         >
           Remove Card
         </button>

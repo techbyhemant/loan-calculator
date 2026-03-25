@@ -48,22 +48,22 @@ export function LoanInputForm() {
   } = useLoanCalculator();
 
   return (
-    <div className="w-auto mx-auto bg-white rounded-xl shadow-sm px-4 sm:px-6 py-4 sm:py-5 flex flex-col gap-4">
-      <h1 className="text-base sm:text-lg font-semibold text-[#1E2A38] mb-2 text-center">
+    <div className="w-auto mx-auto bg-card rounded-xl shadow-sm px-4 sm:px-6 py-4 sm:py-5 flex flex-col gap-4">
+      <h1 className="text-base sm:text-lg font-semibold text-foreground mb-2 text-center">
         Loan Details
       </h1>
 
       {/* Loan Type Tabs */}
       <div className="flex justify-center mb-2">
-        <div className="inline-flex rounded-lg bg-gray-100 p-1">
+        <div className="inline-flex rounded-lg bg-muted p-1">
           {(["personal", "home", "car"] as const).map((type) => (
             <button
               key={type}
               type="button"
-              className={`px-3 sm:px-4 py-1.5 rounded-md font-medium text-xs sm:text-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
+              className={`px-3 sm:px-4 py-1.5 rounded-md font-medium text-xs sm:text-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-ring ${
                 loanType === type
-                  ? "bg-emerald-700 text-white shadow"
-                  : "text-gray-700 bg-transparent"
+                  ? "bg-primary text-white shadow"
+                  : "text-foreground bg-transparent"
               }`}
               onClick={() => setLoanType(type)}
               aria-pressed={loanType === type}
@@ -81,7 +81,7 @@ export function LoanInputForm() {
       {/* Loan Amount */}
       <div className="flex flex-col gap-2">
         <label
-          className="text-sm font-medium text-[#374151]"
+          className="text-sm font-medium text-foreground"
           htmlFor="loan-amount"
         >
           Loan Amount
@@ -101,10 +101,10 @@ export function LoanInputForm() {
             placeholder="Loan Amount"
             min={config.loanAmount.min}
             max={config.loanAmount.max}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm w-full focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all pr-10 outline-none border-[1px]"
+            className="rounded-md border border-input px-3 py-2 text-sm w-full focus:ring-2 focus:ring-ring focus:border-ring transition-all pr-10 outline-none border-[1px]"
             maxLength={11}
           />
-          <span className="absolute right-2 top-2.5 text-sm text-gray-500">
+          <span className="absolute right-2 top-2.5 text-sm text-muted-foreground">
             {config.loanAmount.unit}
           </span>
         </div>
@@ -122,10 +122,10 @@ export function LoanInputForm() {
             }}
             className="w-full green-slider"
             style={{
-              background: `linear-gradient(to right, #10b981 0%, #10b981 ${amountToSlider(amount, config.loanAmount.ticks) / 10}%, #e5e7eb ${amountToSlider(amount, config.loanAmount.ticks) / 10}%, #e5e7eb 100%)`,
+              background: `linear-gradient(to right, hsl(var(--slider-fill)) 0%, hsl(var(--slider-fill)) ${amountToSlider(amount, config.loanAmount.ticks) / 10}%, hsl(var(--slider-track)) ${amountToSlider(amount, config.loanAmount.ticks) / 10}%, hsl(var(--slider-track)) 100%)`,
             }}
           />
-          <div className="flex justify-between text-xs text-gray-500 mt-1 px-1">
+          <div className="flex justify-between text-xs text-muted-foreground mt-1 px-1">
             {config.loanAmount.ticks.map((tick) => (
               <span key={tick} className="text-xs">
                 {tick === 0
@@ -142,7 +142,7 @@ export function LoanInputForm() {
       {/* Interest Rate */}
       <div className="flex flex-col gap-2">
         <label
-          className="text-sm font-medium text-[#374151]"
+          className="text-sm font-medium text-foreground"
           htmlFor="interest-rate"
         >
           Interest Rate
@@ -168,9 +168,9 @@ export function LoanInputForm() {
             min={config.interestRate.min}
             max={config.interestRate.max}
             step={0.01}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm w-full focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all pr-10 outline-none border-[1px]"
+            className="rounded-md border border-input px-3 py-2 text-sm w-full focus:ring-2 focus:ring-ring focus:border-ring transition-all pr-10 outline-none border-[1px]"
           />
-          <span className="absolute right-2 top-2.5 text-sm text-gray-500">
+          <span className="absolute right-2 top-2.5 text-sm text-muted-foreground">
             {config.interestRate.unit}
           </span>
         </div>
@@ -188,10 +188,10 @@ export function LoanInputForm() {
             )}
             className="w-full green-slider"
             style={{
-              background: `linear-gradient(to right, #10b981 0%, #10b981 ${amountToSlider(rate, config.interestRate.ticks) / 10}%, #e5e7eb ${amountToSlider(rate, config.interestRate.ticks) / 10}%, #e5e7eb 100%)`,
+              background: `linear-gradient(to right, hsl(var(--slider-fill)) 0%, hsl(var(--slider-fill)) ${amountToSlider(rate, config.interestRate.ticks) / 10}%, hsl(var(--slider-track)) ${amountToSlider(rate, config.interestRate.ticks) / 10}%, hsl(var(--slider-track)) 100%)`,
             }}
           />
-          <div className="flex justify-between text-xs text-gray-500 mt-1 px-1">
+          <div className="flex justify-between text-xs text-muted-foreground mt-1 px-1">
             {config.interestRate.ticks.map((tick) => (
               <span key={tick} className="text-xs">
                 {tick}%
@@ -205,18 +205,18 @@ export function LoanInputForm() {
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <label
-            className="text-sm font-medium text-[#374151]"
+            className="text-sm font-medium text-foreground"
             htmlFor="tenure"
           >
             Tenure
           </label>
-          <div className="flex items-center gap-1 bg-gray-100 rounded-md p-1">
+          <div className="flex items-center gap-1 bg-muted rounded-md p-1">
             <button
               type="button"
               className={`px-2 py-1 rounded-md text-xs font-medium ${
                 tenureUnit === "years"
-                  ? "bg-emerald-700 text-white"
-                  : "text-gray-600"
+                  ? "bg-primary text-white"
+                  : "text-muted-foreground"
               }`}
               onClick={() => setTenureUnit("years")}
             >
@@ -226,8 +226,8 @@ export function LoanInputForm() {
               type="button"
               className={`px-2 py-1 rounded-md text-xs font-medium ${
                 tenureUnit === "months"
-                  ? "bg-emerald-700 text-white"
-                  : "text-gray-600"
+                  ? "bg-primary text-white"
+                  : "text-muted-foreground"
               }`}
               onClick={() => setTenureUnit("months")}
             >
@@ -235,7 +235,7 @@ export function LoanInputForm() {
             </button>
           </div>
         </div>
-        <span className="text-xs text-gray-500 mb-1">
+        <span className="text-xs text-muted-foreground mb-1">
           Switch to months for more granular control
         </span>
         <div className="relative">
@@ -271,9 +271,9 @@ export function LoanInputForm() {
                 ? config.tenure.max
                 : config.tenure.max * 12
             }
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm w-full focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all pr-10 outline-none border-[1px]"
+            className="rounded-md border border-input px-3 py-2 text-sm w-full focus:ring-2 focus:ring-ring focus:border-ring transition-all pr-10 outline-none border-[1px]"
           />
-          <span className="absolute right-2 top-2.5 text-sm text-gray-500">
+          <span className="absolute right-2 top-2.5 text-sm text-muted-foreground">
             {tenureUnit === "years" ? config.tenure.unit : "mo"}
           </span>
         </div>
@@ -303,11 +303,11 @@ export function LoanInputForm() {
                   ? config.tenure.ticks
                   : config.tenure.ticks.map((t) => t * 12);
                 const pct = amountToSlider(tenure, ticks) / 10;
-                return `linear-gradient(to right, #10b981 0%, #10b981 ${pct}%, #e5e7eb ${pct}%, #e5e7eb 100%)`;
+                return `linear-gradient(to right, hsl(var(--slider-fill)) 0%, hsl(var(--slider-fill)) ${pct}%, hsl(var(--slider-track)) ${pct}%, hsl(var(--slider-track)) 100%)`;
               })(),
             }}
           />
-          <div className="flex justify-between text-xs text-gray-500 mt-1 px-1">
+          <div className="flex justify-between text-xs text-muted-foreground mt-1 px-1">
             {tenureUnit === "years"
               ? config.tenure.ticks.map((tick) => (
                   <span key={tick} className="text-xs">
@@ -332,7 +332,7 @@ export function LoanInputForm() {
       {/* EMI Start Date */}
       <div className="flex flex-col gap-2">
         <label
-          className="text-sm font-medium text-[#374151]"
+          className="text-sm font-medium text-foreground"
           htmlFor="emi-start"
         >
           EMI Start Date
@@ -342,7 +342,7 @@ export function LoanInputForm() {
           type="month"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
-          className="rounded-md border border-gray-300 px-3 py-2 text-sm w-full focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none border-[1px]"
+          className="rounded-md border border-input px-3 py-2 text-sm w-full focus:ring-2 focus:ring-ring focus:border-ring transition-all outline-none border-[1px]"
           min="2000-01"
           max="2100-12"
         />

@@ -29,10 +29,10 @@ function StatCard({
   sub?: string;
 }) {
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
-      <p className="text-sm text-gray-600 mb-1">{label}</p>
-      <p className="text-xl font-bold text-gray-900">{value}</p>
-      {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
+    <div className="bg-card border border-border rounded-xl shadow-sm p-4">
+      <p className="text-sm text-muted-foreground mb-1">{label}</p>
+      <p className="text-xl font-bold text-foreground">{value}</p>
+      {sub && <p className="text-xs text-muted-foreground mt-1">{sub}</p>}
     </div>
   );
 }
@@ -48,43 +48,43 @@ function LoanCard({ loan }: { loan: Loan }) {
   );
 
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
+    <div className="bg-card border border-border rounded-xl shadow-sm p-4">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2.5">
           <span className="text-xl">
             {LOAN_TYPE_ICONS[loan.type] ?? "\u{1F4CB}"}
           </span>
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">{loan.name}</h3>
+            <h3 className="text-sm font-semibold text-foreground">{loan.name}</h3>
             {loan.lender && (
-              <p className="text-xs text-gray-500">{loan.lender}</p>
+              <p className="text-xs text-muted-foreground">{loan.lender}</p>
             )}
           </div>
         </div>
-        <p className="text-sm font-semibold text-gray-900">
+        <p className="text-sm font-semibold text-foreground">
           {formatLakhs(loan.currentOutstanding)}
         </p>
       </div>
 
       {/* Progress bar */}
       <div className="mb-3">
-        <div className="flex justify-between text-xs text-gray-500 mb-1">
+        <div className="flex justify-between text-xs text-muted-foreground mb-1">
           <span>{paidPercent.toFixed(0)}% paid</span>
           <span>{formatLakhs(loan.originalAmount)} original</span>
         </div>
-        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
           <div
-            className="h-full bg-blue-500 rounded-full transition-all"
+            className="h-full bg-primary rounded-full transition-all"
             style={{ width: `${paidPercent}%` }}
           />
         </div>
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="text-xs text-gray-600">
+        <div className="text-xs text-muted-foreground">
           <span className="font-medium">{formatINR(loan.emiAmount)}</span>/mo
           {loan.emiDate && (
-            <span className="text-gray-400">
+            <span className="text-muted-foreground">
               {" "}
               &middot; Due {loan.emiDate}
               {loan.emiDate === 1
@@ -99,7 +99,7 @@ function LoanCard({ loan }: { loan: Loan }) {
         </div>
         <Link
           href={`/dashboard/loans/${loan._id}`}
-          className="text-xs font-medium text-blue-600 hover:text-blue-700"
+          className="text-xs font-medium text-primary hover:text-primary"
         >
           View Details &rarr;
         </Link>
@@ -110,10 +110,10 @@ function LoanCard({ loan }: { loan: Loan }) {
 
 function SkeletonCard() {
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 animate-pulse">
-      <div className="h-4 bg-gray-200 rounded w-1/3 mb-3" />
-      <div className="h-6 bg-gray-200 rounded w-1/2 mb-2" />
-      <div className="h-3 bg-gray-100 rounded w-1/4" />
+    <div className="bg-card border border-border rounded-xl shadow-sm p-4 animate-pulse">
+      <div className="h-4 bg-border rounded w-1/3 mb-3" />
+      <div className="h-6 bg-border rounded w-1/2 mb-2" />
+      <div className="h-3 bg-muted rounded w-1/4" />
     </div>
   );
 }
@@ -139,10 +139,10 @@ export default function DashboardPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
+        <h1 className="text-xl font-semibold text-foreground">Dashboard</h1>
         <Link
           href="/dashboard/loans/new"
-          className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors"
+          className="bg-primary hover:bg-primary/90 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors"
         >
           + Add Loan
         </Link>
@@ -195,18 +195,18 @@ export default function DashboardPage() {
           ))}
         </div>
       ) : loans.length === 0 ? (
-        <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-8 text-center">
+        <div className="bg-card border border-border rounded-xl shadow-sm p-8 text-center">
           <p className="text-3xl mb-3">&#x1F4B0;</p>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">
+          <h2 className="text-lg font-semibold text-foreground mb-2">
             Add your first loan
           </h2>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-muted-foreground mb-4">
             Track your home loan, car loan, or any other loan. See exactly when
             you&apos;ll be debt-free.
           </p>
           <Link
             href="/dashboard/loans/new"
-            className="inline-flex bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6 py-2.5 text-sm font-medium transition-colors"
+            className="inline-flex bg-primary hover:bg-primary/90 text-white rounded-lg px-6 py-2.5 text-sm font-medium transition-colors"
           >
             + Add Your First Loan
           </Link>

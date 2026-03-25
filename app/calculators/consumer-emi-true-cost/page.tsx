@@ -42,7 +42,7 @@ export default function ConsumerEMITrueCostPage() {
   ]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }}
@@ -52,11 +52,11 @@ export default function ConsumerEMITrueCostPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           0% EMI True Cost Calculator: What &quot;No Cost EMI&quot; Actually
           Costs
         </h1>
-        <p className="text-gray-600 mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           That &quot;0% interest&quot; offer on your new phone or laptop is not
           free. Sellers charge a processing fee of 1-3% upfront — which is the
           interest, just renamed. Enter your purchase details to see the real
@@ -65,8 +65,8 @@ export default function ConsumerEMITrueCostPage() {
 
         <ConsumerEMITrueCostCalc />
 
-        <section className="mt-12 space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <section className="mt-12 space-y-6 text-foreground text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl font-semibold text-foreground">
             How &quot;No Cost EMI&quot; Actually Works in India
           </h2>
           <p>
@@ -86,7 +86,7 @@ export default function ConsumerEMITrueCostPage() {
             3.7% — not zero.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Why Banks Can Legally Call It &quot;0% Interest&quot;
           </h2>
           <p>
@@ -114,7 +114,7 @@ export default function ConsumerEMITrueCostPage() {
             </li>
           </ul>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             When Should You Use No Cost EMI?
           </h2>
           <p>
@@ -145,20 +145,20 @@ export default function ConsumerEMITrueCostPage() {
           <div className="flex flex-col sm:flex-row gap-3 mt-4">
             <Link
               href="/calculators/sip-vs-prepayment"
-              className="inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center justify-center px-4 py-2 bg-card border border-border rounded-lg text-sm font-medium text-foreground hover:bg-accent transition-colors"
             >
               SIP vs Prepayment Calculator →
             </Link>
             <Link
               href="/calculators/credit-card-payoff"
-              className="inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center justify-center px-4 py-2 bg-card border border-border rounded-lg text-sm font-medium text-foreground hover:bg-accent transition-colors"
             >
               Credit Card Payoff Calculator →
             </Link>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <p className="text-blue-800 font-medium">
+          <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
+            <p className="text-primary font-medium">
               Tracking multiple loans and EMIs? See your exact debt-free date
               and save lakhs in interest.{" "}
               <Link href="/login" className="underline font-semibold">

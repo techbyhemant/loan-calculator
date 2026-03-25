@@ -34,21 +34,21 @@ export default function CreditCardPayoffPage() {
   ]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Credit Card Payoff Calculator: How Long to Clear Your Balance?
         </h1>
-        <p className="text-gray-600 mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Credit cards charge 3.5% per month — that&apos;s 42% per annum. Enter your balance and monthly payment to see exactly how long it will take to become debt-free, and how much interest you&apos;ll pay along the way.
         </p>
 
         <CCPayoffCalc />
 
-        <section className="mt-12 space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <section className="mt-12 space-y-6 text-foreground text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl font-semibold text-foreground">
             How Credit Card Interest Works in India
           </h2>
           <p>
@@ -58,7 +58,7 @@ export default function CreditCardPayoffPage() {
             The interest is calculated on a daily balance basis. If your outstanding balance is ₹1,00,000 and you don&apos;t pay the full amount by the due date, you&apos;ll be charged roughly ₹3,500 in interest for that month alone. Over a year, that&apos;s ₹42,000 — nearly half your original balance — without reducing the principal by a single rupee if you only pay minimum due.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             The Minimum Due Trap
           </h2>
           <p>
@@ -69,13 +69,13 @@ export default function CreditCardPayoffPage() {
           </p>
           <p>
             Use our{" "}
-            <Link href="/calculators/minimum-due-trap" className="text-blue-600 underline font-medium">
+            <Link href="/calculators/minimum-due-trap" className="text-primary underline font-medium">
               Minimum Due Trap Calculator
             </Link>{" "}
             to see the exact cost for your balance.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             When to Consider a Personal Loan Instead
           </h2>
           <p>
@@ -83,21 +83,21 @@ export default function CreditCardPayoffPage() {
           </p>
           <p>
             Use our{" "}
-            <Link href="/calculators/cc-vs-personal-loan" className="text-blue-600 underline font-medium">
+            <Link href="/calculators/cc-vs-personal-loan" className="text-primary underline font-medium">
               Credit Card vs Personal Loan Calculator
             </Link>{" "}
             to see if switching makes sense for your situation — including processing fees and break-even analysis.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             The Interest-Free Period Rule You Must Know
           </h2>
           <p>
             If you pay the <strong>full outstanding</strong> by the due date every month, you get 20-50 days of interest-free credit. But the moment you pay even ₹1 less than the full amount, the interest-free period is lost — and interest is charged on the <strong>entire balance from the transaction date</strong>, not just the unpaid portion. This is why partial payments on credit cards are far more expensive than people realize.
           </p>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <p className="text-blue-800 font-medium">
+          <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
+            <p className="text-primary font-medium">
               Struggling with credit card debt? Track all your debts and get a personalized payoff plan.{" "}
               <Link href="/login" className="underline font-semibold">
                 Start your free debt-free plan &rarr;

@@ -53,11 +53,11 @@ export function PartPaymentLogger({ loanId }: PartPaymentLoggerProps) {
   };
 
   const inputClass =
-    "w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none";
+    "w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-ring focus:ring-1 focus:ring-ring outline-none";
 
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 sm:p-6">
-      <h3 className="text-base font-semibold text-gray-900 mb-4">
+    <div className="bg-card border border-border rounded-xl shadow-sm p-4 sm:p-6">
+      <h3 className="text-base font-semibold text-foreground mb-4">
         Log Part Payment
       </h3>
 
@@ -70,7 +70,7 @@ export function PartPaymentLogger({ loanId }: PartPaymentLoggerProps) {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Amount (₹)
             </label>
             <NumericInput
@@ -82,7 +82,7 @@ export function PartPaymentLogger({ loanId }: PartPaymentLoggerProps) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Payment Date
             </label>
             <input
@@ -95,7 +95,7 @@ export function PartPaymentLogger({ loanId }: PartPaymentLoggerProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             After part payment, reduce:
           </label>
           <div className="flex gap-3">
@@ -104,8 +104,8 @@ export function PartPaymentLogger({ loanId }: PartPaymentLoggerProps) {
               onClick={() => setReduceType("tenure")}
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                 reduceType === "tenure"
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                  ? "bg-primary text-white border-primary"
+                  : "bg-card text-foreground border-border hover:border-border"
               }`}
             >
               Reduce Tenure
@@ -115,8 +115,8 @@ export function PartPaymentLogger({ loanId }: PartPaymentLoggerProps) {
               onClick={() => setReduceType("emi")}
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                 reduceType === "emi"
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                  ? "bg-primary text-white border-primary"
+                  : "bg-card text-foreground border-border hover:border-border"
               }`}
             >
               Reduce EMI
@@ -125,7 +125,7 @@ export function PartPaymentLogger({ loanId }: PartPaymentLoggerProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             Note (optional)
           </label>
           <input
@@ -141,7 +141,7 @@ export function PartPaymentLogger({ loanId }: PartPaymentLoggerProps) {
         <button
           type="submit"
           disabled={createPartPayment.isPending}
-          className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50"
+          className="bg-primary hover:bg-primary/90 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50"
         >
           {createPartPayment.isPending ? "Saving..." : "Log Part Payment"}
         </button>
@@ -169,10 +169,10 @@ export function PartPaymentHistory({ loanId }: PartPaymentHistoryProps) {
 
   if (isLoading) {
     return (
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 animate-pulse">
-        <div className="h-4 bg-gray-200 rounded w-1/3 mb-3" />
-        <div className="h-3 bg-gray-100 rounded w-full mb-2" />
-        <div className="h-3 bg-gray-100 rounded w-2/3" />
+      <div className="bg-card border border-border rounded-xl shadow-sm p-4 animate-pulse">
+        <div className="h-4 bg-border rounded w-1/3 mb-3" />
+        <div className="h-3 bg-muted rounded w-full mb-2" />
+        <div className="h-3 bg-muted rounded w-2/3" />
       </div>
     );
   }
@@ -189,8 +189,8 @@ export function PartPaymentHistory({ loanId }: PartPaymentHistoryProps) {
 
   if (items.length === 0) {
     return (
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6 text-center">
-        <p className="text-sm text-gray-500">
+      <div className="bg-card border border-border rounded-xl shadow-sm p-6 text-center">
+        <p className="text-sm text-muted-foreground">
           No part payments logged yet. Use the form above to log one.
         </p>
       </div>
@@ -198,49 +198,49 @@ export function PartPaymentHistory({ loanId }: PartPaymentHistoryProps) {
   }
 
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
-      <div className="px-4 py-3 border-b border-gray-100">
-        <h3 className="text-base font-semibold text-gray-900">
+    <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
+      <div className="px-4 py-3 border-b border-border">
+        <h3 className="text-base font-semibold text-foreground">
           Part Payment History
         </h3>
       </div>
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-border">
         {items.map((pp) => (
           <div key={pp._id} className="px-4 py-3 flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm font-semibold text-foreground">
                   {formatINR(pp.amount)}
                 </span>
-                <span className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">
+                <span className="text-xs bg-muted text-muted-foreground px-1.5 py-0.5 rounded">
                   {pp.reduceType === "tenure" ? "Tenure reduced" : "EMI reduced"}
                 </span>
               </div>
-              <div className="text-xs text-gray-500 mt-0.5">
+              <div className="text-xs text-muted-foreground mt-0.5">
                 {new Date(pp.date).toLocaleDateString("en-IN", {
                   day: "numeric",
                   month: "short",
                   year: "numeric",
                 })}
                 {pp.interestSaved > 0 && (
-                  <span className="text-green-600 ml-2">
+                  <span className="text-positive ml-2">
                     Saved {formatINR(pp.interestSaved)}
                   </span>
                 )}
                 {pp.monthsReduced > 0 && (
-                  <span className="text-blue-600 ml-2">
+                  <span className="text-primary ml-2">
                     {pp.monthsReduced} months earlier
                   </span>
                 )}
                 {pp.note && (
-                  <span className="text-gray-400 ml-2">&middot; {pp.note}</span>
+                  <span className="text-muted-foreground ml-2">&middot; {pp.note}</span>
                 )}
               </div>
             </div>
             <button
               onClick={() => deletePartPayment.mutate({ id: pp._id })}
               disabled={deletePartPayment.isPending}
-              className="text-xs text-red-500 hover:text-red-700 transition-colors"
+              className="text-xs text-negative hover:text-negative transition-colors"
               title="Delete"
             >
               &times;

@@ -66,9 +66,9 @@ export default function TaxBenefitCalc() {
       {results && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <StatCard label="Section 24(b) Deduction" value={formatINR(results.sec24Deduction)} sub={`Interest — ${loanType === "self-occupied" ? "max ₹2L" : "no cap"}`} valueColor="text-blue-700" />
-            <StatCard label="Section 80C Deduction" value={formatINR(results.sec80CDeduction)} sub="Principal — shared ₹1.5L limit" valueColor="text-green-700" />
-            <StatCard label="Total Deduction" value={formatINR(results.totalDeduction)} sub="24(b) + 80C combined" valueColor="text-purple-700" />
+            <StatCard label="Section 24(b) Deduction" value={formatINR(results.sec24Deduction)} sub={`Interest — ${loanType === "self-occupied" ? "max ₹2L" : "no cap"}`} valueColor="text-primary" />
+            <StatCard label="Section 80C Deduction" value={formatINR(results.sec80CDeduction)} sub="Principal — shared ₹1.5L limit" valueColor="text-positive" />
+            <StatCard label="Total Deduction" value={formatINR(results.totalDeduction)} sub="24(b) + 80C combined" valueColor="text-primary" />
           </div>
 
           <TableCard title="Tax Saved by Bracket">
@@ -89,10 +89,10 @@ export default function TaxBenefitCalc() {
                 ].map((row) => (
                   <tr key={row.label}>
                     <td className="px-4 py-3 font-medium">{row.label}</td>
-                    <td className={`px-4 py-3 text-right font-semibold ${row.old >= row.newR ? "text-green-700" : "text-muted-foreground"}`}>{formatINR(row.old)}</td>
-                    <td className={`px-4 py-3 text-right font-semibold ${row.newR > row.old ? "text-green-700" : "text-muted-foreground"}`}>{formatINR(row.newR)}</td>
+                    <td className={`px-4 py-3 text-right font-semibold ${row.old >= row.newR ? "text-positive" : "text-muted-foreground"}`}>{formatINR(row.old)}</td>
+                    <td className={`px-4 py-3 text-right font-semibold ${row.newR > row.old ? "text-positive" : "text-muted-foreground"}`}>{formatINR(row.newR)}</td>
                     <td className="px-4 py-3 text-right">
-                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${row.old >= row.newR ? "bg-amber-100 text-amber-800" : "bg-blue-100 text-blue-800"}`}>
+                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${row.old >= row.newR ? "bg-warning/10 text-warning" : "bg-primary/10 text-primary"}`}>
                         {row.old >= row.newR ? "Old Regime" : "New Regime"}
                       </span>
                     </td>

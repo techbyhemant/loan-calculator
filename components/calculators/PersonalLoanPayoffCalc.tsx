@@ -207,12 +207,12 @@ export default function PersonalLoanPayoffCalc() {
             <StatCard
               label="Interest Saved"
               value={formatLakhs(results.interestSaved)}
-              valueColor="text-green-700"
+              valueColor="text-positive"
             />
             <StatCard
               label="Penalty Amount"
               value={formatINR(results.penaltyAmount)}
-              valueColor="text-red-600"
+              valueColor="text-negative"
             />
             <StatCard
               label="Net Saving"
@@ -221,7 +221,7 @@ export default function PersonalLoanPayoffCalc() {
                 formatINR(results.netSaving)
               }
               valueColor={
-                results.netSaving >= 0 ? "text-green-700" : "text-red-600"
+                results.netSaving >= 0 ? "text-positive" : "text-negative"
               }
             />
             <StatCard
@@ -231,7 +231,7 @@ export default function PersonalLoanPayoffCalc() {
                   ? formatMonths(results.monthsReduced)
                   : "0"
               }
-              valueColor="text-blue-700"
+              valueColor="text-primary"
             />
           </div>
 
@@ -256,7 +256,7 @@ export default function PersonalLoanPayoffCalc() {
                   <td className="px-4 py-3 text-right font-medium">
                     {formatMonths(results.without.months)}
                   </td>
-                  <td className="px-4 py-3 text-right font-medium text-green-700">
+                  <td className="px-4 py-3 text-right font-medium text-positive">
                     {formatMonths(results.withPrepay.months)}
                   </td>
                 </tr>
@@ -267,7 +267,7 @@ export default function PersonalLoanPayoffCalc() {
                   <td className="px-4 py-3 text-right font-medium">
                     {formatLakhs(results.without.totalInterest)}
                   </td>
-                  <td className="px-4 py-3 text-right font-medium text-green-700">
+                  <td className="px-4 py-3 text-right font-medium text-positive">
                     {formatLakhs(results.withPrepay.totalInterest)}
                   </td>
                 </tr>
@@ -293,7 +293,7 @@ export default function PersonalLoanPayoffCalc() {
                   <td className="px-4 py-3 text-right text-muted-foreground">
                     &mdash;
                   </td>
-                  <td className="px-4 py-3 text-right text-red-600">
+                  <td className="px-4 py-3 text-right text-negative">
                     {formatINR(results.penaltyAmount)}
                   </td>
                 </tr>

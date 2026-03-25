@@ -60,6 +60,28 @@ const config: Config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        /* ── Custom semantic tokens ──────────────── */
+        positive: {
+          DEFAULT: "hsl(var(--positive))",
+          foreground: "hsl(var(--positive-foreground))",
+        },
+        negative: {
+          DEFAULT: "hsl(var(--negative))",
+          foreground: "hsl(var(--negative-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
+        "table-header": "hsl(var(--table-header))",
+        "table-alt": "hsl(var(--table-alt))",
+        "table-hover": "hsl(var(--table-hover))",
+        "table-expanded": "hsl(var(--table-expanded))",
+        pro: {
+          DEFAULT: "hsl(var(--pro))",
+          foreground: "hsl(var(--pro-foreground))",
+          subtle: "hsl(var(--pro-subtle))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

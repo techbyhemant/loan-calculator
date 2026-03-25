@@ -141,14 +141,14 @@ export default function ConsumerEMITrueCostCalc() {
               label="Processing Fee"
               value={formatINR(results.processingFee)}
               valueColor={
-                results.processingFee > 0 ? "text-red-600" : "text-green-700"
+                results.processingFee > 0 ? "text-negative" : "text-positive"
               }
             />
             <StatCard
               label="Effective Annual Rate"
               value={`${results.effectiveRatePA.toFixed(1)}%`}
               valueColor={
-                results.effectiveRatePA > 0 ? "text-red-600" : "text-green-700"
+                results.effectiveRatePA > 0 ? "text-negative" : "text-positive"
               }
               sub="What 0% EMI actually costs"
             />
@@ -156,7 +156,7 @@ export default function ConsumerEMITrueCostCalc() {
               label="Total Extra Cost"
               value={formatINR(results.totalExtraCost)}
               valueColor={
-                results.totalExtraCost > 0 ? "text-red-600" : "text-green-700"
+                results.totalExtraCost > 0 ? "text-negative" : "text-positive"
               }
               sub={includeGST && results.gstOnFee > 0 ? `Incl. ${formatINR(results.gstOnFee)} GST` : undefined}
             />
@@ -204,10 +204,10 @@ export default function ConsumerEMITrueCostCalc() {
                   <td className="px-4 py-3 text-muted-foreground">
                     Processing Fee
                   </td>
-                  <td className="px-4 py-3 text-right text-green-700">
+                  <td className="px-4 py-3 text-right text-positive">
                     {formatINR(0)}
                   </td>
-                  <td className="px-4 py-3 text-right text-red-600">
+                  <td className="px-4 py-3 text-right text-negative">
                     +{formatINR(results.processingFee)}
                   </td>
                 </tr>
@@ -215,10 +215,10 @@ export default function ConsumerEMITrueCostCalc() {
                   <td className="px-4 py-3 text-muted-foreground">
                     GST on Fee
                   </td>
-                  <td className="px-4 py-3 text-right text-green-700">
+                  <td className="px-4 py-3 text-right text-positive">
                     {formatINR(0)}
                   </td>
-                  <td className="px-4 py-3 text-right text-red-600">
+                  <td className="px-4 py-3 text-right text-negative">
                     {includeGST && results.gstOnFee > 0
                       ? `+${formatINR(results.gstOnFee)}`
                       : formatINR(0)}
@@ -245,8 +245,8 @@ export default function ConsumerEMITrueCostCalc() {
                   <td
                     className={`px-4 py-3 text-right font-medium ${
                       results.totalExtraCost > 0
-                        ? "text-red-600"
-                        : "text-green-700"
+                        ? "text-negative"
+                        : "text-positive"
                     }`}
                   >
                     {results.totalExtraCost > 0 ? "+" : ""}

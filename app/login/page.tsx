@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
@@ -23,26 +24,27 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen flex items-center justify-center px-4">
+    <div className="bg-background min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         {/* Logo / Brand */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">LastEMI</h1>
-          <p className="text-sm text-gray-600 mt-2">
+          <Image src="/long-logo-light.png" alt="LastEMI" width={160} height={46} className="mx-auto h-10 w-auto dark:hidden" />
+          <Image src="/long-logo-dark.png" alt="LastEMI" width={160} height={46} className="mx-auto h-10 w-auto hidden dark:block" />
+          <p className="text-sm text-muted-foreground mt-2">
             Track all your loans. Become debt-free faster.
           </p>
         </div>
 
         {/* Auth Card */}
-        <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6 text-center">
+        <div className="bg-card border border-border rounded-xl shadow-sm p-6">
+          <h2 className="text-lg font-semibold text-foreground mb-6 text-center">
             Sign in to your account
           </h2>
 
           {/* Google Button */}
           <button
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center justify-center gap-3 bg-card border border-border rounded-lg px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -67,22 +69,22 @@ export default function LoginPage() {
 
           {/* Divider */}
           <div className="flex items-center my-5">
-            <div className="flex-1 border-t border-gray-200" />
-            <span className="px-3 text-xs text-gray-500">or</span>
-            <div className="flex-1 border-t border-gray-200" />
+            <div className="flex-1 border-t border-border" />
+            <span className="px-3 text-xs text-muted-foreground">or</span>
+            <div className="flex-1 border-t border-border" />
           </div>
 
           {/* Email Magic Link */}
           {!showEmail ? (
             <button
               onClick={() => setShowEmail(true)}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2.5 text-sm font-medium transition-colors"
+              className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg px-4 py-2.5 text-sm font-medium transition-colors"
             >
               Continue with Email
             </button>
           ) : emailSent ? (
             <div className="text-center">
-              <div className="text-green-700 bg-green-50 border border-green-200 rounded-lg p-4 text-sm">
+              <div className="text-positive bg-positive/10 border border-positive/20 rounded-lg p-4 text-sm">
                 <p className="font-semibold">Check your email!</p>
                 <p className="mt-1">
                   We sent a sign-in link to <strong>{email}</strong>
@@ -97,12 +99,12 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="w-full rounded-lg border border-border bg-card px-3 py-2.5 text-sm text-foreground focus:border-ring focus:ring-1 focus:ring-ring outline-none"
               />
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2.5 text-sm font-medium transition-colors disabled:opacity-50"
+                className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg px-4 py-2.5 text-sm font-medium transition-colors disabled:opacity-50"
               >
                 {loading ? "Sending link..." : "Send sign-in link"}
               </button>
@@ -110,7 +112,7 @@ export default function LoginPage() {
           )}
         </div>
 
-        <p className="text-center text-xs text-gray-500 mt-6">
+        <p className="text-center text-xs text-muted-foreground mt-6">
           No password needed. We use secure sign-in links.
         </p>
       </div>

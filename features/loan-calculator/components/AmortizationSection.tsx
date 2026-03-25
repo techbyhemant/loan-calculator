@@ -77,7 +77,7 @@ export function AmortizationSection() {
                   });
                 }
               }}
-              className="w-full text-sm py-1.5 px-2 border border-gray-300 rounded focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+              className="w-full text-sm py-1.5 px-2 border border-input rounded focus:ring-1 focus:ring-ring focus:border-ring outline-none"
               placeholder="Amount (₹)"
               min="0"
               step="1000"
@@ -107,7 +107,7 @@ export function AmortizationSection() {
                   });
                 }
               }}
-              className="w-full text-sm py-1.5 px-2 border border-gray-300 rounded focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+              className="w-full text-sm py-1.5 px-2 border border-input rounded focus:ring-1 focus:ring-ring focus:border-ring outline-none"
               placeholder="Increase (₹)"
               min="0"
               step="1000"
@@ -143,7 +143,7 @@ export function AmortizationSection() {
                   });
                 }
               }}
-              className="flex-1 text-sm py-1.5 px-2 border border-gray-300 rounded focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+              className="flex-1 text-sm py-1.5 px-2 border border-input rounded focus:ring-1 focus:ring-ring focus:border-ring outline-none"
               placeholder="Amount (₹)"
               min="0"
               step="1000"
@@ -171,7 +171,7 @@ export function AmortizationSection() {
                     });
                   }
                 }}
-                className="flex-1 text-sm py-1.5 px-2 border border-gray-300 rounded focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                className="flex-1 text-sm py-1.5 px-2 border border-input rounded focus:ring-1 focus:ring-ring focus:border-ring outline-none"
                 placeholder="Increase (₹)"
                 min="0"
                 step="1000"
@@ -206,7 +206,7 @@ export function AmortizationSection() {
                 });
               }
             }}
-            className="w-20 text-xs py-1 px-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+            className="w-20 text-xs py-1 px-2 border border-input rounded-md focus:ring-2 focus:ring-ring focus:border-ring outline-none"
             placeholder="0"
             min="0"
             step="1000"
@@ -234,7 +234,7 @@ export function AmortizationSection() {
                   });
                 }
               }}
-              className="w-20 text-xs py-1 px-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+              className="w-20 text-xs py-1 px-2 border border-input rounded-md focus:ring-2 focus:ring-ring focus:border-ring outline-none"
               placeholder="0"
               min="0"
               step="1000"
@@ -247,10 +247,10 @@ export function AmortizationSection() {
   );
 
   return (
-    <section className="bg-white rounded-xl shadow-sm p-0 mt-4 sm:p-4 sm:mt-6">
+    <section className="bg-card rounded-xl shadow-sm p-0 mt-4 sm:p-4 sm:mt-6">
       <div className="w-full">
         <div
-          className={`py-2 bg-white border-b border-zinc-200 ${
+          className={`py-2 bg-card border-b border-border ${
             isMobile ? "px-4" : ""
           }`}
         >
@@ -262,7 +262,7 @@ export function AmortizationSection() {
             <h2
               className={`${
                 isMobile ? "text-base" : "text-base sm:text-lg"
-              } font-semibold text-[#1E2A38]`}
+              } font-semibold text-foreground`}
             >
               Amortization Table
             </h2>

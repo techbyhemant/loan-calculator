@@ -45,32 +45,32 @@ export default function RBIRatesPage() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           RBI Repo Rate: Impact on Your Home Loan EMI
         </h1>
-        <p className="text-gray-600 mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           The RBI repo rate directly affects floating-rate home loan EMIs. When
           the repo rate changes, banks adjust their lending rates accordingly.
         </p>
 
         {/* Current Rate Card */}
-        <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6 mb-6 text-center">
-          <p className="text-sm text-gray-600 mb-1">Current RBI Repo Rate</p>
-          <p className="text-4xl font-bold text-blue-700">
+        <div className="bg-card border border-border rounded-xl shadow-sm p-6 mb-6 text-center">
+          <p className="text-sm text-muted-foreground mb-1">Current RBI Repo Rate</p>
+          <p className="text-4xl font-bold text-primary">
             {CURRENT_RATE.rate}%
           </p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             As of {CURRENT_RATE.date}
             {CURRENT_RATE.change !== 0 && (
               <span
                 className={
-                  CURRENT_RATE.change < 0 ? "text-green-600" : "text-red-600"
+                  CURRENT_RATE.change < 0 ? "text-positive" : "text-negative"
                 }
               >
                 {" "}
@@ -82,43 +82,43 @@ export default function RBIRatesPage() {
         </div>
 
         {/* Rate History Table */}
-        <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden mb-6">
-          <div className="px-4 py-3 border-b border-gray-100">
-            <h2 className="text-base font-semibold text-gray-900">
+        <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden mb-6">
+          <div className="px-4 py-3 border-b border-border">
+            <h2 className="text-base font-semibold text-foreground">
               Recent Rate History
             </h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gray-50">
-                  <th className="text-left px-4 py-3 font-medium text-gray-700">
+                <tr className="bg-background">
+                  <th className="text-left px-4 py-3 font-medium text-foreground">
                     MPC Date
                   </th>
-                  <th className="text-right px-4 py-3 font-medium text-gray-700">
+                  <th className="text-right px-4 py-3 font-medium text-foreground">
                     Repo Rate
                   </th>
-                  <th className="text-right px-4 py-3 font-medium text-gray-700">
+                  <th className="text-right px-4 py-3 font-medium text-foreground">
                     Change
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-border">
                 {[...RATE_HISTORY].reverse().map((entry) => (
                   <tr key={entry.date}>
-                    <td className="px-4 py-3 text-gray-900">{entry.date}</td>
-                    <td className="px-4 py-3 text-right font-medium">
+                    <td className="px-4 py-3 text-foreground">{entry.date}</td>
+                    <td className="px-4 py-3 text-right font-medium text-foreground">
                       {entry.rate}%
                     </td>
                     <td className="px-4 py-3 text-right">
                       {entry.change === 0 ? (
-                        <span className="text-gray-400">No change</span>
+                        <span className="text-muted-foreground">No change</span>
                       ) : (
                         <span
                           className={
                             entry.change < 0
-                              ? "text-green-600"
-                              : "text-red-600"
+                              ? "text-positive"
+                              : "text-negative"
                           }
                         >
                           {entry.change > 0 ? "+" : ""}
@@ -134,8 +134,8 @@ export default function RBIRatesPage() {
         </div>
 
         {/* How It Affects You */}
-        <section className="space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <section className="space-y-6 text-foreground text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl font-semibold text-foreground">
             How Does the Repo Rate Affect Your Home Loan?
           </h2>
           <p>
@@ -153,14 +153,14 @@ export default function RBIRatesPage() {
             For older MCLR-linked loans, it may take 6-12 months.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             What Should You Do When Rates Change?
           </h2>
           <ul className="list-disc list-inside space-y-2">
             <li>
               <strong>Rate cut:</strong> Your EMI may reduce automatically, or
               your tenure shortens. Use our{" "}
-              <Link href="/" className="text-blue-600 underline">
+              <Link href="/" className="text-primary underline">
                 EMI calculator
               </Link>{" "}
               to see the exact impact.
@@ -178,8 +178,8 @@ export default function RBIRatesPage() {
             </li>
           </ul>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <p className="text-blue-800 font-medium">
+          <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
+            <p className="text-primary font-medium">
               Track how rate changes affect your specific loans.{" "}
               <Link href="/login" className="underline font-semibold">
                 Add your loans to the free dashboard &rarr;

@@ -185,7 +185,7 @@ export default function MultiLoanPlannerCalc() {
           {loans.map((loan, index) => (
             <div
               key={index}
-              className="border border-gray-100 rounded-lg p-3 space-y-2"
+              className="border border-border rounded-lg p-3 space-y-2"
             >
               <div className="grid grid-cols-[1fr_auto] gap-2 items-center">
                 <div className="grid grid-cols-2 gap-2">
@@ -221,7 +221,7 @@ export default function MultiLoanPlannerCalc() {
                     type="button"
                     onClick={() => removeLoan(index)}
                     disabled={loans.length <= 1}
-                    className="h-9 w-9 flex items-center justify-center rounded-md text-muted-foreground hover:text-red-600 hover:bg-red-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    className="h-9 w-9 flex items-center justify-center rounded-md text-muted-foreground hover:text-negative hover:bg-negative/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                     aria-label={`Remove ${loan.name}`}
                   >
                     ✕
@@ -365,7 +365,7 @@ export default function MultiLoanPlannerCalc() {
                     </td>
                     <td className={`px-4 py-3 text-right font-medium ${
                       loan.effectiveRate < loan.nominalRate
-                        ? "text-green-700"
+                        ? "text-positive"
                         : ""
                     }`}>
                       {loan.effectiveRate.toFixed(1)}%

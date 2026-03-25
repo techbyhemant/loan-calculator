@@ -117,23 +117,23 @@ export default function NewLoanPage() {
   };
 
   const inputClass =
-    "w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none";
+    "w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-ring focus:ring-1 focus:ring-ring outline-none";
 
   return (
     <div>
       <div className="flex items-center gap-3 mb-6">
         <Link
           href="/dashboard"
-          className="text-gray-400 hover:text-gray-600 transition-colors"
+          className="text-muted-foreground hover:text-muted-foreground transition-colors"
         >
           &larr;
         </Link>
-        <h1 className="text-xl font-semibold text-gray-900">Add New Loan</h1>
+        <h1 className="text-xl font-semibold text-foreground">Add New Loan</h1>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 sm:p-6 space-y-5"
+        className="bg-card border border-border rounded-xl shadow-sm p-4 sm:p-6 space-y-5"
       >
         {/* Error banner */}
         {error && (
@@ -142,7 +142,7 @@ export default function NewLoanPage() {
             {error.includes("Upgrade") && (
               <Link
                 href="/pricing"
-                className="ml-2 underline font-semibold text-purple-700"
+                className="ml-2 underline font-semibold text-primary"
               >
                 Upgrade to Pro
               </Link>
@@ -152,7 +152,7 @@ export default function NewLoanPage() {
 
         {/* Loan Type */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             Loan Type
           </label>
           <div className="flex flex-wrap gap-2">
@@ -163,8 +163,8 @@ export default function NewLoanPage() {
                 onClick={() => handleTypeChange(lt.value)}
                 className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
                   loanType === lt.value
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                    ? "bg-primary text-white border-primary"
+                    : "bg-card text-foreground border-border hover:border-border"
                 }`}
               >
                 <span>{lt.icon}</span> {lt.label}
@@ -176,7 +176,7 @@ export default function NewLoanPage() {
         {/* Name + Lender */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Loan Name *
             </label>
             <input
@@ -189,7 +189,7 @@ export default function NewLoanPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Lender
             </label>
             <input
@@ -205,7 +205,7 @@ export default function NewLoanPage() {
         {/* Amounts */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Original Loan Amount (₹) *
             </label>
             <NumericInput
@@ -221,7 +221,7 @@ export default function NewLoanPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Current Outstanding (₹) *
             </label>
             <NumericInput
@@ -237,7 +237,7 @@ export default function NewLoanPage() {
         {/* Rate + EMI */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Annual Interest Rate (%) *
             </label>
             <NumericInput
@@ -251,7 +251,7 @@ export default function NewLoanPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Monthly EMI (₹)
             </label>
             <NumericInput
@@ -266,7 +266,7 @@ export default function NewLoanPage() {
               className={inputClass}
             />
             {calculatedEMI > 0 && !emi && (
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Auto-calculated: ₹
                 {formatINR(calculatedEMI).replace("₹", "")}
               </p>
@@ -277,7 +277,7 @@ export default function NewLoanPage() {
         {/* EMI Date + Start Date */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               EMI Due Date (day of month)
             </label>
             <NumericInput
@@ -290,7 +290,7 @@ export default function NewLoanPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Loan Start Date
             </label>
             <input
@@ -305,7 +305,7 @@ export default function NewLoanPage() {
         {/* Tenure */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Tenure (Years)
             </label>
             <NumericInput
@@ -318,7 +318,7 @@ export default function NewLoanPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               + Additional Months
             </label>
             <NumericInput
@@ -335,7 +335,7 @@ export default function NewLoanPage() {
         {/* Rate Type + Penalty */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Rate Type
             </label>
             <div className="flex gap-3">
@@ -347,8 +347,8 @@ export default function NewLoanPage() {
                 }}
                 className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                   rateType === "floating"
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                    ? "bg-primary text-white border-primary"
+                    : "bg-card text-foreground border-border hover:border-border"
                 }`}
               >
                 Floating
@@ -358,8 +358,8 @@ export default function NewLoanPage() {
                 onClick={() => setRateType("fixed")}
                 className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                   rateType === "fixed"
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                    ? "bg-primary text-white border-primary"
+                    : "bg-card text-foreground border-border hover:border-border"
                 }`}
               >
                 Fixed
@@ -368,7 +368,7 @@ export default function NewLoanPage() {
           </div>
           {rateType === "fixed" && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Prepayment Penalty (%)
               </label>
               <NumericInput
@@ -386,8 +386,8 @@ export default function NewLoanPage() {
             <div className="flex items-end">
               <p className={`text-xs rounded-lg p-2.5 ${
                 isRBIZeroPenaltyApplicable(loanType, "floating")
-                  ? "text-green-700 bg-green-50 border border-green-200"
-                  : "text-gray-600 bg-gray-50 border border-gray-200"
+                  ? "text-positive bg-positive/10 border border-positive/20"
+                  : "text-muted-foreground bg-background border border-border"
               }`}>
                 {isRBIZeroPenaltyApplicable(loanType, "floating")
                   ? "RBI mandated: Zero prepayment penalty on this floating rate loan"
@@ -402,13 +402,13 @@ export default function NewLoanPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6 py-2.5 text-sm font-medium transition-colors disabled:opacity-50"
+            className="bg-primary hover:bg-primary/90 text-white rounded-lg px-6 py-2.5 text-sm font-medium transition-colors disabled:opacity-50"
           >
             {submitting ? "Adding..." : "Add Loan"}
           </button>
           <Link
             href="/dashboard"
-            className="text-gray-600 hover:text-gray-800 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors"
+            className="text-muted-foreground hover:text-foreground rounded-lg px-4 py-2.5 text-sm font-medium transition-colors"
           >
             Cancel
           </Link>

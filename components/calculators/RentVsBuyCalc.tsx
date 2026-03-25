@@ -89,23 +89,23 @@ export default function RentVsBuyCalc() {
           </Verdict>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <CalcCard className={results.buyBetter ? "ring-2 ring-green-200" : ""}>
+            <CalcCard className={results.buyBetter ? "ring-2 ring-positive/20" : ""}>
               <h2 className="text-base font-semibold mb-3">Buy</h2>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between"><span className="text-muted-foreground">Monthly EMI</span><span className="font-medium">{formatINR(results.emi)}</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Total Interest</span><span className="font-medium text-red-600">{formatLakhs(results.totalInterest)}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Total Interest</span><span className="font-medium text-negative">{formatLakhs(results.totalInterest)}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">Registration + Stamp</span><span className="font-medium">{formatLakhs(results.registration)}</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Property Value ({loanTenure}yr)</span><span className="font-medium text-green-700">{formatLakhs(results.propertyValueAtEnd)}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Property Value ({loanTenure}yr)</span><span className="font-medium text-positive">{formatLakhs(results.propertyValueAtEnd)}</span></div>
                 <div className="border-t pt-2 flex justify-between font-semibold"><span>Net Cost</span><span>{formatLakhs(results.netBuyCost)}</span></div>
               </div>
             </CalcCard>
 
-            <CalcCard className={!results.buyBetter ? "ring-2 ring-blue-200" : ""}>
+            <CalcCard className={!results.buyBetter ? "ring-2 ring-primary/20" : ""}>
               <h2 className="text-base font-semibold mb-3">Rent + Invest</h2>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between"><span className="text-muted-foreground">Total Rent ({loanTenure}yr)</span><span className="font-medium">{formatLakhs(results.totalRent)}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">Rent in Year {loanTenure}</span><span className="font-medium">{formatINR(results.finalRent)}/mo</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Investment Corpus</span><span className="font-medium text-green-700">{formatLakhs(results.investmentCorpus)}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Investment Corpus</span><span className="font-medium text-positive">{formatLakhs(results.investmentCorpus)}</span></div>
                 <div className="border-t pt-2 flex justify-between font-semibold"><span>Net Cost</span><span>{formatLakhs(results.netRentCost)}</span></div>
               </div>
             </CalcCard>

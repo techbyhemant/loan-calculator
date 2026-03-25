@@ -10,7 +10,7 @@ export function BlogCard({ post }: BlogCardProps) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="block bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+      className="block bg-card border border-border rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow"
     >
       {/* Thumbnail */}
       {post.image ? (
@@ -32,10 +32,10 @@ export function BlogCard({ post }: BlogCardProps) {
       {/* Content */}
       <div className="p-4">
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+          <span className="text-xs font-medium text-primary bg-accent px-2 py-0.5 rounded-full">
             {post.category}
           </span>
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-muted-foreground">
             {new Date(post.publishedAt).toLocaleDateString("en-IN", {
               day: "numeric",
               month: "short",
@@ -43,10 +43,10 @@ export function BlogCard({ post }: BlogCardProps) {
             })}
           </span>
         </div>
-        <h3 className="text-sm font-semibold text-gray-900 mb-1 line-clamp-2">
+        <h3 className="text-sm font-semibold text-foreground mb-1 line-clamp-2">
           {post.title}
         </h3>
-        <p className="text-xs text-gray-600 line-clamp-2">{post.description}</p>
+        <p className="text-xs text-muted-foreground line-clamp-2">{post.description}</p>
       </div>
     </Link>
   );

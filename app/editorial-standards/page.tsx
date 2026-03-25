@@ -10,9 +10,9 @@ export const metadata = buildMetadata({
 
 export default function EditorialStandardsPage() {
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <main className="max-w-3xl mx-auto py-10 px-4 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-6">
           Editorial Standards
         </h1>
 
@@ -23,7 +23,7 @@ export default function EditorialStandardsPage() {
             decisions depend on it.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900 mt-8">
+          <h2 className="text-xl font-semibold text-foreground mt-8">
             Calculation Verification
           </h2>
           <p>
@@ -32,7 +32,7 @@ export default function EditorialStandardsPage() {
             guidelines and cross-checked with actual bank statements.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900 mt-8">
+          <h2 className="text-xl font-semibold text-foreground mt-8">
             Primary Sources We Cite
           </h2>
           <ul className="list-disc list-inside space-y-2">
@@ -50,7 +50,7 @@ export default function EditorialStandardsPage() {
             </li>
           </ul>
 
-          <h2 className="text-xl font-semibold text-gray-900 mt-8">
+          <h2 className="text-xl font-semibold text-foreground mt-8">
             Affiliate Disclosure
           </h2>
           <p>
@@ -61,7 +61,7 @@ export default function EditorialStandardsPage() {
             recommendation.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900 mt-8">
+          <h2 className="text-xl font-semibold text-foreground mt-8">
             Content Review
           </h2>
           <p>
@@ -70,7 +70,7 @@ export default function EditorialStandardsPage() {
             financial year (April) to ensure accuracy with current rules.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900 mt-8">
+          <h2 className="text-xl font-semibold text-foreground mt-8">
             What We Do Not Do
           </h2>
           <ul className="list-disc list-inside space-y-2">
@@ -84,7 +84,7 @@ export default function EditorialStandardsPage() {
 
           <p className="mt-8">
             Questions about our editorial process?{" "}
-            <Link href="/about" className="text-blue-600 underline">
+            <Link href="/about" className="text-primary underline">
               Contact us
             </Link>
           </p>

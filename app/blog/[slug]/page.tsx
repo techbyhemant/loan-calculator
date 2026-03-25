@@ -44,7 +44,7 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound();
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       {/* Schema: Article + Breadcrumb + FAQ */}
       <script
         type="application/ld+json"
@@ -100,10 +100,10 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Meta */}
         <div className="flex items-center gap-3 mb-4">
-          <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+          <span className="text-xs font-medium text-primary bg-accent px-2 py-0.5 rounded-full">
             {post.category}
           </span>
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-muted-foreground">
             {new Date(post.publishedAt).toLocaleDateString("en-IN", {
               day: "numeric",
               month: "long",
@@ -113,7 +113,7 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
 
         {/* Title */}
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
           {post.title}
         </h1>
 
@@ -122,7 +122,7 @@ export default async function BlogPostPage({ params }: Props) {
           {post.tags.map((tag) => (
             <span
               key={tag}
-              className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full"
+              className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full"
             >
               {tag}
             </span>
@@ -137,8 +137,8 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Related Calculator CTA */}
         {post.relatedCalculator && (
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mt-8">
-            <p className="text-blue-800 text-sm font-medium">
+          <div className="bg-accent border border-primary/20 rounded-xl p-4 mt-8">
+            <p className="text-primary text-sm font-medium">
               Try the calculator mentioned in this post:{" "}
               <Link
                 href={post.relatedCalculator}
@@ -151,10 +151,10 @@ export default async function BlogPostPage({ params }: Props) {
         )}
 
         {/* Back to blog */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
+        <div className="mt-8 pt-6 border-t border-border">
           <Link
             href="/blog"
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            className="text-sm text-primary hover:text-primary/90 font-medium"
           >
             ← Back to all posts
           </Link>
@@ -171,23 +171,23 @@ export default async function BlogPostPage({ params }: Props) {
  */
 function simpleMarkdownToHtml(md: string): string {
   return md
-    .replace(/^## (.+)$/gm, '<h2 class="text-xl font-semibold text-gray-900 mt-8 mb-3">$1</h2>')
-    .replace(/^### (.+)$/gm, '<h3 class="text-lg font-semibold text-gray-900 mt-6 mb-2">$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2 class="text-xl font-semibold text-foreground mt-8 mb-3">$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3 class="text-lg font-semibold text-foreground mt-6 mb-2">$1</h3>')
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.+?)\*/g, "<em>$1</em>")
-    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="text-blue-600 underline">$1</a>')
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="text-primary underline">$1</a>')
     .replace(/^- (.+)$/gm, "<li>$1</li>")
     .replace(/(<li>.*<\/li>\n?)+/g, (match) => `<ul class="list-disc list-inside space-y-1 my-3">${match}</ul>`)
     .replace(/^(\d+)\. (.+)$/gm, "<li>$2</li>")
     .replace(/^(?!<[hulo])(.*\S.*)$/gm, '<p class="mb-3">$1</p>')
     .replace(/<Callout type="tip">([\s\S]*?)<\/Callout>/g,
-      '<div class="bg-blue-50 border border-blue-200 rounded-lg p-4 my-4 text-sm text-blue-800">$1</div>')
+      '<div class="bg-accent border border-primary/20 rounded-lg p-4 my-4 text-sm text-primary">$1</div>')
     .replace(/<EmiCalculator\s*\/>/g,
-      '<div class="bg-gray-50 border border-gray-200 rounded-lg p-4 my-6 text-center text-sm text-gray-600">📊 <a href="/" class="text-blue-600 underline font-medium">Open EMI Calculator</a></div>')
+      '<div class="bg-background border border-border rounded-lg p-4 my-6 text-center text-sm text-muted-foreground">📊 <a href="/" class="text-primary underline font-medium">Open EMI Calculator</a></div>')
     .replace(/<SipVsPrepaymentCalc\s*\/>/g,
-      '<div class="bg-gray-50 border border-gray-200 rounded-lg p-4 my-6 text-center text-sm text-gray-600">📊 <a href="/calculators/sip-vs-prepayment" class="text-blue-600 underline font-medium">Open SIP vs Prepayment Calculator</a></div>')
+      '<div class="bg-background border border-border rounded-lg p-4 my-6 text-center text-sm text-muted-foreground">📊 <a href="/calculators/sip-vs-prepayment" class="text-primary underline font-medium">Open SIP vs Prepayment Calculator</a></div>')
     .replace(/<EligibilityCalc\s*\/>/g,
-      '<div class="bg-gray-50 border border-gray-200 rounded-lg p-4 my-6 text-center text-sm text-gray-600">📊 <a href="/calculators/home-loan-eligibility" class="text-blue-600 underline font-medium">Open Eligibility Calculator</a></div>')
+      '<div class="bg-background border border-border rounded-lg p-4 my-6 text-center text-sm text-muted-foreground">📊 <a href="/calculators/home-loan-eligibility" class="text-primary underline font-medium">Open Eligibility Calculator</a></div>')
     .replace(/<ComparisonTable[\s\S]*?\/>/g,
-      '<div class="bg-gray-50 border border-gray-200 rounded-lg p-4 my-4 text-sm text-gray-600 italic">Comparison table — view in full article</div>');
+      '<div class="bg-background border border-border rounded-lg p-4 my-4 text-sm text-muted-foreground italic">Comparison table — view in full article</div>');
 }

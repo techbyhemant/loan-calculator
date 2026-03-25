@@ -24,11 +24,11 @@ const LOAN_TYPE_ICONS: Record<string, string> = {
 
 function SkeletonBlock() {
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6 animate-pulse">
-      <div className="h-5 bg-gray-200 rounded w-1/3 mb-4" />
-      <div className="h-4 bg-gray-100 rounded w-full mb-2" />
-      <div className="h-4 bg-gray-100 rounded w-2/3 mb-2" />
-      <div className="h-4 bg-gray-100 rounded w-1/2" />
+    <div className="bg-card border border-border rounded-xl shadow-sm p-6 animate-pulse">
+      <div className="h-5 bg-border rounded w-1/3 mb-4" />
+      <div className="h-4 bg-muted rounded w-full mb-2" />
+      <div className="h-4 bg-muted rounded w-2/3 mb-2" />
+      <div className="h-4 bg-muted rounded w-1/2" />
     </div>
   );
 }
@@ -82,13 +82,13 @@ export default function LoanDetailPage() {
 
   if (error || !loan) {
     return (
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-8 text-center">
-        <p className="text-red-600 font-medium">
+      <div className="bg-card border border-border rounded-xl shadow-sm p-8 text-center">
+        <p className="text-negative font-medium">
           {error?.message ?? "Loan not found"}
         </p>
         <Link
           href="/dashboard"
-          className="text-sm text-blue-600 hover:text-blue-700 mt-2 inline-block"
+          className="text-sm text-primary hover:text-primary mt-2 inline-block"
         >
           &larr; Back to Dashboard
         </Link>
@@ -102,7 +102,7 @@ export default function LoanDetailPage() {
       <div className="flex items-center gap-3 mb-6">
         <Link
           href="/dashboard"
-          className="text-gray-400 hover:text-gray-600 transition-colors"
+          className="text-muted-foreground hover:text-muted-foreground transition-colors"
         >
           &larr;
         </Link>
@@ -111,9 +111,9 @@ export default function LoanDetailPage() {
             {LOAN_TYPE_ICONS[loan.type] ?? "\u{1F4CB}"}
           </span>
           <div>
-            <h1 className="text-xl font-semibold text-gray-900">{loan.name}</h1>
+            <h1 className="text-xl font-semibold text-foreground">{loan.name}</h1>
             {loan.lender && (
-              <p className="text-sm text-gray-500">{loan.lender}</p>
+              <p className="text-sm text-muted-foreground">{loan.lender}</p>
             )}
           </div>
         </div>
@@ -121,51 +121,51 @@ export default function LoanDetailPage() {
 
       {/* Loan Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
-          <p className="text-sm text-gray-600 mb-1">Outstanding</p>
-          <p className="text-lg font-bold text-gray-900">
+        <div className="bg-card border border-border rounded-xl shadow-sm p-4">
+          <p className="text-sm text-muted-foreground mb-1">Outstanding</p>
+          <p className="text-lg font-bold text-foreground">
             {formatLakhs(loan.currentOutstanding)}
           </p>
         </div>
-        <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
-          <p className="text-sm text-gray-600 mb-1">Monthly EMI</p>
-          <p className="text-lg font-bold text-gray-900">
+        <div className="bg-card border border-border rounded-xl shadow-sm p-4">
+          <p className="text-sm text-muted-foreground mb-1">Monthly EMI</p>
+          <p className="text-lg font-bold text-foreground">
             {formatINR(loan.emiAmount)}
           </p>
         </div>
-        <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
-          <p className="text-sm text-gray-600 mb-1">Interest Rate</p>
-          <p className="text-lg font-bold text-gray-900">
+        <div className="bg-card border border-border rounded-xl shadow-sm p-4">
+          <p className="text-sm text-muted-foreground mb-1">Interest Rate</p>
+          <p className="text-lg font-bold text-foreground">
             {loan.interestRate}%
-            <span className="text-xs font-normal text-gray-500 ml-1">
+            <span className="text-xs font-normal text-muted-foreground ml-1">
               {loan.rateType}
             </span>
           </p>
         </div>
-        <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
-          <p className="text-sm text-gray-600 mb-1">Remaining Tenure</p>
-          <p className="text-lg font-bold text-gray-900">
+        <div className="bg-card border border-border rounded-xl shadow-sm p-4">
+          <p className="text-sm text-muted-foreground mb-1">Remaining Tenure</p>
+          <p className="text-lg font-bold text-foreground">
             {formatMonths(loan.tenureMonths)}
           </p>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 mb-6">
-        <div className="flex justify-between text-sm text-gray-600 mb-2">
+      <div className="bg-card border border-border rounded-xl shadow-sm p-4 mb-6">
+        <div className="flex justify-between text-sm text-muted-foreground mb-2">
           <span>{paidPercent.toFixed(0)}% paid off</span>
           <span>
             {formatLakhs(loan.originalAmount - loan.currentOutstanding)} of{" "}
             {formatLakhs(loan.originalAmount)}
           </span>
         </div>
-        <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+        <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
           <div
-            className="h-full bg-blue-500 rounded-full transition-all"
+            className="h-full bg-primary rounded-full transition-all"
             style={{ width: `${paidPercent}%` }}
           />
         </div>
-        <div className="flex justify-between text-xs text-gray-500 mt-2">
+        <div className="flex justify-between text-xs text-muted-foreground mt-2">
           <span>Total interest remaining: {formatLakhs(totalInterest)}</span>
           {amortization.length > 0 && (
             <span>
@@ -188,49 +188,49 @@ export default function LoanDetailPage() {
 
       {/* Amortization Schedule */}
       {amortization.length > 0 && (
-        <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
-          <div className="px-4 py-3 border-b border-gray-100">
-            <h3 className="text-base font-semibold text-gray-900">
+        <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
+          <div className="px-4 py-3 border-b border-border">
+            <h3 className="text-base font-semibold text-foreground">
               Amortization Schedule
             </h3>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-muted-foreground mt-0.5">
               {amortization.length} months remaining
             </p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gray-50">
-                  <th className="text-left px-4 py-2.5 font-medium text-gray-700">
+                <tr className="bg-background">
+                  <th className="text-left px-4 py-2.5 font-medium text-foreground">
                     Month
                   </th>
-                  <th className="text-right px-4 py-2.5 font-medium text-gray-700">
+                  <th className="text-right px-4 py-2.5 font-medium text-foreground">
                     EMI
                   </th>
-                  <th className="text-right px-4 py-2.5 font-medium text-gray-700">
+                  <th className="text-right px-4 py-2.5 font-medium text-foreground">
                     Principal
                   </th>
-                  <th className="text-right px-4 py-2.5 font-medium text-gray-700">
+                  <th className="text-right px-4 py-2.5 font-medium text-foreground">
                     Interest
                   </th>
-                  <th className="text-right px-4 py-2.5 font-medium text-gray-700">
+                  <th className="text-right px-4 py-2.5 font-medium text-foreground">
                     Balance
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-background">
                 {amortization.slice(0, 60).map((row) => (
-                  <tr key={row.month} className="hover:bg-gray-50">
-                    <td className="px-4 py-2 text-gray-600">
+                  <tr key={row.month} className="hover:bg-accent">
+                    <td className="px-4 py-2 text-muted-foreground">
                       {formatDate(row.date)}
                     </td>
                     <td className="px-4 py-2 text-right font-medium">
                       {formatINR(row.emi)}
                     </td>
-                    <td className="px-4 py-2 text-right text-green-700">
+                    <td className="px-4 py-2 text-right text-positive">
                       {formatINR(row.principal)}
                     </td>
-                    <td className="px-4 py-2 text-right text-red-600">
+                    <td className="px-4 py-2 text-right text-negative">
                       {formatINR(row.interest)}
                     </td>
                     <td className="px-4 py-2 text-right">
@@ -242,8 +242,8 @@ export default function LoanDetailPage() {
             </table>
           </div>
           {amortization.length > 60 && (
-            <div className="px-4 py-3 bg-gray-50 border-t border-gray-100 text-center">
-              <p className="text-xs text-gray-500">
+            <div className="px-4 py-3 bg-background border-t border-border text-center">
+              <p className="text-xs text-muted-foreground">
                 Showing first 60 of {amortization.length} months
               </p>
             </div>

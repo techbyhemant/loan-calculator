@@ -12,10 +12,10 @@ import NumericInput from "@/components/ui/NumericInput";
 
 function SkeletonBlock() {
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6 animate-pulse">
-      <div className="h-5 bg-gray-200 rounded w-1/3 mb-4" />
-      <div className="h-4 bg-gray-100 rounded w-full mb-2" />
-      <div className="h-4 bg-gray-100 rounded w-2/3" />
+    <div className="bg-card border border-border rounded-xl shadow-sm p-6 animate-pulse">
+      <div className="h-5 bg-border rounded w-1/3 mb-4" />
+      <div className="h-4 bg-muted rounded w-full mb-2" />
+      <div className="h-4 bg-muted rounded w-2/3" />
     </div>
   );
 }
@@ -65,32 +65,32 @@ export default function ChallengePage() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-gray-900 mb-6">
+      <h1 className="text-xl font-semibold text-foreground mb-6">
         Debt-Free Challenge
       </h1>
 
       {/* Level & Progress */}
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 sm:p-6 mb-6">
+      <div className="bg-card border border-border rounded-xl shadow-sm p-4 sm:p-6 mb-6">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <p className="text-sm text-gray-600">Your Level</p>
-            <p className="text-lg font-bold text-gray-900">{challenge.level}</p>
+            <p className="text-sm text-muted-foreground">Your Level</p>
+            <p className="text-lg font-bold text-foreground">{challenge.level}</p>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold text-blue-700">
+            <p className="text-2xl font-bold text-primary">
               {challenge.earned}/{challenge.total}
             </p>
-            <p className="text-xs text-gray-500">milestones earned</p>
+            <p className="text-xs text-muted-foreground">milestones earned</p>
           </div>
         </div>
-        <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+        <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
           <div
-            className="h-full bg-blue-500 rounded-full transition-all"
+            className="h-full bg-primary rounded-full transition-all"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
         {challenge.nextMilestone && (
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             Next: <strong>{challenge.nextMilestone.title}</strong> &mdash;{" "}
             {challenge.nextMilestone.description}
           </p>
@@ -104,19 +104,19 @@ export default function ChallengePage() {
             key={m.id}
             className={`rounded-xl border p-3 text-center transition-all ${
               m.earned
-                ? "bg-white border-green-200 shadow-sm"
-                : "bg-gray-50 border-gray-100 opacity-50"
+                ? "bg-card border-positive/20 shadow-sm"
+                : "bg-background border-border opacity-50"
             }`}
           >
             <p className="text-2xl mb-1">{m.icon}</p>
             <p
-              className={`text-xs font-semibold ${m.earned ? "text-gray-900" : "text-gray-400"}`}
+              className={`text-xs font-semibold ${m.earned ? "text-foreground" : "text-muted-foreground"}`}
             >
               {m.title}
             </p>
-            <p className="text-[10px] text-gray-500 mt-0.5">{m.description}</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">{m.description}</p>
             {m.earned && (
-              <span className="inline-block mt-1 text-[10px] bg-green-100 text-green-800 px-1.5 py-0.5 rounded-full font-medium">
+              <span className="inline-block mt-1 text-[10px] bg-positive/10 text-positive px-1.5 py-0.5 rounded-full font-medium">
                 Earned
               </span>
             )}
@@ -126,28 +126,28 @@ export default function ChallengePage() {
 
       {/* Debt-Free Timeline */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-        <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 text-center">
-          <p className="text-sm text-gray-600 mb-1">Current Debt-Free Date</p>
-          <p className="text-xl font-bold text-gray-900">
+        <div className="bg-card border border-border rounded-xl shadow-sm p-4 text-center">
+          <p className="text-sm text-muted-foreground mb-1">Current Debt-Free Date</p>
+          <p className="text-xl font-bold text-foreground">
             {challenge.debtFreeDate
               ? formatDate(challenge.debtFreeDate)
               : "Add loans"}
           </p>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             At current EMI, no extra payments
           </p>
         </div>
-        <div className="bg-white border border-green-200 rounded-xl shadow-sm p-4 text-center">
-          <p className="text-sm text-gray-600 mb-1">
+        <div className="bg-card border border-positive/20 rounded-xl shadow-sm p-4 text-center">
+          <p className="text-sm text-muted-foreground mb-1">
             With Extra {formatINR((monthlyExtra as number) || 0)}/mo
           </p>
-          <p className="text-xl font-bold text-green-700">
+          <p className="text-xl font-bold text-positive">
             {challenge.whatIfDebtFreeDate
               ? formatDate(challenge.whatIfDebtFreeDate)
               : "—"}
           </p>
           {challenge.debtFreeDate && challenge.whatIfDebtFreeDate && (
-            <p className="text-xs text-green-600 mt-1">
+            <p className="text-xs text-positive mt-1">
               {Math.max(
                 0,
                 Math.round(
@@ -163,11 +163,11 @@ export default function ChallengePage() {
       </div>
 
       {/* What If Slider */}
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 sm:p-6">
-        <h2 className="text-sm font-semibold text-gray-900 mb-3">
+      <div className="bg-card border border-border rounded-xl shadow-sm p-4 sm:p-6">
+        <h2 className="text-sm font-semibold text-foreground mb-3">
           What If Calculator
         </h2>
-        <p className="text-xs text-gray-500 mb-3">
+        <p className="text-xs text-muted-foreground mb-3">
           How much extra can you put toward loans each month?
         </p>
         <div className="max-w-xs">
@@ -176,10 +176,10 @@ export default function ChallengePage() {
             onChange={setMonthlyExtra}
             placeholder="10,000"
             min={0}
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+            className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-ring focus:ring-1 focus:ring-ring outline-none"
           />
         </div>
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-muted-foreground mt-2">
           Extra payment is applied to your highest-rate loan first (avalanche
           strategy) for maximum savings.
         </p>

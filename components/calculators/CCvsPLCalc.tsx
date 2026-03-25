@@ -140,13 +140,13 @@ export default function CCvsPLCalc() {
                 </tr>
                 <tr>
                   <td className="px-4 py-3 text-muted-foreground">Total Interest</td>
-                  <td className="px-4 py-3 text-right text-red-600">{formatINR(results.ccTotalInterest)}</td>
+                  <td className="px-4 py-3 text-right text-negative">{formatINR(results.ccTotalInterest)}</td>
                   <td className="px-4 py-3 text-right">{formatINR(results.plTotalInterest)}</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 text-muted-foreground">Processing Fee</td>
                   <td className="px-4 py-3 text-right text-muted-foreground">₹0</td>
-                  <td className="px-4 py-3 text-right text-red-600">-{formatINR(results.plProcessingFee)}</td>
+                  <td className="px-4 py-3 text-right text-negative">-{formatINR(results.plProcessingFee)}</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 text-muted-foreground">Total Cost</td>
@@ -156,7 +156,7 @@ export default function CCvsPLCalc() {
                 <tr className="bg-muted/50 font-semibold">
                   <td className="px-4 py-3">Net Saving</td>
                   <td className="px-4 py-3 text-right text-muted-foreground">&mdash;</td>
-                  <td className={`px-4 py-3 text-right ${results.plNetSaving > 0 ? "text-green-700" : "text-red-700"}`}>
+                  <td className={`px-4 py-3 text-right ${results.plNetSaving > 0 ? "text-positive" : "text-negative"}`}>
                     {results.plNetSaving > 0 ? "+" : ""}{formatLakhs(results.plNetSaving)}
                   </td>
                 </tr>
@@ -173,7 +173,7 @@ export default function CCvsPLCalc() {
             <StatCard
               label="Net Saving"
               value={formatINR(Math.abs(results.plNetSaving))}
-              valueColor={results.plNetSaving > 0 ? "text-green-700" : "text-red-700"}
+              valueColor={results.plNetSaving > 0 ? "text-positive" : "text-negative"}
               sub={results.plNetSaving > 0 ? "saved by switching to PL" : "lost by switching to PL"}
             />
             <StatCard

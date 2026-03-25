@@ -49,22 +49,22 @@ export default function SalaryToEmiPage() {
   const faqSchema = getFAQSchema(faqs);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           How Much Home Loan Can I Get on My Salary?
         </h1>
-        <p className="text-gray-600 mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Enter your monthly salary to see the maximum home loan you qualify for. Uses the FOIR (Fixed Obligation to Income Ratio) method that Indian banks actually use.
         </p>
 
         <SalaryToEmiCalc />
 
-        <section className="mt-12 space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <section className="mt-12 space-y-6 text-foreground text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl font-semibold text-foreground">
             How Banks Calculate Loan Amount From Your Salary
           </h2>
           <p>
@@ -74,14 +74,14 @@ export default function SalaryToEmiPage() {
             For example, if your salary is ₹1 lakh per month and you have no existing EMIs, banks will approve a maximum EMI of ₹50,000. At 8.5% for 20 years, that translates to a loan of approximately ₹52-54 lakh.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             What Reduces Your Eligibility
           </h2>
           <p>
             Every existing EMI you pay — car loan, personal loan, credit card minimum dues — gets subtracted from your available EMI capacity. A ₹15,000 car loan EMI on a ₹1 lakh salary reduces your home loan eligibility by approximately ₹15-18 lakh. Consider closing small loans before applying.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Tips to Maximize Your Loan Amount
           </h2>
           <ul className="list-disc list-inside space-y-2">
@@ -91,20 +91,20 @@ export default function SalaryToEmiPage() {
             <li><strong>Improve your CIBIL score:</strong> Above 750 gets you lower rates, which means higher loan for the same EMI.</li>
           </ul>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Frequently Asked Questions
           </h2>
           <dl className="space-y-4">
             {faqs.map((faq) => (
               <div key={faq.question}>
-                <dt className="font-semibold text-gray-900">{faq.question}</dt>
-                <dd className="mt-1 text-gray-600">{faq.answer}</dd>
+                <dt className="font-semibold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-muted-foreground">{faq.answer}</dd>
               </div>
             ))}
           </dl>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <p className="text-blue-800 font-medium">
+          <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
+            <p className="text-primary font-medium">
               Got your loan? Track your EMIs and plan part payments.{" "}
               <Link href="/login" className="underline font-semibold">
                 Start your free debt-free plan →

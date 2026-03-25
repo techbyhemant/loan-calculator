@@ -13,10 +13,10 @@ import NumericInput from "@/components/ui/NumericInput";
 
 function SkeletonBlock() {
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6 animate-pulse">
-      <div className="h-5 bg-gray-200 rounded w-1/3 mb-4" />
-      <div className="h-4 bg-gray-100 rounded w-full mb-2" />
-      <div className="h-4 bg-gray-100 rounded w-2/3" />
+    <div className="bg-card border border-border rounded-xl shadow-sm p-6 animate-pulse">
+      <div className="h-5 bg-border rounded w-1/3 mb-4" />
+      <div className="h-4 bg-muted rounded w-full mb-2" />
+      <div className="h-4 bg-muted rounded w-2/3" />
     </div>
   );
 }
@@ -64,11 +64,11 @@ function TaxContent() {
   if (homeLoans.length === 0) {
     return (
       <div>
-        <h1 className="text-xl font-semibold text-gray-900 mb-6">
+        <h1 className="text-xl font-semibold text-foreground mb-6">
           Tax Benefits Dashboard
         </h1>
-        <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-8 text-center">
-          <p className="text-sm text-gray-600">
+        <div className="bg-card border border-border rounded-xl shadow-sm p-8 text-center">
+          <p className="text-sm text-muted-foreground">
             Add a home loan to see your tax benefits under Section 80C and
             24(b).
           </p>
@@ -78,22 +78,22 @@ function TaxContent() {
   }
 
   const inputClass =
-    "w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none";
+    "w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-ring focus:ring-1 focus:ring-ring outline-none";
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-gray-900 mb-6">
+      <h1 className="text-xl font-semibold text-foreground mb-6">
         Tax Benefits Dashboard
       </h1>
 
       {/* Profile Inputs */}
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 sm:p-6 mb-6">
-        <h2 className="text-sm font-semibold text-gray-900 mb-4">
+      <div className="bg-card border border-border rounded-xl shadow-sm p-4 sm:p-6 mb-6">
+        <h2 className="text-sm font-semibold text-foreground mb-4">
           Your Tax Profile
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Gross Annual Income (₹)
             </label>
             <NumericInput
@@ -105,7 +105,7 @@ function TaxContent() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Other 80C Investments (₹)
             </label>
             <NumericInput
@@ -115,12 +115,12 @@ function TaxContent() {
               min={0}
               className={inputClass}
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               EPF + ELSS + LIC + PPF
             </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Tax Regime
             </label>
             <div className="flex gap-3">
@@ -129,8 +129,8 @@ function TaxContent() {
                 onClick={() => setTaxRegime("old")}
                 className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
                   taxRegime === "old"
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-700 border-gray-200"
+                    ? "bg-primary text-white border-primary"
+                    : "bg-card text-foreground border-border"
                 }`}
               >
                 Old
@@ -140,8 +140,8 @@ function TaxContent() {
                 onClick={() => setTaxRegime("new")}
                 className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
                   taxRegime === "new"
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-700 border-gray-200"
+                    ? "bg-primary text-white border-primary"
+                    : "bg-card text-foreground border-border"
                 }`}
               >
                 New
@@ -155,30 +155,30 @@ function TaxContent() {
         <>
           {/* Deduction Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 text-center">
-              <p className="text-sm text-gray-600 mb-1">
+            <div className="bg-card border border-border rounded-xl shadow-sm p-4 text-center">
+              <p className="text-sm text-muted-foreground mb-1">
                 Section 24(b)
               </p>
-              <p className="text-xl font-bold text-blue-700">
+              <p className="text-xl font-bold text-primary">
                 {formatINR(benefits.sec24Deduction)}
               </p>
-              <p className="text-xs text-gray-500">Interest deduction</p>
+              <p className="text-xs text-muted-foreground">Interest deduction</p>
             </div>
-            <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 text-center">
-              <p className="text-sm text-gray-600 mb-1">
+            <div className="bg-card border border-border rounded-xl shadow-sm p-4 text-center">
+              <p className="text-sm text-muted-foreground mb-1">
                 Section 80C
               </p>
-              <p className="text-xl font-bold text-green-700">
+              <p className="text-xl font-bold text-positive">
                 {formatINR(benefits.sec80CDeduction)}
               </p>
-              <p className="text-xs text-gray-500">Principal deduction</p>
+              <p className="text-xs text-muted-foreground">Principal deduction</p>
             </div>
-            <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4 text-center">
-              <p className="text-sm text-gray-600 mb-1">Tax Saved</p>
-              <p className="text-xl font-bold text-purple-700">
+            <div className="bg-card border border-border rounded-xl shadow-sm p-4 text-center">
+              <p className="text-sm text-muted-foreground mb-1">Tax Saved</p>
+              <p className="text-xl font-bold text-primary">
                 {formatINR(benefits.taxSaved)}
               </p>
-              <p className="text-xs text-gray-500">this financial year</p>
+              <p className="text-xs text-muted-foreground">this financial year</p>
             </div>
           </div>
 
@@ -186,15 +186,15 @@ function TaxContent() {
           <div
             className={`rounded-xl p-4 border mb-6 ${
               benefits.recommendedRegime === "old"
-                ? "bg-amber-50 border-amber-200"
-                : "bg-blue-50 border-blue-200"
+                ? "bg-warning/10 border-warning/20"
+                : "bg-primary/10 border-primary/20"
             }`}
           >
             <p
               className={`text-sm font-semibold ${
                 benefits.recommendedRegime === "old"
-                  ? "text-amber-800"
-                  : "text-blue-800"
+                  ? "text-warning"
+                  : "text-primary"
               }`}
             >
               {benefits.recommendedRegime === "old" ? "Old" : "New"} regime
@@ -203,8 +203,8 @@ function TaxContent() {
             <p
               className={`text-sm mt-1 ${
                 benefits.recommendedRegime === "old"
-                  ? "text-amber-700"
-                  : "text-blue-700"
+                  ? "text-warning"
+                  : "text-primary"
               }`}
             >
               Difference: {formatINR(benefits.regimeDifference)} per year
@@ -212,56 +212,56 @@ function TaxContent() {
           </div>
 
           {/* Breakdown Table */}
-          <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
-            <div className="px-4 py-3 border-b border-gray-100">
-              <h3 className="text-base font-semibold text-gray-900">
+          <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
+            <div className="px-4 py-3 border-b border-border">
+              <h3 className="text-base font-semibold text-foreground">
                 Deduction Breakdown
               </h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-gray-50">
-                    <th className="text-left px-4 py-3 font-medium text-gray-700">
+                  <tr className="bg-background">
+                    <th className="text-left px-4 py-3 font-medium text-foreground">
                       Section
                     </th>
-                    <th className="text-right px-4 py-3 font-medium text-gray-700">
+                    <th className="text-right px-4 py-3 font-medium text-foreground">
                       Deduction
                     </th>
-                    <th className="text-right px-4 py-3 font-medium text-gray-700">
+                    <th className="text-right px-4 py-3 font-medium text-foreground">
                       Max Limit
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-border">
                   <tr>
-                    <td className="px-4 py-3 text-gray-900">
+                    <td className="px-4 py-3 text-foreground">
                       24(b) &mdash; Interest
                     </td>
                     <td className="px-4 py-3 text-right font-medium">
                       {formatINR(benefits.sec24Deduction)}
                     </td>
-                    <td className="px-4 py-3 text-right text-gray-500">
+                    <td className="px-4 py-3 text-right text-muted-foreground">
                       {formatINR(200000)}
                     </td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 text-gray-900">
+                    <td className="px-4 py-3 text-foreground">
                       80C &mdash; Principal
                     </td>
                     <td className="px-4 py-3 text-right font-medium">
                       {formatINR(benefits.sec80CDeduction)}
                     </td>
-                    <td className="px-4 py-3 text-right text-gray-500">
+                    <td className="px-4 py-3 text-right text-muted-foreground">
                       {formatINR(150000)} (shared)
                     </td>
                   </tr>
-                  <tr className="bg-gray-50 font-semibold">
-                    <td className="px-4 py-3 text-gray-900">Total</td>
+                  <tr className="bg-background font-semibold">
+                    <td className="px-4 py-3 text-foreground">Total</td>
                     <td className="px-4 py-3 text-right">
                       {formatINR(benefits.totalDeduction)}
                     </td>
-                    <td className="px-4 py-3 text-right text-gray-500">
+                    <td className="px-4 py-3 text-right text-muted-foreground">
                       {formatINR(350000)}
                     </td>
                   </tr>

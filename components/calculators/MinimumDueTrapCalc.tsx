@@ -102,25 +102,25 @@ export default function MinimumDueTrapCalc() {
               label="Years to Pay Off"
               value={`${results.trap.yearsToPayoff}`}
               sub={`${results.trap.monthsToPayoff} months`}
-              valueColor="text-red-700"
+              valueColor="text-negative"
             />
             <StatCard
               label="Total Interest Paid"
               value={formatLakhs(results.trap.totalInterestPaid)}
               sub="just in interest"
-              valueColor="text-red-700"
+              valueColor="text-negative"
             />
             <StatCard
               label="Total Amount Paid"
               value={formatLakhs(results.trap.totalAmountPaid)}
               sub={`on ${formatINR(outstanding as number)} balance`}
-              valueColor="text-red-700"
+              valueColor="text-negative"
             />
             <StatCard
               label="You Pay X Times More"
               value={`${results.multiplier.toFixed(1)}x`}
               sub="your original balance"
-              valueColor="text-red-700"
+              valueColor="text-negative"
             />
           </div>
 
@@ -147,17 +147,17 @@ export default function MinimumDueTrapCalc() {
               </thead>
               <tbody className="divide-y">
                 {/* Minimum Due Only — highlighted red */}
-                <tr className="bg-red-50">
-                  <td className="px-4 py-3 font-medium text-red-700">
+                <tr className="bg-negative/10">
+                  <td className="px-4 py-3 font-medium text-negative">
                     Minimum Due Only (5%)
                   </td>
-                  <td className="px-4 py-3 text-right font-medium text-red-700">
+                  <td className="px-4 py-3 text-right font-medium text-negative">
                     {results.trap.monthsToPayoff}
                   </td>
-                  <td className="px-4 py-3 text-right font-medium text-red-700">
+                  <td className="px-4 py-3 text-right font-medium text-negative">
                     {formatLakhs(results.trap.totalInterestPaid)}
                   </td>
-                  <td className="px-4 py-3 text-right font-medium text-red-700">
+                  <td className="px-4 py-3 text-right font-medium text-negative">
                     {formatLakhs(results.trap.totalAmountPaid)}
                   </td>
                 </tr>
@@ -201,17 +201,17 @@ export default function MinimumDueTrapCalc() {
                 </tr>
 
                 {/* Clear in 12 months — highlighted green */}
-                <tr className="bg-green-50">
-                  <td className="px-4 py-3 font-medium text-green-700">
+                <tr className="bg-positive/10">
+                  <td className="px-4 py-3 font-medium text-positive">
                     Clear in 12 months ({formatINR(results.payment12)}/mo)
                   </td>
-                  <td className="px-4 py-3 text-right font-medium text-green-700">
+                  <td className="px-4 py-3 text-right font-medium text-positive">
                     {results.result12.monthsToPayoff}
                   </td>
-                  <td className="px-4 py-3 text-right font-medium text-green-700">
+                  <td className="px-4 py-3 text-right font-medium text-positive">
                     {formatLakhs(results.result12.totalInterestPaid)}
                   </td>
-                  <td className="px-4 py-3 text-right font-medium text-green-700">
+                  <td className="px-4 py-3 text-right font-medium text-positive">
                     {formatLakhs(results.result12.totalAmountPaid)}
                   </td>
                 </tr>

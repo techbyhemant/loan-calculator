@@ -68,8 +68,8 @@ export default function EligibilityCalc() {
       {results && results.maxEMI > 0 && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <StatCard label="Maximum Eligible Loan" value={formatLakhs(results.maxLoan)} sub={formatINR(results.maxLoan)} valueColor="text-blue-700" />
-            <StatCard label="Maximum EMI Capacity" value={formatINR(results.maxEMI)} sub="50% of net income minus existing EMIs" valueColor="text-green-700" />
+            <StatCard label="Maximum Eligible Loan" value={formatLakhs(results.maxLoan)} sub={formatINR(results.maxLoan)} valueColor="text-primary" />
+            <StatCard label="Maximum EMI Capacity" value={formatINR(results.maxEMI)} sub="50% of net income minus existing EMIs" valueColor="text-positive" />
           </div>
 
           <TableCard
@@ -90,7 +90,7 @@ export default function EligibilityCalc() {
                   <tr key={lender.name}>
                     <td className="px-4 py-3 font-medium">{lender.name}</td>
                     <td className="px-4 py-3 text-right text-muted-foreground">{lender.rate}%</td>
-                    <td className="px-4 py-3 text-right font-semibold text-blue-700">{formatLakhs(lender.maxLoan)}</td>
+                    <td className="px-4 py-3 text-right font-semibold text-primary">{formatLakhs(lender.maxLoan)}</td>
                   </tr>
                 ))}
               </tbody>

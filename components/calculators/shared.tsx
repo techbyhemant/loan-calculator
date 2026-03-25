@@ -150,9 +150,9 @@ export function Verdict({
   children: React.ReactNode;
 }) {
   const styles = {
-    good: "bg-green-50 text-green-800 border-green-200",
-    bad: "bg-red-50 text-red-800 border-red-200",
-    neutral: "bg-amber-50 text-amber-800 border-amber-200",
+    good: "bg-positive/10 text-positive border-positive/20",
+    bad: "bg-negative/10 text-negative border-negative/20",
+    neutral: "bg-warning/10 text-warning border-warning/20",
   };
   return (
     <div className={cn("rounded-xl p-4 text-center font-semibold text-lg border", styles[type])}>
@@ -170,8 +170,8 @@ export function Callout({
   children: React.ReactNode;
 }) {
   const styles = {
-    info: "bg-blue-50 border-blue-200 text-blue-700",
-    warning: "bg-amber-50 border-amber-200 text-amber-700",
+    info: "bg-primary/5 border-primary/20 text-primary",
+    warning: "bg-warning/10 border-warning/20 text-warning",
   };
   return (
     <div className={cn("border rounded-lg p-3 text-sm", styles[type])}>

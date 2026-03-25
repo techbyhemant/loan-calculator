@@ -8,7 +8,7 @@ export function YearlyBreakdownSection() {
   return (
     <section className="mt-6 sm:mt-8">
       <div className="mb-4">
-        <h2 className="text-base font-semibold text-gray-900">
+        <h2 className="text-base font-semibold text-foreground">
           Yearly Principal, Interest & Balance
         </h2>
       </div>

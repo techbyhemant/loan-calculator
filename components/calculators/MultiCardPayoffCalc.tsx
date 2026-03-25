@@ -127,7 +127,7 @@ export default function MultiCardPayoffCalc() {
                 type="button"
                 onClick={() => removeCard(index)}
                 disabled={cards.length <= 1}
-                className="h-9 w-9 flex items-center justify-center rounded-md text-muted-foreground hover:text-red-600 hover:bg-red-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="h-9 w-9 flex items-center justify-center rounded-md text-muted-foreground hover:text-negative hover:bg-negative/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 aria-label={`Remove ${card.name}`}
               >
                 ✕
@@ -191,7 +191,7 @@ export default function MultiCardPayoffCalc() {
                   <td className="px-4 py-3 text-right">
                     {formatMonths(results.avalanche.totalMonths)}
                   </td>
-                  <td className="px-4 py-3 text-right text-green-700 font-medium">
+                  <td className="px-4 py-3 text-right text-positive font-medium">
                     {results.interestSavedByAvalanche > 0
                       ? formatINR(results.interestSavedByAvalanche)
                       : "—"}

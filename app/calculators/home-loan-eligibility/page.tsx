@@ -63,7 +63,7 @@ export default function HomeLoanEligibilityPage() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -73,10 +73,10 @@ export default function HomeLoanEligibilityPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Home Loan Eligibility Calculator: How Much Loan Can You Get?
         </h1>
-        <p className="text-gray-600 mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Find out the maximum home loan amount you qualify for based on your monthly
           income, existing obligations, and preferred tenure.
         </p>
@@ -84,8 +84,8 @@ export default function HomeLoanEligibilityPage() {
         <EligibilityCalc />
 
         {/* SEO Content */}
-        <section className="mt-12 space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <section className="mt-12 space-y-6 text-foreground text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl font-semibold text-foreground">
             How Banks Calculate Your Home Loan Eligibility
           </h2>
           <p>
@@ -96,7 +96,7 @@ export default function HomeLoanEligibilityPage() {
             living expenses and leave a comfortable margin.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             What is the Typical FOIR Ratio?
           </h2>
           <p>
@@ -108,7 +108,7 @@ export default function HomeLoanEligibilityPage() {
             is the most common threshold for salaried applicants.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             How Existing EMIs Affect Your Eligibility
           </h2>
           <p>
@@ -120,7 +120,7 @@ export default function HomeLoanEligibilityPage() {
             smaller outstanding loans to maximize your eligibility.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Tips to Increase Your Home Loan Eligibility
           </h2>
           <ul className="list-disc list-inside space-y-2">
@@ -148,20 +148,20 @@ export default function HomeLoanEligibilityPage() {
             </li>
           </ul>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Frequently Asked Questions
           </h2>
           <dl className="space-y-4">
             {faqs.map((faq) => (
               <div key={faq.question}>
-                <dt className="font-semibold text-gray-900">{faq.question}</dt>
-                <dd className="mt-1 text-gray-600">{faq.answer}</dd>
+                <dt className="font-semibold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-muted-foreground">{faq.answer}</dd>
               </div>
             ))}
           </dl>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <p className="text-blue-800 font-medium">
+          <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
+            <p className="text-primary font-medium">
               Planning to take a home loan?{" "}
               <Link href="/login" className="underline font-semibold">
                 Save your calculation &rarr;

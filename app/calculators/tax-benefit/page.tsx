@@ -63,7 +63,7 @@ export default function TaxBenefitPage() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -73,10 +73,10 @@ export default function TaxBenefitPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Home Loan Tax Benefit Calculator: How Much Tax Do You Save?
         </h1>
-        <p className="text-gray-600 mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Find out how much tax you can save on your home loan under Section 80C
           (principal) and Section 24(b) (interest). Compare old regime vs new regime instantly.
         </p>
@@ -84,8 +84,8 @@ export default function TaxBenefitPage() {
         <TaxBenefitCalc />
 
         {/* SEO Content */}
-        <section className="mt-12 space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <section className="mt-12 space-y-6 text-foreground text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl font-semibold text-foreground">
             Understanding Home Loan Tax Benefits in India
           </h2>
           <p>
@@ -94,7 +94,7 @@ export default function TaxBenefitPage() {
             per year</strong>, translating to substantial tax savings depending on your tax bracket.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Section 80C: Deduction on Principal Repayment
           </h2>
           <p>
@@ -106,7 +106,7 @@ export default function TaxBenefitPage() {
             accounts for your existing 80C investments to show you the actual available deduction.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Section 24(b): Deduction on Interest Paid
           </h2>
           <p>
@@ -118,7 +118,7 @@ export default function TaxBenefitPage() {
             interest component of your EMI is highest.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Old Regime vs New Regime: Which Saves More?
           </h2>
           <p>
@@ -132,20 +132,20 @@ export default function TaxBenefitPage() {
             regimes side by side so you can make the right choice.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Frequently Asked Questions
           </h2>
           <dl className="space-y-4">
             {faqs.map((faq) => (
               <div key={faq.question}>
-                <dt className="font-semibold text-gray-900">{faq.question}</dt>
-                <dd className="mt-1 text-gray-600">{faq.answer}</dd>
+                <dt className="font-semibold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-muted-foreground">{faq.answer}</dd>
               </div>
             ))}
           </dl>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <p className="text-blue-800 font-medium">
+          <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
+            <p className="text-primary font-medium">
               Want to track your home loan tax benefits every year?{" "}
               <Link href="/login" className="underline font-semibold">
                 Track your home loan tax benefits every year &rarr;

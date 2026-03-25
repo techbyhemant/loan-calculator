@@ -41,7 +41,7 @@ export default function PersonalLoanPayoffPage() {
   ]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }}
@@ -51,10 +51,10 @@ export default function PersonalLoanPayoffPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Personal Loan Prepayment Calculator: Is It Worth the Penalty?
         </h1>
-        <p className="text-gray-600 mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Personal loans carry high interest (11-24%) but also charge 2-5%
           foreclosure penalty. Enter your numbers to see if prepaying actually
           saves you money after the penalty.
@@ -62,8 +62,8 @@ export default function PersonalLoanPayoffPage() {
 
         <PersonalLoanPayoffCalc />
 
-        <section className="mt-12 space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <section className="mt-12 space-y-6 text-foreground text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl font-semibold text-foreground">
             How Personal Loan Foreclosure Charges Work in India
           </h2>
           <p>
@@ -82,7 +82,7 @@ export default function PersonalLoanPayoffPage() {
             making the payment.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             When Should You Prepay a Personal Loan?
           </h2>
           <p>
@@ -99,7 +99,7 @@ export default function PersonalLoanPayoffPage() {
             most expensive debt first.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Personal Loan vs Home Loan: Prepayment Rules Compared
           </h2>
           <p>
@@ -116,8 +116,8 @@ export default function PersonalLoanPayoffPage() {
             extra home loan payments.
           </p>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <p className="text-blue-800 font-medium">
+          <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
+            <p className="text-primary font-medium">
               Have multiple loans? See which to pay first.{" "}
               <Link href="/login" className="underline font-semibold">
                 Start your free debt-free plan &rarr;

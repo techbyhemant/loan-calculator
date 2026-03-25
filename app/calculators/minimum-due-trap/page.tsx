@@ -41,7 +41,7 @@ export default function MinimumDueTrapPage() {
   ]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }}
@@ -51,10 +51,10 @@ export default function MinimumDueTrapPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Minimum Due Trap Calculator: What Paying 5% Actually Costs You
         </h1>
-        <p className="text-gray-600 mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Banks want you to pay minimum due. It keeps you in debt for years and
           earns them massive interest. Enter your balance to see the real cost
           — and what you should pay instead.
@@ -62,8 +62,8 @@ export default function MinimumDueTrapPage() {
 
         <MinimumDueTrapCalc />
 
-        <section className="mt-12 space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <section className="mt-12 space-y-6 text-foreground text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl font-semibold text-foreground">
             How Credit Card Minimum Due Works in India
           </h2>
           <p>
@@ -82,7 +82,7 @@ export default function MinimumDueTrapPage() {
             11 years to clear with minimum payments alone.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Why the Minimum Due Is a Trap
           </h2>
           <p>
@@ -114,7 +114,7 @@ export default function MinimumDueTrapPage() {
             every statement.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             How to Escape the Minimum Due Trap
           </h2>
           <p>
@@ -140,7 +140,7 @@ export default function MinimumDueTrapPage() {
               often cheaper than credit card interest at 42%. Use our{" "}
               <Link
                 href="/calculators/cc-vs-personal-loan"
-                className="text-blue-600 hover:underline font-medium"
+                className="text-primary hover:underline font-medium"
               >
                 CC vs Personal Loan calculator
               </Link>{" "}
@@ -151,20 +151,20 @@ export default function MinimumDueTrapPage() {
           <div className="flex flex-col sm:flex-row gap-3 mt-4">
             <Link
               href="/calculators/credit-card-payoff"
-              className="inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center justify-center px-4 py-2 bg-card border border-border rounded-lg text-sm font-medium text-foreground hover:bg-accent transition-colors"
             >
               Credit Card Payoff Calculator →
             </Link>
             <Link
               href="/calculators/cc-vs-personal-loan"
-              className="inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center justify-center px-4 py-2 bg-card border border-border rounded-lg text-sm font-medium text-foreground hover:bg-accent transition-colors"
             >
               CC vs Personal Loan Calculator →
             </Link>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <p className="text-blue-800 font-medium">
+          <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
+            <p className="text-primary font-medium">
               Stuck in credit card debt? Track all your cards, set payoff targets,
               and see your debt-free date.{" "}
               <Link href="/login" className="underline font-semibold">

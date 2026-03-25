@@ -83,12 +83,12 @@ export default function BalanceTransferCalc() {
                 </tr>
               </thead>
               <tbody className="divide-y">
-                <tr><td className="px-4 py-3 text-muted-foreground">Interest Rate</td><td className="px-4 py-3 text-right font-medium">{currentRate}%</td><td className="px-4 py-3 text-right font-medium text-green-700">{newRate}%</td></tr>
+                <tr><td className="px-4 py-3 text-muted-foreground">Interest Rate</td><td className="px-4 py-3 text-right font-medium">{currentRate}%</td><td className="px-4 py-3 text-right font-medium text-positive">{newRate}%</td></tr>
                 <tr><td className="px-4 py-3 text-muted-foreground">Monthly EMI</td><td className="px-4 py-3 text-right font-medium">{formatINR(results.oldEMI)}</td><td className="px-4 py-3 text-right font-medium">{formatINR(results.newEMI)}</td></tr>
                 <tr><td className="px-4 py-3 text-muted-foreground">Total Interest</td><td className="px-4 py-3 text-right">{formatLakhs(results.oldTotalInterest)}</td><td className="px-4 py-3 text-right">{formatLakhs(results.newTotalInterest)}</td></tr>
-                <tr><td className="px-4 py-3 text-muted-foreground">Interest Saved</td><td className="px-4 py-3 text-right text-muted-foreground">—</td><td className="px-4 py-3 text-right text-green-700 font-medium">{formatLakhs(results.interestSaved)}</td></tr>
-                <tr><td className="px-4 py-3 text-muted-foreground">Transfer Costs</td><td className="px-4 py-3 text-right text-muted-foreground">—</td><td className="px-4 py-3 text-right text-red-600">-{formatINR(results.totalTransferCost)}</td></tr>
-                <tr className="bg-muted/50 font-semibold"><td className="px-4 py-3">Net Saving</td><td className="px-4 py-3 text-right text-muted-foreground">—</td><td className={`px-4 py-3 text-right ${results.netSaving > 0 ? "text-green-700" : "text-red-700"}`}>{results.netSaving > 0 ? "+" : ""}{formatLakhs(results.netSaving)}</td></tr>
+                <tr><td className="px-4 py-3 text-muted-foreground">Interest Saved</td><td className="px-4 py-3 text-right text-muted-foreground">—</td><td className="px-4 py-3 text-right text-positive font-medium">{formatLakhs(results.interestSaved)}</td></tr>
+                <tr><td className="px-4 py-3 text-muted-foreground">Transfer Costs</td><td className="px-4 py-3 text-right text-muted-foreground">—</td><td className="px-4 py-3 text-right text-negative">-{formatINR(results.totalTransferCost)}</td></tr>
+                <tr className="bg-muted/50 font-semibold"><td className="px-4 py-3">Net Saving</td><td className="px-4 py-3 text-right text-muted-foreground">—</td><td className={`px-4 py-3 text-right ${results.netSaving > 0 ? "text-positive" : "text-negative"}`}>{results.netSaving > 0 ? "+" : ""}{formatLakhs(results.netSaving)}</td></tr>
               </tbody>
             </table>
           </TableCard>

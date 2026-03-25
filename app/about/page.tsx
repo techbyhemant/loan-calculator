@@ -9,9 +9,9 @@ export const metadata = buildMetadata({
 
 export default function AboutPage() {
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <main className="max-w-3xl mx-auto py-10 px-4 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-6">
           About LastEMI
         </h1>
 
@@ -22,7 +22,7 @@ export default function AboutPage() {
             DSAs, or tricked into affiliate links.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900 mt-8">
+          <h2 className="text-xl font-semibold text-foreground mt-8">
             Why We Built This
           </h2>
           <p>
@@ -32,7 +32,7 @@ export default function AboutPage() {
             We make money from a Pro plan, not from selling your phone number.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900 mt-8">
+          <h2 className="text-xl font-semibold text-foreground mt-8">
             What Makes Us Different
           </h2>
           <ul className="list-disc list-inside space-y-2">
@@ -54,7 +54,7 @@ export default function AboutPage() {
             </li>
           </ul>
 
-          <h2 className="text-xl font-semibold text-gray-900 mt-8">
+          <h2 className="text-xl font-semibold text-foreground mt-8">
             Our Calculators
           </h2>
           <p>
@@ -64,7 +64,7 @@ export default function AboutPage() {
             loans.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900 mt-8">
+          <h2 className="text-xl font-semibold text-foreground mt-8">
             Privacy Pledge
           </h2>
           <p>
@@ -73,12 +73,12 @@ export default function AboutPage() {
             stay in your browser unless you explicitly create an account.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900 mt-8">Contact</h2>
+          <h2 className="text-xl font-semibold text-foreground mt-8">Contact</h2>
           <p>
             Email:{" "}
             <a
               href="mailto:hello@lastemi.com"
-              className="text-blue-600 underline"
+              className="text-primary underline"
             >
               hello@lastemi.com
             </a>

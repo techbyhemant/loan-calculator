@@ -129,7 +129,7 @@ export default function CCPayoffCalc() {
                 <StatCard
                   label="Total Interest"
                   value={formatLakhs(results.payoff.totalInterestPaid)}
-                  valueColor="text-red-600"
+                  valueColor="text-negative"
                   sub={`${((results.payoff.totalInterestPaid / (outstanding as number)) * 100).toFixed(0)}% of your balance`}
                 />
                 <StatCard
@@ -139,15 +139,15 @@ export default function CCPayoffCalc() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-center">
-                  <p className="text-sm text-green-700 mb-1">To clear in 12 months</p>
-                  <p className="text-xl font-bold text-green-800">
+                <div className="rounded-lg border border-positive/20 bg-positive/10 p-4 text-center">
+                  <p className="text-sm text-positive mb-1">To clear in 12 months</p>
+                  <p className="text-xl font-bold text-positive">
                     {formatINR(results.pay12)}<span className="text-sm font-normal">/mo</span>
                   </p>
                 </div>
-                <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-center">
-                  <p className="text-sm text-blue-700 mb-1">To clear in 24 months</p>
-                  <p className="text-xl font-bold text-blue-800">
+                <div className="rounded-lg border border-primary/20 bg-accent p-4 text-center">
+                  <p className="text-sm text-primary mb-1">To clear in 24 months</p>
+                  <p className="text-xl font-bold text-primary">
                     {formatINR(results.pay24)}<span className="text-sm font-normal">/mo</span>
                   </p>
                 </div>
@@ -168,7 +168,7 @@ export default function CCPayoffCalc() {
                       <td className="px-4 py-3 text-right font-medium">
                         {formatMonths(results.payoff.monthsToPayoff)}
                       </td>
-                      <td className="px-4 py-3 text-right font-medium text-red-600">
+                      <td className="px-4 py-3 text-right font-medium text-negative">
                         {formatMonths(results.minDueTrap.monthsToPayoff)}
                       </td>
                     </tr>
@@ -177,7 +177,7 @@ export default function CCPayoffCalc() {
                       <td className="px-4 py-3 text-right font-medium">
                         {formatLakhs(results.payoff.totalInterestPaid)}
                       </td>
-                      <td className="px-4 py-3 text-right font-medium text-red-600">
+                      <td className="px-4 py-3 text-right font-medium text-negative">
                         {formatLakhs(results.minDueTrap.totalInterestPaid)}
                       </td>
                     </tr>
@@ -186,14 +186,14 @@ export default function CCPayoffCalc() {
                       <td className="px-4 py-3 text-right font-medium">
                         {formatLakhs(results.payoff.totalAmountPaid)}
                       </td>
-                      <td className="px-4 py-3 text-right font-medium text-red-600">
+                      <td className="px-4 py-3 text-right font-medium text-negative">
                         {formatLakhs(results.minDueTrap.totalAmountPaid)}
                       </td>
                     </tr>
                     <tr className="bg-muted/50 font-semibold">
                       <td className="px-4 py-3">Extra Interest (Min Due)</td>
                       <td className="px-4 py-3 text-right text-muted-foreground">&mdash;</td>
-                      <td className="px-4 py-3 text-right text-red-700">
+                      <td className="px-4 py-3 text-right text-negative">
                         +{formatLakhs(results.minDueTrap.extraInterestVsFixedPayment)}
                       </td>
                     </tr>
@@ -228,8 +228,8 @@ export default function CCPayoffCalc() {
                       <tr key={row.month}>
                         <td className="px-4 py-2 text-muted-foreground">{row.month}</td>
                         <td className="px-4 py-2 text-right">{formatINR(row.payment)}</td>
-                        <td className="px-4 py-2 text-right text-red-600">{formatINR(row.interestCharged)}</td>
-                        <td className="px-4 py-2 text-right text-green-700">{formatINR(row.principalPaid)}</td>
+                        <td className="px-4 py-2 text-right text-negative">{formatINR(row.interestCharged)}</td>
+                        <td className="px-4 py-2 text-right text-positive">{formatINR(row.principalPaid)}</td>
                         <td className="px-4 py-2 text-right font-medium">{formatINR(row.closingBalance)}</td>
                       </tr>
                     ))}
@@ -239,7 +239,7 @@ export default function CCPayoffCalc() {
                   <div className="px-4 py-3 text-center border-t">
                     <button
                       onClick={() => setShowAllRows(!showAllRows)}
-                      className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                      className="text-sm text-primary hover:text-primary font-medium"
                     >
                       {showAllRows
                         ? "Show first 24 months only"

@@ -9,7 +9,7 @@ import { YearlyBreakdownSection } from "./components/YearlyBreakdownSection";
 export default function LoanCalculator() {
   return (
     <LoanCalculatorProvider>
-      <div className="bg-[#F9FAFB] min-h-screen font-inter">
+      <div className="bg-background min-h-screen font-inter">
         <main className="max-w-6xl w-auto mx-auto py-4 sm:py-6 px-3 sm:px-4">
           {/* Top flex: Inputs and Pie+Summary - stack vertically on mobile */}
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">

@@ -36,7 +36,7 @@ export default function MultiLoanPlannerPage() {
   ]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }}
@@ -46,10 +46,10 @@ export default function MultiLoanPlannerPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Which Loan Should You Pay Off First? Multi-Loan Payoff Planner
         </h1>
-        <p className="text-gray-600 mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Most people pay off whichever loan feels most annoying. But the mathematically
           optimal order depends on <strong>effective after-tax rates</strong>, not headline
           rates. Enter your loans below to see the smartest payoff sequence for your tax
@@ -58,8 +58,8 @@ export default function MultiLoanPlannerPage() {
 
         <MultiLoanPlannerCalc />
 
-        <section className="mt-12 space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <section className="mt-12 space-y-6 text-foreground text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl font-semibold text-foreground">
             Why Effective Rate Matters More Than Headline Rate
           </h2>
           <p>
@@ -75,7 +75,7 @@ export default function MultiLoanPlannerPage() {
             type based on your tax bracket, so you can see the true cost side by side.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Why Your Home Loan Should Almost Always Go Last
           </h2>
           <p>
@@ -99,7 +99,7 @@ export default function MultiLoanPlannerPage() {
             equals the headline rate.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Education Loans and Section 80E: The Hidden Benefit
           </h2>
           <p>
@@ -116,8 +116,8 @@ export default function MultiLoanPlannerPage() {
             Always factor this in before rushing to prepay an education loan.
           </p>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <p className="text-blue-800 font-medium">
+          <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
+            <p className="text-primary font-medium">
               Have multiple loans and want a personalised payoff strategy?{" "}
               <Link href="/login" className="underline font-semibold">
                 Create your free debt-free plan →

@@ -64,30 +64,30 @@ export default function NewCreditCardPage() {
   return (
     <div className="max-w-lg mx-auto space-y-6">
       <div className="flex items-center gap-3">
-        <Link href="/dashboard/credit-cards" className="text-gray-400 hover:text-gray-600">
+        <Link href="/dashboard/credit-cards" className="text-muted-foreground hover:text-muted-foreground">
           &larr;
         </Link>
-        <h1 className="text-xl font-bold text-gray-900">Add Credit Card</h1>
+        <h1 className="text-xl font-bold text-foreground">Add Credit Card</h1>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm p-4 space-y-4">
+      <div className="bg-card rounded-xl shadow-sm p-4 space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Card Name</label>
+          <label className="block text-sm font-medium text-foreground mb-1">Card Name</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. HDFC Regalia"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+            className="w-full rounded-md border border-border px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Issuing Bank</label>
+          <label className="block text-sm font-medium text-foreground mb-1">Issuing Bank</label>
           <select
             value={issuer}
             onChange={(e) => setIssuer(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+            className="w-full rounded-md border border-border px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
           >
             <option value="">Select bank...</option>
             {COMMON_ISSUERS.map((bank) => (
@@ -98,29 +98,29 @@ export default function NewCreditCardPage() {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Credit Limit (₹)</label>
+            <label className="block text-sm font-medium text-foreground mb-1">Credit Limit (₹)</label>
             <NumericInput
               value={creditLimit}
               onChange={setCreditLimit}
               placeholder="2,00,000"
               min={0}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+              className="w-full rounded-md border border-border px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Outstanding (₹)</label>
+            <label className="block text-sm font-medium text-foreground mb-1">Outstanding (₹)</label>
             <NumericInput
               value={currentOutstanding}
               onChange={setCurrentOutstanding}
               placeholder="0"
               min={0}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+              className="w-full rounded-md border border-border px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Monthly Interest Rate (%)</label>
+          <label className="block text-sm font-medium text-foreground mb-1">Monthly Interest Rate (%)</label>
           <NumericInput
             value={monthlyRate}
             onChange={setMonthlyRate}
@@ -128,53 +128,53 @@ export default function NewCreditCardPage() {
             min={0}
             max={10}
             step={0.1}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+            className="w-full rounded-md border border-border px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Standard in India: 3.5%/month = 42% PA
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Billing Date</label>
+            <label className="block text-sm font-medium text-foreground mb-1">Billing Date</label>
             <NumericInput
               value={billingDate}
               onChange={setBillingDate}
               placeholder="1"
               min={1}
               max={28}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+              className="w-full rounded-md border border-border px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+            <label className="block text-sm font-medium text-foreground mb-1">Due Date</label>
             <NumericInput
               value={dueDate}
               onChange={setDueDate}
               placeholder="20"
               min={1}
               max={28}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+              className="w-full rounded-md border border-border px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Notes (optional)</label>
+          <label className="block text-sm font-medium text-foreground mb-1">Notes (optional)</label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Any notes about this card..."
             rows={2}
             maxLength={500}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none resize-none"
+            className="w-full rounded-md border border-border px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none resize-none"
           />
         </div>
 
         {monthlyInterest > 0 && (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-            <p className="text-sm text-amber-800">
+          <div className="bg-warning/10 border border-warning/20 rounded-lg p-3">
+            <p className="text-sm text-warning">
               Monthly interest on this card: <strong>{formatINR(monthlyInterest)}</strong>
               {" "}({formatINR(monthlyInterest * 12)}/year)
             </p>
@@ -190,7 +190,7 @@ export default function NewCreditCardPage() {
         <button
           onClick={handleSubmit}
           disabled={submitting}
-          className="w-full bg-emerald-600 text-white rounded-lg py-2.5 text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 transition-colors"
+          className="w-full bg-primary text-white rounded-lg py-2.5 text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors"
         >
           {submitting ? "Adding..." : "Add Credit Card"}
         </button>

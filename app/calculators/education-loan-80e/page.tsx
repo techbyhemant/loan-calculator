@@ -41,7 +41,7 @@ export default function EducationLoan80EPage() {
   ]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }}
@@ -51,11 +51,11 @@ export default function EducationLoan80EPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Education Loan Section 80E Calculator: Tax Benefit &amp; Repayment
           Planner
         </h1>
-        <p className="text-gray-600 mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Education loans are unique &mdash; they come with a moratorium period
           (no EMIs while you study) and unlimited interest deduction under
           Section 80E. This calculator shows you the real cost of your loan
@@ -64,8 +64,8 @@ export default function EducationLoan80EPage() {
 
         <EducationLoan80ECalc />
 
-        <section className="mt-12 space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <section className="mt-12 space-y-6 text-foreground text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl font-semibold text-foreground">
             What Is Section 80E and Why It Matters
           </h2>
           <p>
@@ -83,7 +83,7 @@ export default function EducationLoan80EPage() {
             recognised financial institution or approved charitable institution.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             The Moratorium Trap: Hidden Interest Capitalisation
           </h2>
           <p>
@@ -102,7 +102,7 @@ export default function EducationLoan80EPage() {
             interest during the moratorium period, you&apos;ll save significantly.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Smart Repayment Strategy for Education Loans
           </h2>
           <p>
@@ -124,8 +124,8 @@ export default function EducationLoan80EPage() {
             making prepayment more attractive.
           </p>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <p className="text-blue-800 font-medium">
+          <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
+            <p className="text-primary font-medium">
               Managing multiple loans including education?{" "}
               <Link href="/login" className="underline font-semibold">
                 Track all your loans and find your debt-free date &rarr;

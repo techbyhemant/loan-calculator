@@ -9,47 +9,47 @@ export function Footer() {
   if (pathname.startsWith("/dashboard")) return null;
 
   return (
-    <footer className="bg-white border-t border-gray-200 mt-auto">
+    <footer className="bg-card border-t border-border mt-auto">
       <div className="max-w-6xl mx-auto px-3 sm:px-4 py-8">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-8">
           {/* Calculators */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-3">
+            <h3 className="text-sm font-semibold text-foreground mb-3">
               Calculators
             </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-sm text-gray-600 hover:text-gray-900">
+                <Link href="/" className="text-sm text-muted-foreground hover:text-foreground">
                   EMI Calculator
                 </Link>
               </li>
               <li>
-                <Link href="/calculators/sip-vs-prepayment" className="text-sm text-gray-600 hover:text-gray-900">
+                <Link href="/calculators/sip-vs-prepayment" className="text-sm text-muted-foreground hover:text-foreground">
                   SIP vs Prepayment
                 </Link>
               </li>
               <li>
-                <Link href="/calculators/home-loan-eligibility" className="text-sm text-gray-600 hover:text-gray-900">
+                <Link href="/calculators/home-loan-eligibility" className="text-sm text-muted-foreground hover:text-foreground">
                   Eligibility Check
                 </Link>
               </li>
               <li>
-                <Link href="/calculators/tax-benefit" className="text-sm text-gray-600 hover:text-gray-900">
+                <Link href="/calculators/tax-benefit" className="text-sm text-muted-foreground hover:text-foreground">
                   Tax Benefit
                 </Link>
               </li>
               <li>
-                <Link href="/calculators/salary-to-emi" className="text-sm text-gray-600 hover:text-gray-900">
+                <Link href="/calculators/salary-to-emi" className="text-sm text-muted-foreground hover:text-foreground">
                   Salary to Loan
                 </Link>
               </li>
               <li>
-                <Link href="/calculators/rent-vs-buy" className="text-sm text-gray-600 hover:text-gray-900">
+                <Link href="/calculators/rent-vs-buy" className="text-sm text-muted-foreground hover:text-foreground">
                   Rent vs Buy
                 </Link>
               </li>
               <li>
-                <Link href="/calculators/balance-transfer" className="text-sm text-gray-600 hover:text-gray-900">
+                <Link href="/calculators/balance-transfer" className="text-sm text-muted-foreground hover:text-foreground">
                   Balance Transfer
                 </Link>
               </li>
@@ -58,17 +58,17 @@ export function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-3">
+            <h3 className="text-sm font-semibold text-foreground mb-3">
               Resources
             </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/rbi-rates" className="text-sm text-gray-600 hover:text-gray-900">
+                <Link href="/rbi-rates" className="text-sm text-muted-foreground hover:text-foreground">
                   RBI Repo Rate
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="text-sm text-gray-600 hover:text-gray-900">
+                <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground">
                   Pricing
                 </Link>
               </li>
@@ -77,17 +77,17 @@ export function Footer() {
 
           {/* Dashboard */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-3">
+            <h3 className="text-sm font-semibold text-foreground mb-3">
               Dashboard
             </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/login" className="text-sm text-gray-600 hover:text-gray-900">
+                <Link href="/login" className="text-sm text-muted-foreground hover:text-foreground">
                   Sign In
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard" className="text-sm text-gray-600 hover:text-gray-900">
+                <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground">
                   My Loans
                 </Link>
               </li>
@@ -96,18 +96,18 @@ export function Footer() {
 
           {/* About */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-3">
+            <h3 className="text-sm font-semibold text-foreground mb-3">
               LastEMI
             </h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               India&apos;s honest debt freedom platform. No hidden fees, no lead gen
               &mdash; just math.
             </p>
           </div>
         </div>
 
-        <div className="border-t border-gray-100 pt-4 text-center">
-          <p className="text-xs text-gray-500">
+        <div className="border-t border-border pt-4 text-center">
+          <p className="text-xs text-muted-foreground">
             &copy; 2026 LastEMI. All rights reserved.
           </p>
         </div>

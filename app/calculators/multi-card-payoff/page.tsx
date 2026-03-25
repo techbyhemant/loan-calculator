@@ -35,7 +35,7 @@ export default function MultiCardPayoffPage() {
   ]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }}
@@ -45,10 +45,10 @@ export default function MultiCardPayoffPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Multi-Card Payoff Calculator: Avalanche vs Snowball
         </h1>
-        <p className="text-gray-600 mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Juggling multiple credit cards? Enter your balances and monthly budget
           to see the smartest payoff order. We compare avalanche and snowball
           strategies so you know exactly how much each one costs.
@@ -56,8 +56,8 @@ export default function MultiCardPayoffPage() {
 
         <MultiCardPayoffCalc />
 
-        <section className="mt-12 space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <section className="mt-12 space-y-6 text-foreground text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl font-semibold text-foreground">
             The Avalanche Method: Pay Less Interest
           </h2>
           <p>
@@ -74,7 +74,7 @@ export default function MultiCardPayoffPage() {
             significantly.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             The Snowball Method: Build Momentum
           </h2>
           <p>
@@ -89,7 +89,7 @@ export default function MultiCardPayoffPage() {
             the alternative is giving up halfway, snowball wins every time.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Which Strategy Should You Choose?
           </h2>
           <p>
@@ -109,7 +109,7 @@ export default function MultiCardPayoffPage() {
             worst possible strategy — our{" "}
             <Link
               href="/calculators/minimum-due-trap"
-              className="text-blue-600 hover:underline font-medium"
+              className="text-primary hover:underline font-medium"
             >
               Minimum Due Trap Calculator
             </Link>{" "}
@@ -120,15 +120,15 @@ export default function MultiCardPayoffPage() {
             Already know you want to clear a single card fast? Use our{" "}
             <Link
               href="/calculators/credit-card-payoff"
-              className="text-blue-600 hover:underline font-medium"
+              className="text-primary hover:underline font-medium"
             >
               Credit Card Payoff Calculator
             </Link>{" "}
             for a detailed month-by-month breakdown.
           </p>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <p className="text-blue-800 font-medium">
+          <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
+            <p className="text-primary font-medium">
               Want to track your payoff progress and get reminders?{" "}
               <Link href="/login" className="underline font-semibold">
                 Create your free debt-free plan →

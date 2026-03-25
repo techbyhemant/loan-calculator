@@ -63,7 +63,7 @@ export default function SipVsPrepaymentPage() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -73,10 +73,10 @@ export default function SipVsPrepaymentPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           SIP vs Home Loan Prepayment: Which is Better for You?
         </h1>
-        <p className="text-gray-600 mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Got extra cash each month? Use this calculator to compare whether investing
           in SIP mutual funds or prepaying your home loan builds more wealth for you.
         </p>
@@ -84,8 +84,8 @@ export default function SipVsPrepaymentPage() {
         <SipVsPrepaymentCalc />
 
         {/* SEO Content */}
-        <section className="mt-12 space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <section className="mt-12 space-y-6 text-foreground text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl font-semibold text-foreground">
             Understanding SIP and Loan Prepayment
           </h2>
           <p>
@@ -101,7 +101,7 @@ export default function SipVsPrepaymentPage() {
             zero prepayment penalty, making it a completely free option.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             The Simple Rule of Thumb
           </h2>
           <p>
@@ -114,7 +114,7 @@ export default function SipVsPrepaymentPage() {
             SIP could generate more wealth.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Why Your Tax Bracket Matters
           </h2>
           <p>
@@ -132,7 +132,7 @@ export default function SipVsPrepaymentPage() {
             since there is no tax benefit to lose.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Important Considerations
           </h2>
           <p>
@@ -142,20 +142,20 @@ export default function SipVsPrepaymentPage() {
             is almost always the safer and better choice.
           </p>
 
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Frequently Asked Questions
           </h2>
           <dl className="space-y-4">
             {faqs.map((faq) => (
               <div key={faq.question}>
-                <dt className="font-semibold text-gray-900">{faq.question}</dt>
-                <dd className="mt-1 text-gray-600">{faq.answer}</dd>
+                <dt className="font-semibold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-muted-foreground">{faq.answer}</dd>
               </div>
             ))}
           </dl>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <p className="text-blue-800 font-medium">
+          <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
+            <p className="text-primary font-medium">
               Want to track your prepayments and see your updated debt-free date?{" "}
               <Link href="/login" className="underline font-semibold">
                 Save your results to your free loan dashboard &rarr;

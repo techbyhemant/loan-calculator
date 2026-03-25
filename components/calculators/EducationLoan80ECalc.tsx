@@ -199,25 +199,25 @@ export default function EducationLoan80ECalc() {
               label="Annual 80E Deduction"
               value={formatLakhs(results.deduction80E)}
               sub="No upper limit"
-              valueColor="text-green-700"
+              valueColor="text-positive"
             />
             <StatCard
               label="Tax Saved Per Year"
               value={formatINR(results.taxSaved)}
               sub={`At ${taxBracket}% bracket`}
-              valueColor="text-green-700"
+              valueColor="text-positive"
             />
             <StatCard
               label="Effective Rate"
               value={`${results.effectiveRate.toFixed(1)}%`}
               sub={`Down from ${results.rate}%`}
-              valueColor="text-blue-700"
+              valueColor="text-primary"
             />
             <StatCard
               label="Interest During Moratorium"
               value={formatLakhs(results.interestDuringMoratorium)}
               sub={`${results.moratMonths} months`}
-              valueColor="text-amber-700"
+              valueColor="text-warning"
             />
           </div>
 
@@ -269,10 +269,10 @@ export default function EducationLoan80ECalc() {
                     <td className="px-4 py-3 text-right">
                       {formatINR(row.annualInterestPaid)}
                     </td>
-                    <td className="px-4 py-3 text-right text-green-700">
+                    <td className="px-4 py-3 text-right text-positive">
                       {formatINR(row.deduction80E)}
                     </td>
-                    <td className="px-4 py-3 text-right text-green-700 font-medium">
+                    <td className="px-4 py-3 text-right text-positive font-medium">
                       {formatINR(row.taxSavedYear)}
                     </td>
                     <td className="px-4 py-3 text-right font-medium">
@@ -303,7 +303,7 @@ export default function EducationLoan80ECalc() {
                   <td className="px-4 py-3 text-muted-foreground">
                     Your Effective Loan Rate
                   </td>
-                  <td className="px-4 py-3 text-right font-medium text-green-700">
+                  <td className="px-4 py-3 text-right font-medium text-positive">
                     {results.effectiveRate.toFixed(1)}%
                   </td>
                 </tr>

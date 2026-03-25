@@ -81,9 +81,9 @@ export default function SalaryToEmiCalc() {
       {results && results.maxEMI > 0 && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <StatCard label="Max Home Loan" value={formatLakhs(results.maxLoan)} sub={formatINR(results.maxLoan)} valueColor="text-blue-700" />
-            <StatCard label="Max EMI You Can Afford" value={formatINR(results.maxEMI)} sub="per month" valueColor="text-green-700" />
-            <StatCard label="EMI-to-Salary Ratio" value={`${results.emiPercent}%`} sub="of net salary" valueColor="text-purple-700" />
+            <StatCard label="Max Home Loan" value={formatLakhs(results.maxLoan)} sub={formatINR(results.maxLoan)} valueColor="text-primary" />
+            <StatCard label="Max EMI You Can Afford" value={formatINR(results.maxEMI)} sub="per month" valueColor="text-positive" />
+            <StatCard label="EMI-to-Salary Ratio" value={`${results.emiPercent}%`} sub="of net salary" valueColor="text-primary" />
           </div>
 
           <TableCard title="How Much Home Loan on Different Salaries?" description={`At ${rate}% for ${tenure} years, 50% FOIR`}>
@@ -107,7 +107,7 @@ export default function SalaryToEmiCalc() {
                         {isCurrentSalary && <span className="ml-2 text-xs text-primary">← You</span>}
                       </td>
                       <td className="px-4 py-3 text-right text-muted-foreground">{formatINR(emi)}</td>
-                      <td className="px-4 py-3 text-right font-semibold text-blue-700">{formatLakhs(loan)}</td>
+                      <td className="px-4 py-3 text-right font-semibold text-primary">{formatLakhs(loan)}</td>
                     </tr>
                   );
                 })}

@@ -1,5 +1,6 @@
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { useThemeColors } from "@/lib/hooks/useThemeColors";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -12,16 +13,18 @@ export function PaymentBreakdownPie({
   principal,
   interest,
 }: PaymentBreakdownPieProps) {
+  const colors = useThemeColors();
+
   const data = {
     labels: ["Principal Loan Amount", "Total Interest"],
     datasets: [
       {
         data: [principal, interest],
         backgroundColor: [
-          "rgb(34,197,94)", // Tailwind green-500
-          "rgb(251,146,60)", // Tailwind orange-400
+          colors.chart1,
+          colors.chart2,
         ],
-        borderWidth: 1,
+        borderWidth: 0,
       },
     ],
   };
@@ -32,7 +35,7 @@ export function PaymentBreakdownPie({
         display: true,
         position: "bottom" as const,
         labels: {
-          color: "#64748b", // Tailwind slate-500
+          color: colors.mutedForeground,
           font: { size: 14 },
         },
       },
