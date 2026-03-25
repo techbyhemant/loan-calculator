@@ -146,10 +146,8 @@ export function LoanCalculatorProvider({
   children,
 }: LoanCalculatorProviderProps) {
   const [state, dispatch] = useReducer(loanReducer, initialState, (init) => {
-    // Compute default start date here (runs once, client-only avoids hydration mismatch)
-    const today = new Date();
-    const defaultStart = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}`;
-    const merged = { ...init, startDate: defaultStart };
+    // Use a static default for SSR — real date is set in useEffect below
+    const merged = { ...init, startDate: "2026-03" };
 
     // Read shared token from URL on mount (e.g. ?s=<base64token>)
     if (typeof window === "undefined") return merged;
@@ -173,16 +171,22 @@ export function LoanCalculatorProvider({
     return merged;
   });
 
-  // Clean up URL params after reading shared token on mount
-  const hasCleanedUrl = useRef(false);
+  // Set real date on client after hydration (avoids SSR mismatch)
+  const hasInitialized = useRef(false);
   useEffect(() => {
-    if (!hasCleanedUrl.current && typeof window !== "undefined") {
-      hasCleanedUrl.current = true;
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      const today = new Date();
+      const realDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}`;
+      if (state.startDate === "2026-03" && realDate !== "2026-03") {
+        dispatch({ type: "SET_START_DATE", payload: realDate });
+      }
+      // Clean up URL params after reading shared token
       if (window.location.search) {
         window.history.replaceState(null, "", window.location.pathname);
       }
     }
-  }, []);
+  }, [state.startDate]);
 
   // Computed values
   const config = loanTypeConfigs[state.loanType];

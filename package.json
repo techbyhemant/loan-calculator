@@ -2,6 +2,12 @@
   "name": "loan_calculator",
   "version": "0.1.0",
   "private": true,
+  "browserslist": [
+    "chrome >= 90",
+    "firefox >= 90",
+    "safari >= 15",
+    "edge >= 90"
+  ],
   "scripts": {
     "dev": "next dev --turbopack --port 3005",
     "build": "next build",
