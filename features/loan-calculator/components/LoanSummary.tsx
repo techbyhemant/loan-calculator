@@ -1,6 +1,11 @@
 import React from "react";
-import { PaymentBreakdownPie } from "../charts/PaymentBreakdownPie";
+import dynamic from "next/dynamic";
 import { useLoanCalculator } from "../context/LoanCalculatorContext";
+
+const PaymentBreakdownPie = dynamic(
+  () => import("../charts/PaymentBreakdownPie").then((m) => ({ default: m.PaymentBreakdownPie })),
+  { ssr: false, loading: () => <div className="w-48 h-48 mx-auto bg-muted rounded-full animate-pulse" /> }
+);
 
 export function LoanSummary() {
   const { amount, result, formatINR } = useLoanCalculator();

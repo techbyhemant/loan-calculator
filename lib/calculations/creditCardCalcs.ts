@@ -22,6 +22,7 @@ export const CC_DEFAULTS = {
   minimumDueFloor: 200, // ₹200 minimum
   billingCycleDays: 30, // standard billing cycle
   interestFreePeriod: 20, // days after statement date
+  gstRate: 0.18, // 18% GST on all CC fees & interest (India)
 } as const;
 
 // ============================================================
@@ -44,23 +45,26 @@ export interface CCMonthlyBreakdown {
   month: number;
   openingBalance: number;
   payment: number;
-  interestCharged: number;
+  interestCharged: number; // base interest (before GST)
+  gstOnInterest: number; // 18% GST on interest (0 if GST disabled)
   principalPaid: number;
   closingBalance: number;
 }
 
 export interface CCPayoffResult {
   monthsToPayoff: number;
-  totalInterestPaid: number;
-  totalAmountPaid: number;
+  totalInterestPaid: number; // base interest only
+  totalGSTPaid: number; // GST on interest (0 if GST disabled)
+  totalAmountPaid: number; // includes GST
   monthlyBreakdown: CCMonthlyBreakdown[];
   isNeverPayoff: boolean; // true if payment <= monthly interest
 }
 
 export interface CCMinimumDueResult {
   monthsToPayoff: number; // usually 96-180 months
-  totalInterestPaid: number; // usually 3-5x the original balance
-  totalAmountPaid: number;
+  totalInterestPaid: number; // base interest only
+  totalGSTPaid: number; // GST on interest (0 if GST disabled)
+  totalAmountPaid: number; // includes GST
   yearsToPayoff: number;
   extraInterestVsFixedPayment: number; // how much MORE you pay vs fixed payment
 }
@@ -78,12 +82,15 @@ export interface CCScenarioComparison {
 
 export interface CCVsPersonalLoanResult {
   ccMonthlyPayment: number;
-  ccTotalInterest: number;
+  ccTotalInterest: number; // base interest
+  ccTotalGST: number; // GST on CC interest
   ccMonthsToPayoff: number;
   plMonthlyEMI: number;
-  plTotalInterest: number;
+  plTotalInterest: number; // base interest
+  plTotalGST: number; // GST on PL interest
   plProcessingFee: number;
-  plNetSaving: number; // positive = PL saves money
+  plProcessingFeeGST: number; // GST on PL processing fee
+  plNetSaving: number; // positive = PL saves money (GST-inclusive)
   plBreakEvenMonths: number; // months until PL starts saving
   recommendation: "PERSONAL_LOAN" | "KEEP_CC" | "MARGINAL";
   recommendationReason: string;
@@ -101,17 +108,19 @@ export interface CardPayoffSchedule {
 export interface MultiCardPayoffResult {
   avalanche: {
     cards: CardPayoffSchedule[];
-    totalInterest: number;
+    totalInterest: number; // base interest only
+    totalGST: number; // GST on interest (0 if GST disabled)
     totalMonths: number;
     order: string[]; // card names in payoff order
   };
   snowball: {
     cards: CardPayoffSchedule[];
-    totalInterest: number;
+    totalInterest: number; // base interest only
+    totalGST: number; // GST on interest (0 if GST disabled)
     totalMonths: number;
     order: string[];
   };
-  interestSavedByAvalanche: number;
+  interestSavedByAvalanche: number; // GST-inclusive saving
   recommendation: "AVALANCHE" | "SNOWBALL";
   recommendationReason: string;
 }
@@ -133,19 +142,27 @@ export interface CreditUtilization {
 /**
  * Calculate credit card payoff schedule for a fixed monthly payment.
  * Uses standard revolving credit formula.
+ *
+ * @param includeGST - When true (default), 18% GST is added to interest each month.
+ *   In India, 18% GST is charged on ALL credit card interest and fees.
+ *   This makes the effective interest rate even higher than the stated rate.
  */
 export function calculateCCPayoff(
   input: CreditCardInput,
-  monthlyPayment: number
+  monthlyPayment: number,
+  includeGST: boolean = true
 ): CCPayoffResult {
   const { outstanding, monthlyRate = CC_DEFAULTS.monthlyRate } = input;
+  const gstMultiplier = includeGST ? CC_DEFAULTS.gstRate : 0;
 
-  // If payment doesn't cover monthly interest, debt never clears
+  // If payment doesn't cover monthly interest + GST, debt never clears
   const monthlyInterestOnFull = outstanding * monthlyRate;
-  if (monthlyPayment <= monthlyInterestOnFull) {
+  const gstOnFullInterest = monthlyInterestOnFull * gstMultiplier;
+  if (monthlyPayment <= monthlyInterestOnFull + gstOnFullInterest) {
     return {
       monthsToPayoff: Infinity,
       totalInterestPaid: Infinity,
+      totalGSTPaid: Infinity,
       totalAmountPaid: Infinity,
       monthlyBreakdown: [],
       isNeverPayoff: true,
@@ -155,6 +172,7 @@ export function calculateCCPayoff(
   const breakdown: CCMonthlyBreakdown[] = [];
   let balance = outstanding;
   let totalInterest = 0;
+  let totalGST = 0;
   let totalPaid = 0;
   let month = 0;
   const MAX_MONTHS = 600; // safety cap — 50 years
@@ -163,8 +181,10 @@ export function calculateCCPayoff(
     month++;
     const openingBalance = balance;
     const interestCharged = balance * monthlyRate;
-    const actualPayment = Math.min(monthlyPayment, balance + interestCharged);
-    const principalPaid = actualPayment - interestCharged;
+    const gstOnInterest = interestCharged * gstMultiplier;
+    const totalInterestWithGST = interestCharged + gstOnInterest;
+    const actualPayment = Math.min(monthlyPayment, balance + totalInterestWithGST);
+    const principalPaid = actualPayment - totalInterestWithGST;
     const closingBalance = Math.max(0, balance - principalPaid);
 
     breakdown.push({
@@ -172,11 +192,13 @@ export function calculateCCPayoff(
       openingBalance: roundTo2(openingBalance),
       payment: roundTo2(actualPayment),
       interestCharged: roundTo2(interestCharged),
+      gstOnInterest: roundTo2(gstOnInterest),
       principalPaid: roundTo2(principalPaid),
       closingBalance: roundTo2(closingBalance),
     });
 
     totalInterest += interestCharged;
+    totalGST += gstOnInterest;
     totalPaid += actualPayment;
     balance = closingBalance;
   }
@@ -184,6 +206,7 @@ export function calculateCCPayoff(
   return {
     monthsToPayoff: month,
     totalInterestPaid: roundTo2(totalInterest),
+    totalGSTPaid: roundTo2(totalGST),
     totalAmountPaid: roundTo2(totalPaid),
     monthlyBreakdown: breakdown,
     isNeverPayoff: false,
@@ -198,14 +221,19 @@ export function calculateCCPayoff(
  * Calculate the devastating effect of paying only minimum due.
  * Minimum due = max(outstanding × 5%, ₹200)
  * The trap: minimum due shrinks as balance shrinks, so you never get to zero quickly.
+ *
+ * @param includeGST - When true (default), 18% GST is added to interest each month.
  */
 export function calculateMinimumDueTrap(
-  input: CreditCardInput
+  input: CreditCardInput,
+  includeGST: boolean = true
 ): CCMinimumDueResult {
   const { outstanding, monthlyRate = CC_DEFAULTS.monthlyRate } = input;
+  const gstMultiplier = includeGST ? CC_DEFAULTS.gstRate : 0;
 
   let balance = outstanding;
   let totalInterest = 0;
+  let totalGST = 0;
   let totalPaid = 0;
   let month = 0;
   const MAX_MONTHS = 1200; // 100 years safety cap
@@ -213,32 +241,36 @@ export function calculateMinimumDueTrap(
   while (balance > 1 && month < MAX_MONTHS) {
     month++;
     const interestCharged = balance * monthlyRate;
+    const gstOnInterest = interestCharged * gstMultiplier;
+    const totalInterestWithGST = interestCharged + gstOnInterest;
     const minDue = Math.max(
       balance * CC_DEFAULTS.minimumDuePercent,
       CC_DEFAULTS.minimumDueFloor
     );
-    // Payment can't exceed balance + interest
-    const payment = Math.min(minDue, balance + interestCharged);
-    const principalPaid = payment - interestCharged;
+    // Payment can't exceed balance + interest + GST
+    const payment = Math.min(minDue, balance + totalInterestWithGST);
+    const principalPaid = payment - totalInterestWithGST;
 
-    // If min due doesn't even cover interest (near-zero balance edge case)
+    // If min due doesn't even cover interest + GST (near-zero balance edge case)
     if (principalPaid <= 0) {
-      balance = balance + interestCharged - payment;
+      balance = balance + totalInterestWithGST - payment;
     } else {
       balance = Math.max(0, balance - principalPaid);
     }
 
     totalInterest += interestCharged;
+    totalGST += gstOnInterest;
     totalPaid += payment;
   }
 
   // Calculate what a fixed 12-month payment would cost for comparison
-  const recommended12Month = calculateFixedPaymentForTarget(input, 12);
-  const fixedPayoffResult = calculateCCPayoff(input, recommended12Month);
+  const recommended12Month = calculateFixedPaymentForTarget(input, 12, includeGST);
+  const fixedPayoffResult = calculateCCPayoff(input, recommended12Month, includeGST);
 
   return {
     monthsToPayoff: month,
     totalInterestPaid: roundTo2(totalInterest),
+    totalGSTPaid: roundTo2(totalGST),
     totalAmountPaid: roundTo2(totalPaid),
     yearsToPayoff: Math.round((month / 12) * 10) / 10,
     extraInterestVsFixedPayment: roundTo2(
@@ -255,30 +287,32 @@ export function calculateMinimumDueTrap(
  * Compare 3 payment strategies side by side.
  */
 export function calculateCCScenarios(
-  input: CreditCardInput
+  input: CreditCardInput,
+  includeGST: boolean = true
 ): CCScenarioComparison {
-  const recommended12 = calculateFixedPaymentForTarget(input, 12);
-  const recommended24 = calculateFixedPaymentForTarget(input, 24);
+  const recommended12 = calculateFixedPaymentForTarget(input, 12, includeGST);
+  const recommended24 = calculateFixedPaymentForTarget(input, 24, includeGST);
 
   // Minimum due scenario
-  const minimumDueTrap = calculateMinimumDueTrap(input);
+  const minimumDueTrap = calculateMinimumDueTrap(input, includeGST);
   const minimumDueAsPayoff: CCPayoffResult = {
     monthsToPayoff: minimumDueTrap.monthsToPayoff,
     totalInterestPaid: minimumDueTrap.totalInterestPaid,
+    totalGSTPaid: minimumDueTrap.totalGSTPaid,
     totalAmountPaid: minimumDueTrap.totalAmountPaid,
     monthlyBreakdown: [],
     isNeverPayoff: false,
   };
 
   // Fixed payment scenario (using 12-month target)
-  const fixedPayoff = calculateCCPayoff(input, recommended12);
+  const fixedPayoff = calculateCCPayoff(input, recommended12, includeGST);
 
   return {
     minimumDue: minimumDueAsPayoff,
     fixedPayment: fixedPayoff,
     fullClearance: {
       interestPaid: 0, // zero interest if paid within interest-free period
-      saving: minimumDueTrap.totalInterestPaid,
+      saving: minimumDueTrap.totalInterestPaid + minimumDueTrap.totalGSTPaid,
     },
     recommendedMonthlyPayment: roundTo2(recommended12),
     recommended24MonthPayment: roundTo2(recommended24),
@@ -293,57 +327,72 @@ export function calculateCCScenarios(
  * Should the user take a personal loan to clear CC debt?
  * Honest comparison including processing fees.
  * Only recommend PL if net saving > ₹5,000.
+ *
+ * @param includeGST - When true (default), 18% GST is added to both CC and PL
+ *   interest, and to the PL processing fee.
  */
 export function compareCCVsPersonalLoan(
   cc: CreditCardInput,
-  pl: PersonalLoanInput
+  pl: PersonalLoanInput,
+  includeGST: boolean = true
 ): CCVsPersonalLoanResult {
   const ccMonthlyRate = cc.monthlyRate ?? CC_DEFAULTS.monthlyRate;
   const plMonthlyRate = pl.annualRate / 12;
   const processingFeePercent = pl.processingFeePercent ?? 0.02;
+  const gstMultiplier = includeGST ? CC_DEFAULTS.gstRate : 0;
 
   // CC payoff with fixed payment (using PL tenure as benchmark)
-  const ccFixedPayment = calculateFixedPaymentForTarget(cc, pl.tenureMonths);
-  const ccResult = calculateCCPayoff(cc, ccFixedPayment);
+  const ccFixedPayment = calculateFixedPaymentForTarget(cc, pl.tenureMonths, includeGST);
+  const ccResult = calculateCCPayoff(cc, ccFixedPayment, includeGST);
 
   // Personal loan EMI calculation
   const plEMI = calculateEMI(pl.amount, plMonthlyRate, pl.tenureMonths);
   const plTotalPaid = plEMI * pl.tenureMonths;
   const plTotalInterest = plTotalPaid - pl.amount;
+  const plTotalGST = plTotalInterest * gstMultiplier;
   const plProcessingFee = pl.amount * processingFeePercent;
+  const plProcessingFeeGST = plProcessingFee * gstMultiplier;
 
-  // Net saving = CC interest - (PL interest + processing fee)
-  const netSaving =
-    ccResult.totalInterestPaid - (plTotalInterest + plProcessingFee);
+  // CC total cost (GST-inclusive)
+  const ccTotalCost = ccResult.totalInterestPaid + ccResult.totalGSTPaid;
+  // PL total cost (GST-inclusive)
+  const plTotalCost = plTotalInterest + plTotalGST + plProcessingFee + plProcessingFeeGST;
+
+  // Net saving = CC total cost - PL total cost
+  const netSaving = ccTotalCost - plTotalCost;
 
   let recommendation: "PERSONAL_LOAN" | "KEEP_CC" | "MARGINAL";
   let recommendationReason: string;
 
+  const totalPlFee = plProcessingFee + plProcessingFeeGST;
+
   if (netSaving > 5000) {
     recommendation = "PERSONAL_LOAN";
-    recommendationReason = `Taking a personal loan saves ₹${formatINRLocal(netSaving)} after accounting for the ${(processingFeePercent * 100).toFixed(1)}% processing fee (₹${formatINRLocal(plProcessingFee)}).`;
+    recommendationReason = `Taking a personal loan saves ₹${formatINRLocal(netSaving)}${includeGST ? " (incl. GST)" : ""} after accounting for the ${(processingFeePercent * 100).toFixed(1)}% processing fee (₹${formatINRLocal(totalPlFee)}).`;
   } else if (netSaving > 1000) {
     recommendation = "MARGINAL";
-    recommendationReason = `Net saving is only ₹${formatINRLocal(netSaving)} — marginal benefit after processing fee. Only worth it if the PL also helps your CIBIL score or monthly cash flow.`;
+    recommendationReason = `Net saving is only ₹${formatINRLocal(netSaving)}${includeGST ? " (incl. GST)" : ""} — marginal benefit after processing fee. Only worth it if the PL also helps your CIBIL score or monthly cash flow.`;
   } else {
     recommendation = "KEEP_CC";
-    recommendationReason = `After the ₹${formatINRLocal(plProcessingFee)} processing fee, there is little to no saving. Focus on paying the credit card directly with ₹${formatINRLocal(ccFixedPayment)}/month.`;
+    recommendationReason = `After the ₹${formatINRLocal(totalPlFee)} processing fee${includeGST ? " (incl. GST)" : ""}, there is little to no saving. Focus on paying the credit card directly with ₹${formatINRLocal(ccFixedPayment)}/month.`;
   }
 
-  // Break-even: months until PL cumulative interest < CC cumulative interest
+  // Break-even: months until PL cumulative cost < CC cumulative cost
   let ccCumulative = 0;
-  let plCumulative = plProcessingFee; // PL starts with processing fee
+  let plCumulative = plProcessingFee + plProcessingFeeGST; // PL starts with processing fee + GST
   let breakEven = 0;
   let ccBal = cc.outstanding;
   let plBal = pl.amount;
 
   for (let m = 1; m <= pl.tenureMonths; m++) {
     const ccInterest = ccBal * ccMonthlyRate;
-    ccCumulative += ccInterest;
-    ccBal = Math.max(0, ccBal - (ccFixedPayment - ccInterest));
+    const ccGST = ccInterest * gstMultiplier;
+    ccCumulative += ccInterest + ccGST;
+    ccBal = Math.max(0, ccBal - (ccFixedPayment - ccInterest - ccGST));
 
     const plInterest = plBal * plMonthlyRate;
-    plCumulative += plInterest;
+    const plGST = plInterest * gstMultiplier;
+    plCumulative += plInterest + plGST;
     plBal = Math.max(0, plBal - (plEMI - plInterest));
 
     if (plCumulative < ccCumulative && breakEven === 0) {
@@ -354,10 +403,13 @@ export function compareCCVsPersonalLoan(
   return {
     ccMonthlyPayment: roundTo2(ccFixedPayment),
     ccTotalInterest: roundTo2(ccResult.totalInterestPaid),
+    ccTotalGST: roundTo2(ccResult.totalGSTPaid),
     ccMonthsToPayoff: ccResult.monthsToPayoff,
     plMonthlyEMI: roundTo2(plEMI),
     plTotalInterest: roundTo2(plTotalInterest),
+    plTotalGST: roundTo2(plTotalGST),
     plProcessingFee: roundTo2(plProcessingFee),
+    plProcessingFeeGST: roundTo2(plProcessingFeeGST),
     plNetSaving: roundTo2(netSaving),
     plBreakEvenMonths: breakEven,
     recommendation,
@@ -372,10 +424,13 @@ export function compareCCVsPersonalLoan(
 /**
  * Compare avalanche (highest rate first) vs snowball (lowest balance first).
  * Both strategies assume a fixed total monthly budget across all cards.
+ *
+ * @param includeGST - When true (default), 18% GST is added to all interest calculations.
  */
 export function calculateMultiCardPayoff(
   cards: Array<{ name: string; outstanding: number; monthlyRate?: number }>,
-  totalMonthlyBudget: number
+  totalMonthlyBudget: number,
+  includeGST: boolean = true
 ): MultiCardPayoffResult {
   // Sort for avalanche: highest rate first
   const avalancheOrder = [...cards].sort(
@@ -391,15 +446,18 @@ export function calculateMultiCardPayoff(
 
   const avalancheResult = runMultiCardStrategy(
     avalancheOrder,
-    totalMonthlyBudget
+    totalMonthlyBudget,
+    includeGST
   );
   const snowballResult = runMultiCardStrategy(
     snowballOrder,
-    totalMonthlyBudget
+    totalMonthlyBudget,
+    includeGST
   );
 
   const interestSavedByAvalanche =
-    snowballResult.totalInterest - avalancheResult.totalInterest;
+    (snowballResult.totalInterest + snowballResult.totalGST) -
+    (avalancheResult.totalInterest + avalancheResult.totalGST);
 
   return {
     avalanche: {
@@ -414,7 +472,7 @@ export function calculateMultiCardPayoff(
     recommendation: interestSavedByAvalanche > 500 ? "AVALANCHE" : "SNOWBALL",
     recommendationReason:
       interestSavedByAvalanche > 500
-        ? `Avalanche saves ₹${formatINRLocal(interestSavedByAvalanche)} in interest by clearing the highest-rate card first.`
+        ? `Avalanche saves ₹${formatINRLocal(interestSavedByAvalanche)}${includeGST ? " (incl. GST)" : ""} in interest by clearing the highest-rate card first.`
         : `The interest difference is small (₹${formatINRLocal(Math.abs(interestSavedByAvalanche))}). Snowball keeps you motivated by clearing smaller cards faster — often leads to better follow-through.`,
   };
 }
@@ -425,17 +483,21 @@ function runMultiCardStrategy(
     outstanding: number;
     monthlyRate?: number;
   }>,
-  totalBudget: number
+  totalBudget: number,
+  includeGST: boolean = true
 ): {
   cards: CardPayoffSchedule[];
   totalInterest: number;
+  totalGST: number;
   totalMonths: number;
 } {
+  const gstMultiplier = includeGST ? CC_DEFAULTS.gstRate : 0;
   const balances = orderedCards.map((c) => ({
     name: c.name,
     balance: c.outstanding,
     rate: c.monthlyRate ?? CC_DEFAULTS.monthlyRate,
     totalInterest: 0,
+    totalGST: 0,
     monthsToPayoff: 0,
   }));
 
@@ -450,17 +512,20 @@ function runMultiCardStrategy(
     for (const card of balances) {
       if (card.balance <= 0) continue;
       const interest = card.balance * card.rate;
+      const gst = interest * gstMultiplier;
+      const totalInterestWithGST = interest + gst;
       const minDue = Math.max(
         card.balance * CC_DEFAULTS.minimumDuePercent,
         CC_DEFAULTS.minimumDueFloor
       );
       const payment = Math.min(
         minDue,
-        card.balance + interest,
+        card.balance + totalInterestWithGST,
         remainingBudget
       );
       card.totalInterest += interest;
-      card.balance = Math.max(0, card.balance - (payment - interest));
+      card.totalGST += gst;
+      card.balance = Math.max(0, card.balance - (payment - totalInterestWithGST));
       remainingBudget -= payment;
       if (remainingBudget < 0) remainingBudget = 0;
     }
@@ -488,11 +553,14 @@ function runMultiCardStrategy(
       outstanding: orderedCards[i].outstanding,
       monthlyRate: b.rate,
       monthsToPayoff: b.monthsToPayoff || month,
-      totalInterest: roundTo2(b.totalInterest),
+      totalInterest: roundTo2(b.totalInterest + b.totalGST),
       payoffOrder: i + 1,
     })),
     totalInterest: roundTo2(
       balances.reduce((sum, b) => sum + b.totalInterest, 0)
+    ),
+    totalGST: roundTo2(
+      balances.reduce((sum, b) => sum + b.totalGST, 0)
     ),
     totalMonths: month,
   };
@@ -620,13 +688,19 @@ function calculateEMI(
 
 /**
  * Calculate the fixed monthly payment needed to clear debt in N months.
- * Standard PMT formula.
+ * Standard PMT formula, adjusted for GST on interest when applicable.
+ *
+ * @param includeGST - When true (default), the effective monthly rate includes 18% GST,
+ *   which means a higher payment is required to clear the debt in the target timeframe.
  */
 export function calculateFixedPaymentForTarget(
   input: CreditCardInput,
-  targetMonths: number
+  targetMonths: number,
+  includeGST: boolean = true
 ): number {
-  const r = input.monthlyRate ?? CC_DEFAULTS.monthlyRate;
+  const baseRate = input.monthlyRate ?? CC_DEFAULTS.monthlyRate;
+  // Effective rate includes GST since GST is charged on top of interest
+  const r = includeGST ? baseRate * (1 + CC_DEFAULTS.gstRate) : baseRate;
   const pv = input.outstanding;
   if (r === 0) return pv / targetMonths;
   return (

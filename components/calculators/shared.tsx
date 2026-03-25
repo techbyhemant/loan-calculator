@@ -37,16 +37,21 @@ export function CalcSection({
   description,
   children,
   className,
+  onReset,
 }: {
   title: string;
   description?: string;
   children: React.ReactNode;
   className?: string;
+  onReset?: () => void;
 }) {
   return (
     <Card className={cn("py-4 sm:py-6", className)}>
       <CardHeader className="px-4 sm:px-6 pb-0">
-        <CardTitle className="text-lg">{title}</CardTitle>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle className="text-lg">{title}</CardTitle>
+          {onReset && <ResetButton onClick={onReset} />}
+        </div>
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent className="px-4 sm:px-6 pt-4">{children}</CardContent>
@@ -192,6 +197,38 @@ export function Label({
     <label className={cn("block text-sm font-medium text-foreground mb-1", className)}>
       {children}
     </label>
+  );
+}
+
+// ─── RESET BUTTON ───────────────────────────────────────────
+export function ResetButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
+    >
+      Reset to defaults
+    </button>
+  );
+}
+
+// ─── VALIDATION MESSAGE ─────────────────────────────────────
+export function ValidationMessage({ message }: { message: string }) {
+  return message ? (
+    <p className="text-xs text-negative mt-1">{message}</p>
+  ) : null;
+}
+
+// ─── RATE HELPER ────────────────────────────────────────────
+// Shows the annualised equivalent next to a monthly rate input
+export function RateHelper({ monthlyRate }: { monthlyRate: number | "" }) {
+  if (!monthlyRate || monthlyRate <= 0) return null;
+  const annual = (Number(monthlyRate) * 12).toFixed(1);
+  return (
+    <p className="text-xs text-muted-foreground mt-1">
+      = {annual}% per year
+    </p>
   );
 }
 

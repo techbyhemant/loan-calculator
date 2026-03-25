@@ -1,6 +1,11 @@
 import React from "react";
-import { YearlyBreakdownBar } from "../charts/YearlyBreakdownBar";
+import dynamic from "next/dynamic";
 import { useLoanCalculator } from "../context/LoanCalculatorContext";
+
+const YearlyBreakdownBar = dynamic(
+  () => import("../charts/YearlyBreakdownBar").then((m) => ({ default: m.YearlyBreakdownBar })),
+  { ssr: false, loading: () => <div className="w-full h-72 sm:h-96 bg-muted rounded-lg animate-pulse" /> }
+);
 
 export function YearlyBreakdownSection() {
   const { result } = useLoanCalculator();

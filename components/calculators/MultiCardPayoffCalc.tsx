@@ -13,7 +13,6 @@ import {
   Callout,
   Label,
   CALC_INPUT_CLASS,
-  ToggleGroup,
 } from "./shared";
 import {
   calculateMultiCardPayoff,
@@ -34,6 +33,7 @@ const DEFAULT_CARDS: CardEntry[] = [
 export default function MultiCardPayoffCalc() {
   const [cards, setCards] = useState<CardEntry[]>(DEFAULT_CARDS);
   const [totalBudget, setTotalBudget] = useState<number | "">(10000);
+  const [includeGST, setIncludeGST] = useState(true);
 
   function addCard() {
     if (cards.length >= 5) return;
@@ -79,20 +79,26 @@ export default function MultiCardPayoffCalc() {
         typeof c.monthlyRate === "number" ? c.monthlyRate / 100 : undefined,
     }));
 
-    return calculateMultiCardPayoff(formattedCards, totalBudget as number);
-  }, [cards, totalBudget]);
+    return calculateMultiCardPayoff(formattedCards, totalBudget as number, includeGST);
+  }, [cards, totalBudget, includeGST]);
 
   return (
     <div className="space-y-6">
       <CalcSection title="Your Credit Cards">
         <div className="space-y-3">
-          {cards.map((card, index) => (
-            <div
-              key={index}
-              className="grid grid-cols-[1fr_1fr_1fr_auto] sm:grid-cols-[1.5fr_1fr_1fr_auto] gap-2 items-end"
-            >
-              <div>
-                {index === 0 && <Label>Card Name</Label>}
+          {/* Desktop: header row + grid rows */}
+          <div className="hidden sm:block">
+            <div className="grid grid-cols-[1.5fr_1fr_1fr_auto] gap-2 mb-2">
+              <p className="text-xs text-muted-foreground font-medium">Card Name</p>
+              <p className="text-xs text-muted-foreground font-medium">Outstanding (₹)</p>
+              <p className="text-xs text-muted-foreground font-medium">Rate (%/mo)</p>
+              <div className="w-9" />
+            </div>
+            {cards.map((card, index) => (
+              <div
+                key={index}
+                className="grid grid-cols-[1.5fr_1fr_1fr_auto] gap-2 items-center mb-2"
+              >
                 <input
                   type="text"
                   value={card.name}
@@ -100,9 +106,6 @@ export default function MultiCardPayoffCalc() {
                   placeholder="Card name"
                   className={CALC_INPUT_CLASS}
                 />
-              </div>
-              <div>
-                {index === 0 && <Label>Balance (₹)</Label>}
                 <NumericInput
                   value={card.outstanding}
                   onChange={(val) => updateCard(index, "outstanding", val)}
@@ -110,9 +113,6 @@ export default function MultiCardPayoffCalc() {
                   min={0}
                   className={CALC_INPUT_CLASS}
                 />
-              </div>
-              <div>
-                {index === 0 && <Label>Rate (%/mo)</Label>}
                 <NumericInput
                   value={card.monthlyRate}
                   onChange={(val) => updateCard(index, "monthlyRate", val)}
@@ -122,18 +122,70 @@ export default function MultiCardPayoffCalc() {
                   step={0.1}
                   className={CALC_INPUT_CLASS}
                 />
+                <button
+                  type="button"
+                  onClick={() => removeCard(index)}
+                  disabled={cards.length <= 1}
+                  className="h-9 w-9 flex items-center justify-center rounded-md text-muted-foreground hover:text-negative hover:bg-negative/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  aria-label={`Remove ${card.name}`}
+                >
+                  ✕
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => removeCard(index)}
-                disabled={cards.length <= 1}
-                className="h-9 w-9 flex items-center justify-center rounded-md text-muted-foreground hover:text-negative hover:bg-negative/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                aria-label={`Remove ${card.name}`}
+            ))}
+          </div>
+
+          {/* Mobile: stacked card layout */}
+          <div className="sm:hidden space-y-3">
+            {cards.map((card, index) => (
+              <div
+                key={index}
+                className="relative rounded-lg border border-border p-3 space-y-3"
               >
-                ✕
-              </button>
-            </div>
-          ))}
+                <button
+                  type="button"
+                  onClick={() => removeCard(index)}
+                  disabled={cards.length <= 1}
+                  className="absolute top-2 right-2 h-7 w-7 flex items-center justify-center rounded-md text-muted-foreground hover:text-negative hover:bg-negative/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-xs"
+                  aria-label={`Remove ${card.name}`}
+                >
+                  ✕
+                </button>
+                <div>
+                  <Label>Card Name</Label>
+                  <input
+                    type="text"
+                    value={card.name}
+                    onChange={(e) => updateCard(index, "name", e.target.value)}
+                    placeholder="Card name"
+                    className={CALC_INPUT_CLASS}
+                  />
+                </div>
+                <div>
+                  <Label>Outstanding (₹)</Label>
+                  <NumericInput
+                    value={card.outstanding}
+                    onChange={(val) => updateCard(index, "outstanding", val)}
+                    placeholder="50,000"
+                    min={0}
+                    className={CALC_INPUT_CLASS}
+                  />
+                </div>
+                <div>
+                  <Label>Rate (%/mo)</Label>
+                  <NumericInput
+                    value={card.monthlyRate}
+                    onChange={(val) => updateCard(index, "monthlyRate", val)}
+                    placeholder="3.5"
+                    min={0}
+                    max={10}
+                    step={0.1}
+                    className={CALC_INPUT_CLASS}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
 
           <button
             type="button"
@@ -155,19 +207,39 @@ export default function MultiCardPayoffCalc() {
             className={CALC_INPUT_CLASS}
           />
         </div>
+
+        <div className="flex items-center gap-3 mt-4">
+          <button
+            type="button"
+            role="switch"
+            aria-checked={includeGST}
+            aria-label="Include 18% GST on interest"
+            onClick={() => setIncludeGST(!includeGST)}
+            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
+              includeGST ? "bg-primary" : "bg-muted"
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition-transform ${
+                includeGST ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </button>
+          <Label className="mb-0">Include 18% GST on interest</Label>
+        </div>
       </CalcSection>
 
       {results && (
         <div className="space-y-4">
           <Verdict type="good">{results.recommendationReason}</Verdict>
 
-          <TableCard title="Strategy Comparison">
+          <TableCard title={`Strategy Comparison${includeGST ? " (GST-inclusive)" : ""}`}>
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-muted/50">
                   <th className="text-left px-4 py-3 font-medium">Strategy</th>
                   <th className="text-right px-4 py-3 font-medium">
-                    Total Interest
+                    Total Interest{includeGST ? " + GST" : ""}
                   </th>
                   <th className="text-right px-4 py-3 font-medium">
                     Months to Debt-Free
@@ -186,7 +258,7 @@ export default function MultiCardPayoffCalc() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    {formatINR(results.avalanche.totalInterest)}
+                    {formatINR(results.avalanche.totalInterest + results.avalanche.totalGST)}
                   </td>
                   <td className="px-4 py-3 text-right">
                     {formatMonths(results.avalanche.totalMonths)}
@@ -205,7 +277,7 @@ export default function MultiCardPayoffCalc() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    {formatINR(results.snowball.totalInterest)}
+                    {formatINR(results.snowball.totalInterest + results.snowball.totalGST)}
                   </td>
                   <td className="px-4 py-3 text-right">
                     {formatMonths(results.snowball.totalMonths)}
@@ -230,7 +302,7 @@ export default function MultiCardPayoffCalc() {
                     Months to Clear
                   </th>
                   <th className="text-right px-4 py-3 font-medium">
-                    Interest Paid
+                    Interest{includeGST ? " + GST" : ""}
                   </th>
                 </tr>
               </thead>
@@ -271,7 +343,7 @@ export default function MultiCardPayoffCalc() {
                     Months to Clear
                   </th>
                   <th className="text-right px-4 py-3 font-medium">
-                    Interest Paid
+                    Interest{includeGST ? " + GST" : ""}
                   </th>
                 </tr>
               </thead>
@@ -299,6 +371,12 @@ export default function MultiCardPayoffCalc() {
               </tbody>
             </table>
           </TableCard>
+
+          {includeGST && (
+            <Callout type="warning">
+              All interest figures include 18% GST. Banks charge GST on credit card interest every billing cycle — this is not optional and significantly increases your total cost of carrying card debt.
+            </Callout>
+          )}
 
           <Callout type="info">
             Avalanche always saves the most money mathematically. But snowball

@@ -24,6 +24,7 @@ import {
 export default function MinimumDueTrapCalc() {
   const [outstanding, setOutstanding] = useState<number | "">(30000);
   const [monthlyRate, setMonthlyRate] = useState<number | "">(3.5);
+  const [includeGST, setIncludeGST] = useState(true);
 
   const results = useMemo(() => {
     if (!outstanding || !monthlyRate) return null;
@@ -33,19 +34,19 @@ export default function MinimumDueTrapCalc() {
       monthlyRate: (monthlyRate as number) / 100,
     };
 
-    const trap = calculateMinimumDueTrap(input);
+    const trap = calculateMinimumDueTrap(input, includeGST);
 
     // Fixed payment scenarios
     const scenarios = [2000, 3000, 5000].map((payment) => {
-      const result = calculateCCPayoff(input, payment);
+      const result = calculateCCPayoff(input, payment, includeGST);
       return { payment, ...result };
     });
 
     // Recommended amounts to clear in 12 and 24 months
-    const payment12 = calculateFixedPaymentForTarget(input, 12);
-    const payment24 = calculateFixedPaymentForTarget(input, 24);
-    const result12 = calculateCCPayoff(input, payment12);
-    const result24 = calculateCCPayoff(input, payment24);
+    const payment12 = calculateFixedPaymentForTarget(input, 12, includeGST);
+    const payment24 = calculateFixedPaymentForTarget(input, 24, includeGST);
+    const result12 = calculateCCPayoff(input, payment12, includeGST);
+    const result24 = calculateCCPayoff(input, payment24, includeGST);
 
     const multiplier = trap.totalAmountPaid / (outstanding as number);
 
@@ -58,14 +59,14 @@ export default function MinimumDueTrapCalc() {
       result24,
       multiplier,
     };
-  }, [outstanding, monthlyRate]);
+  }, [outstanding, monthlyRate, includeGST]);
 
   return (
     <div className="space-y-6">
       <CalcSection title="Enter Your Credit Card Details">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Label>Outstanding Balance (₹)</Label>
+            <Label>Outstanding Balance (&#8377;)</Label>
             <NumericInput
               value={outstanding}
               onChange={setOutstanding}
@@ -85,7 +86,32 @@ export default function MinimumDueTrapCalc() {
               step={0.1}
               className={CALC_INPUT_CLASS}
             />
+            {typeof monthlyRate === "number" && monthlyRate > 0 && (
+              <p className="text-xs text-muted-foreground mt-1">
+                ({(monthlyRate * 12).toFixed(1)}% per year)
+              </p>
+            )}
           </div>
+        </div>
+
+        <div className="flex items-center gap-3 mt-4">
+          <button
+            type="button"
+            role="switch"
+            aria-checked={includeGST}
+            aria-label="Include 18% GST on interest"
+            onClick={() => setIncludeGST(!includeGST)}
+            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
+              includeGST ? "bg-primary" : "bg-muted"
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition-transform ${
+                includeGST ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </button>
+          <Label className="mb-0">Include 18% GST on interest</Label>
         </div>
       </CalcSection>
 
@@ -94,7 +120,7 @@ export default function MinimumDueTrapCalc() {
           <Verdict type="bad">
             Paying only minimum due on {formatINR(outstanding as number)} means{" "}
             {results.trap.yearsToPayoff} years of payments and{" "}
-            {formatLakhs(results.trap.totalInterestPaid)} in interest
+            {formatLakhs(results.trap.totalInterestPaid + results.trap.totalGSTPaid)} in interest{includeGST ? " + GST" : ""}
           </Verdict>
 
           <div className="grid grid-cols-2 gap-3">
@@ -107,7 +133,7 @@ export default function MinimumDueTrapCalc() {
             <StatCard
               label="Total Interest Paid"
               value={formatLakhs(results.trap.totalInterestPaid)}
-              sub="just in interest"
+              sub={includeGST ? `+ ${formatINR(results.trap.totalGSTPaid)} GST` : "base interest"}
               valueColor="text-negative"
             />
             <StatCard
@@ -126,7 +152,7 @@ export default function MinimumDueTrapCalc() {
 
           <TableCard
             title="Payment Strategy Comparison"
-            description="See how different monthly payments change your payoff timeline"
+            description={`See how different monthly payments change your payoff timeline${includeGST ? " (all figures include 18% GST)" : ""}`}
           >
             <table className="w-full text-sm">
               <thead>
@@ -138,7 +164,7 @@ export default function MinimumDueTrapCalc() {
                     Months to Clear
                   </th>
                   <th className="text-right px-4 py-3 font-medium">
-                    Total Interest
+                    Total Interest{includeGST ? " + GST" : ""}
                   </th>
                   <th className="text-right px-4 py-3 font-medium">
                     Total Paid
@@ -146,7 +172,7 @@ export default function MinimumDueTrapCalc() {
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {/* Minimum Due Only — highlighted red */}
+                {/* Minimum Due Only -- highlighted red */}
                 <tr className="bg-negative/10">
                   <td className="px-4 py-3 font-medium text-negative">
                     Minimum Due Only (5%)
@@ -155,7 +181,7 @@ export default function MinimumDueTrapCalc() {
                     {results.trap.monthsToPayoff}
                   </td>
                   <td className="px-4 py-3 text-right font-medium text-negative">
-                    {formatLakhs(results.trap.totalInterestPaid)}
+                    {formatLakhs(results.trap.totalInterestPaid + results.trap.totalGSTPaid)}
                   </td>
                   <td className="px-4 py-3 text-right font-medium text-negative">
                     {formatLakhs(results.trap.totalAmountPaid)}
@@ -173,12 +199,12 @@ export default function MinimumDueTrapCalc() {
                     </td>
                     <td className="px-4 py-3 text-right">
                       {s.isNeverPayoff
-                        ? "∞"
-                        : formatLakhs(s.totalInterestPaid)}
+                        ? "\u221E"
+                        : formatLakhs(s.totalInterestPaid + s.totalGSTPaid)}
                     </td>
                     <td className="px-4 py-3 text-right">
                       {s.isNeverPayoff
-                        ? "∞"
+                        ? "\u221E"
                         : formatLakhs(s.totalAmountPaid)}
                     </td>
                   </tr>
@@ -193,14 +219,14 @@ export default function MinimumDueTrapCalc() {
                     {results.result24.monthsToPayoff}
                   </td>
                   <td className="px-4 py-3 text-right">
-                    {formatLakhs(results.result24.totalInterestPaid)}
+                    {formatLakhs(results.result24.totalInterestPaid + results.result24.totalGSTPaid)}
                   </td>
                   <td className="px-4 py-3 text-right">
                     {formatLakhs(results.result24.totalAmountPaid)}
                   </td>
                 </tr>
 
-                {/* Clear in 12 months — highlighted green */}
+                {/* Clear in 12 months -- highlighted green */}
                 <tr className="bg-positive/10">
                   <td className="px-4 py-3 font-medium text-positive">
                     Clear in 12 months ({formatINR(results.payment12)}/mo)
@@ -209,7 +235,7 @@ export default function MinimumDueTrapCalc() {
                     {results.result12.monthsToPayoff}
                   </td>
                   <td className="px-4 py-3 text-right font-medium text-positive">
-                    {formatLakhs(results.result12.totalInterestPaid)}
+                    {formatLakhs(results.result12.totalInterestPaid + results.result12.totalGSTPaid)}
                   </td>
                   <td className="px-4 py-3 text-right font-medium text-positive">
                     {formatLakhs(results.result12.totalAmountPaid)}
@@ -219,10 +245,19 @@ export default function MinimumDueTrapCalc() {
             </table>
           </TableCard>
 
+          {includeGST && (
+            <Callout type="warning">
+              <strong>GST makes the trap even worse:</strong> Banks charge 18% GST
+              on all credit card interest. With minimum due payments, the interest
+              compounds month after month &mdash; and GST is charged on that growing
+              interest every single cycle. This is money you never get back.
+            </Callout>
+          )}
+
           <Callout type="warning">
             <strong>The interest-free period trap:</strong> If you pay anything
             less than your full outstanding balance, the bank charges interest on
-            the <strong>entire balance</strong> from the <strong>transaction date</strong> — not
+            the <strong>entire balance</strong> from the <strong>transaction date</strong> &mdash; not
             just the remaining unpaid amount. So even paying 95% of your bill means
             interest is calculated on 100% of your spending from day one. The only
             way to avoid credit card interest is to pay the full outstanding every

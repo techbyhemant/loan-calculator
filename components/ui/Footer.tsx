@@ -12,47 +12,37 @@ export function Footer() {
     <footer className="bg-card border-t border-border mt-auto">
       <div className="max-w-6xl mx-auto px-3 sm:px-4 py-8">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-8">
-          {/* Calculators */}
+          {/* Loan Calculators */}
           <div>
             <h3 className="text-sm font-semibold text-foreground mb-3">
-              Calculators
+              Loan Calculators
             </h3>
             <ul className="space-y-2">
-              <li>
-                <Link href="/" className="text-sm text-muted-foreground hover:text-foreground">
-                  EMI Calculator
-                </Link>
-              </li>
-              <li>
-                <Link href="/calculators/sip-vs-prepayment" className="text-sm text-muted-foreground hover:text-foreground">
-                  SIP vs Prepayment
-                </Link>
-              </li>
-              <li>
-                <Link href="/calculators/home-loan-eligibility" className="text-sm text-muted-foreground hover:text-foreground">
-                  Eligibility Check
-                </Link>
-              </li>
-              <li>
-                <Link href="/calculators/tax-benefit" className="text-sm text-muted-foreground hover:text-foreground">
-                  Tax Benefit
-                </Link>
-              </li>
-              <li>
-                <Link href="/calculators/salary-to-emi" className="text-sm text-muted-foreground hover:text-foreground">
-                  Salary to Loan
-                </Link>
-              </li>
-              <li>
-                <Link href="/calculators/rent-vs-buy" className="text-sm text-muted-foreground hover:text-foreground">
-                  Rent vs Buy
-                </Link>
-              </li>
-              <li>
-                <Link href="/calculators/balance-transfer" className="text-sm text-muted-foreground hover:text-foreground">
-                  Balance Transfer
-                </Link>
-              </li>
+              <li><Link href="/" className="text-sm text-muted-foreground hover:text-foreground">EMI Calculator</Link></li>
+              <li><Link href="/calculators/sip-vs-prepayment" className="text-sm text-muted-foreground hover:text-foreground">SIP vs Prepayment</Link></li>
+              <li><Link href="/calculators/home-loan-eligibility" className="text-sm text-muted-foreground hover:text-foreground">Eligibility Check</Link></li>
+              <li><Link href="/calculators/tax-benefit" className="text-sm text-muted-foreground hover:text-foreground">Tax Benefit</Link></li>
+              <li><Link href="/calculators/salary-to-emi" className="text-sm text-muted-foreground hover:text-foreground">Salary to Loan</Link></li>
+              <li><Link href="/calculators/rent-vs-buy" className="text-sm text-muted-foreground hover:text-foreground">Rent vs Buy</Link></li>
+              <li><Link href="/calculators/balance-transfer" className="text-sm text-muted-foreground hover:text-foreground">Balance Transfer</Link></li>
+              <li><Link href="/calculators/personal-loan-payoff" className="text-sm text-muted-foreground hover:text-foreground">Personal Loan Payoff</Link></li>
+              <li><Link href="/calculators/car-loan-prepayment" className="text-sm text-muted-foreground hover:text-foreground">Car Loan Prepayment</Link></li>
+              <li><Link href="/calculators/education-loan-80e" className="text-sm text-muted-foreground hover:text-foreground">Education Loan 80E</Link></li>
+              <li><Link href="/calculators/consumer-emi-true-cost" className="text-sm text-muted-foreground hover:text-foreground">0% EMI True Cost</Link></li>
+              <li><Link href="/calculators/multi-loan-planner" className="text-sm text-muted-foreground hover:text-foreground">Which Loan First?</Link></li>
+            </ul>
+          </div>
+
+          {/* Credit Card Tools */}
+          <div>
+            <h3 className="text-sm font-semibold text-foreground mb-3">
+              Credit Card Tools
+            </h3>
+            <ul className="space-y-2">
+              <li><Link href="/calculators/credit-card-payoff" className="text-sm text-muted-foreground hover:text-foreground">CC Payoff</Link></li>
+              <li><Link href="/calculators/minimum-due-trap" className="text-sm text-muted-foreground hover:text-foreground">Minimum Due Trap</Link></li>
+              <li><Link href="/calculators/cc-vs-personal-loan" className="text-sm text-muted-foreground hover:text-foreground">CC vs Personal Loan</Link></li>
+              <li><Link href="/calculators/multi-card-payoff" className="text-sm text-muted-foreground hover:text-foreground">Multi-Card Payoff</Link></li>
             </ul>
           </div>
 

@@ -23,6 +23,7 @@ export default function CCvsPLCalc() {
   const [plRate, setPlRate] = useState<number | "">(14);
   const [plTenure, setPlTenure] = useState<number | "">(24);
   const [plProcessingFee, setPlProcessingFee] = useState<number | "">(2);
+  const [includeGST, setIncludeGST] = useState(true);
 
   const results = useMemo(() => {
     if (!ccOutstanding || !ccMonthlyRate || !plRate || !plTenure) return null;
@@ -37,9 +38,10 @@ export default function CCvsPLCalc() {
         annualRate: (plRate as number) / 100,
         tenureMonths: plTenure as number,
         processingFeePercent: ((plProcessingFee as number) || 0) / 100,
-      }
+      },
+      includeGST
     );
-  }, [ccOutstanding, ccMonthlyRate, plRate, plTenure, plProcessingFee]);
+  }, [ccOutstanding, ccMonthlyRate, plRate, plTenure, plProcessingFee, includeGST]);
 
   const verdictType =
     results?.recommendation === "PERSONAL_LOAN"
@@ -53,7 +55,7 @@ export default function CCvsPLCalc() {
       <CalcSection title="Credit Card Details">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Label>Outstanding Balance (₹)</Label>
+            <Label>Outstanding Balance (&#8377;)</Label>
             <NumericInput
               value={ccOutstanding}
               onChange={setCcOutstanding}
@@ -73,6 +75,11 @@ export default function CCvsPLCalc() {
               step={0.1}
               className={CALC_INPUT_CLASS}
             />
+            {typeof ccMonthlyRate === "number" && ccMonthlyRate > 0 && (
+              <p className="text-xs text-muted-foreground mt-1">
+                ({(ccMonthlyRate * 12).toFixed(1)}% per year)
+              </p>
+            )}
           </div>
         </div>
       </CalcSection>
@@ -115,6 +122,26 @@ export default function CCvsPLCalc() {
             />
           </div>
         </div>
+
+        <div className="flex items-center gap-3 mt-4">
+          <button
+            type="button"
+            role="switch"
+            aria-checked={includeGST}
+            aria-label="Include 18% GST on interest and fees"
+            onClick={() => setIncludeGST(!includeGST)}
+            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
+              includeGST ? "bg-primary" : "bg-muted"
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition-transform ${
+                includeGST ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </button>
+          <Label className="mb-0">Include 18% GST on interest &amp; fees</Label>
+        </div>
       </CalcSection>
 
       {results && (
@@ -123,7 +150,7 @@ export default function CCvsPLCalc() {
             {results.recommendationReason}
           </Verdict>
 
-          <TableCard title="Side-by-Side Comparison">
+          <TableCard title={`Side-by-Side Comparison${includeGST ? " (GST-inclusive)" : ""}`}>
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-muted/50">
@@ -139,19 +166,37 @@ export default function CCvsPLCalc() {
                   <td className="px-4 py-3 text-right font-medium">{formatINR(results.plMonthlyEMI)}</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-3 text-muted-foreground">Total Interest</td>
+                  <td className="px-4 py-3 text-muted-foreground">Base Interest</td>
                   <td className="px-4 py-3 text-right text-negative">{formatINR(results.ccTotalInterest)}</td>
                   <td className="px-4 py-3 text-right">{formatINR(results.plTotalInterest)}</td>
                 </tr>
+                {includeGST && (
+                  <tr>
+                    <td className="px-4 py-3 text-muted-foreground">GST on Interest (18%)</td>
+                    <td className="px-4 py-3 text-right text-negative">{formatINR(results.ccTotalGST)}</td>
+                    <td className="px-4 py-3 text-right">{formatINR(results.plTotalGST)}</td>
+                  </tr>
+                )}
                 <tr>
                   <td className="px-4 py-3 text-muted-foreground">Processing Fee</td>
-                  <td className="px-4 py-3 text-right text-muted-foreground">₹0</td>
+                  <td className="px-4 py-3 text-right text-muted-foreground">&#8377;0</td>
                   <td className="px-4 py-3 text-right text-negative">-{formatINR(results.plProcessingFee)}</td>
                 </tr>
+                {includeGST && results.plProcessingFeeGST > 0 && (
+                  <tr>
+                    <td className="px-4 py-3 text-muted-foreground">GST on Processing Fee</td>
+                    <td className="px-4 py-3 text-right text-muted-foreground">&#8377;0</td>
+                    <td className="px-4 py-3 text-right text-negative">-{formatINR(results.plProcessingFeeGST)}</td>
+                  </tr>
+                )}
                 <tr>
                   <td className="px-4 py-3 text-muted-foreground">Total Cost</td>
-                  <td className="px-4 py-3 text-right font-medium">{formatINR(results.ccTotalInterest)}</td>
-                  <td className="px-4 py-3 text-right font-medium">{formatINR(results.plTotalInterest + results.plProcessingFee)}</td>
+                  <td className="px-4 py-3 text-right font-medium">
+                    {formatINR(results.ccTotalInterest + results.ccTotalGST)}
+                  </td>
+                  <td className="px-4 py-3 text-right font-medium">
+                    {formatINR(results.plTotalInterest + results.plTotalGST + results.plProcessingFee + results.plProcessingFeeGST)}
+                  </td>
                 </tr>
                 <tr className="bg-muted/50 font-semibold">
                   <td className="px-4 py-3">Net Saving</td>
@@ -189,8 +234,14 @@ export default function CCvsPLCalc() {
             />
           </div>
 
+          {includeGST && (
+            <Callout type="warning">
+              18% GST is charged on both credit card interest AND personal loan interest and processing fees. This comparison includes GST on both sides for a true apples-to-apples comparison.
+            </Callout>
+          )}
+
           <Callout type="info">
-            A personal loan replaces revolving 42% debt with fixed-rate structured EMIs. But after processing fees, it&apos;s not always better for small amounts. We recommend PL only when net saving exceeds ₹5,000.
+            A personal loan replaces revolving 42% debt with fixed-rate structured EMIs. But after processing fees{includeGST ? " and GST" : ""}, it&apos;s not always better for small amounts. We recommend PL only when net saving exceeds &#8377;5,000.
           </Callout>
         </div>
       )}
