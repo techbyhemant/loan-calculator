@@ -25,7 +25,8 @@ export interface Loan {
   startDate: string; // ISO date string
   tenureMonths: number;
   rateType: RateType;
-  prepaymentPenalty: number; // % — ALWAYS 0 for floating (RBI mandated)
+  prepaymentPenalty: number; // % — ALWAYS 0 for floating home/LAP (RBI mandated)
+  moratoriumEndDate?: string; // ISO date — when EMIs start (education loans)
   isActive: boolean;
   notes?: string;
   createdAt: string;

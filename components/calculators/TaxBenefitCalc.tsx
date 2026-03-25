@@ -22,11 +22,12 @@ export default function TaxBenefitCalc() {
   const [grossIncome, setGrossIncome] = useState<number | "">(1500000);
   const [other80C, setOther80C] = useState<number | "">(50000);
   const [loanType, setLoanType] = useState<"self-occupied" | "rented-out">("self-occupied");
+  const [educationInterest, setEducationInterest] = useState<number | "">(0);
 
   const results = useMemo(() => {
     if (!annualPrincipal || !annualInterest || !grossIncome) return null;
-    return calculateTaxBenefit(annualPrincipal, annualInterest, grossIncome, other80C || 0, loanType);
-  }, [annualPrincipal, annualInterest, grossIncome, other80C, loanType]);
+    return calculateTaxBenefit(annualPrincipal, annualInterest, grossIncome, other80C || 0, loanType, educationInterest || 0);
+  }, [annualPrincipal, annualInterest, grossIncome, other80C, loanType, educationInterest]);
 
   return (
     <div className="space-y-6">
@@ -49,6 +50,11 @@ export default function TaxBenefitCalc() {
             <NumericInput value={other80C} onChange={setOther80C} placeholder="50,000" min={0} className={CALC_INPUT_CLASS} />
             <p className="text-xs text-muted-foreground mt-1">EPF + ELSS + LIC + school fees</p>
           </div>
+          <div>
+            <Label>Education Loan Annual Interest (₹)</Label>
+            <NumericInput value={educationInterest} onChange={setEducationInterest} placeholder="0" min={0} className={CALC_INPUT_CLASS} />
+            <p className="text-xs text-muted-foreground mt-1">Section 80E — no upper limit, available for 8 years</p>
+          </div>
           <div className="sm:col-span-2">
             <Label>Property Type</Label>
             <ToggleGroup
@@ -65,11 +71,20 @@ export default function TaxBenefitCalc() {
 
       {results && (
         <div className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className={`grid grid-cols-1 gap-4 ${results.sec80EDeduction > 0 ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-3"}`}>
             <StatCard label="Section 24(b) Deduction" value={formatINR(results.sec24Deduction)} sub={`Interest — ${loanType === "self-occupied" ? "max ₹2L" : "no cap"}`} valueColor="text-primary" />
             <StatCard label="Section 80C Deduction" value={formatINR(results.sec80CDeduction)} sub="Principal — shared ₹1.5L limit" valueColor="text-positive" />
-            <StatCard label="Total Deduction" value={formatINR(results.totalDeduction)} sub="24(b) + 80C combined" valueColor="text-primary" />
+            {results.sec80EDeduction > 0 && (
+              <StatCard label="Section 80E Deduction" value={formatINR(results.sec80EDeduction)} sub="Education interest — no upper limit" valueColor="text-positive" />
+            )}
+            <StatCard label="Total Deduction" value={formatINR(results.totalDeduction)} sub={results.sec80EDeduction > 0 ? "24(b) + 80C + 80E combined" : "24(b) + 80C combined"} valueColor="text-primary" />
           </div>
+
+          {results.sec80EDeduction > 0 && (
+            <div className="text-sm text-muted-foreground bg-muted/50 border border-border rounded-lg p-3">
+              <strong>Section 80E:</strong> The entire education loan interest of {formatINR(results.sec80EDeduction)} is deductible with no upper limit — available for 8 years from the start of repayment. This deduction is available only under the Old Tax Regime.
+            </div>
+          )}
 
           <TableCard title="Tax Saved by Bracket">
             <table className="w-full text-sm">

@@ -11,16 +11,8 @@ import { formatINR, formatLakhs, formatDate, formatMonths } from "@/lib/utils/fo
 import { trpcReact } from "@/lib/trpc/hooks";
 
 import { PartPaymentLogger, PartPaymentHistory } from "@/components/dashboard/PartPaymentLogger";
-
-const LOAN_TYPE_ICONS: Record<string, string> = {
-  home: "\u{1F3E0}",
-  car: "\u{1F697}",
-  personal: "\u{1F4BC}",
-  gold: "\u{1F947}",
-  education: "\u{1F393}",
-  credit_card: "\u{1F4B3}",
-  other: "\u{1F4CB}",
-};
+import { LOAN_TYPE_DISPLAY, LOAN_TYPE_FINANCIALS, isRBIZeroPenaltyApplicable } from "@/lib/calculations/loanTypeConfig";
+import type { LoanType } from "@/lib/calculations/loanTypeConfig";
 
 function SkeletonBlock() {
   return (
@@ -108,10 +100,16 @@ export default function LoanDetailPage() {
         </Link>
         <div className="flex items-center gap-2.5">
           <span className="text-2xl">
-            {LOAN_TYPE_ICONS[loan.type] ?? "\u{1F4CB}"}
+            {(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).icon}
           </span>
           <div>
-            <h1 className="text-xl font-semibold text-foreground">{loan.name}</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-semibold text-foreground">{loan.name}</h1>
+              <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                {(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).icon}{" "}
+                {(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).shortLabel}
+              </span>
+            </div>
             {loan.lender && (
               <p className="text-sm text-muted-foreground">{loan.lender}</p>
             )}
@@ -175,6 +173,58 @@ export default function LoanDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Prepayment Penalty Info */}
+      {(() => {
+        const rbiProtected = isRBIZeroPenaltyApplicable(
+          loan.type as LoanType,
+          loan.rateType as "fixed" | "floating"
+        );
+        const config = LOAN_TYPE_FINANCIALS[loan.type as LoanType] ?? LOAN_TYPE_FINANCIALS.other;
+
+        if (rbiProtected) {
+          return (
+            <div className="flex items-start gap-3 p-4 rounded-lg bg-positive/10 border border-positive/20 mb-6">
+              <span className="text-lg">✅</span>
+              <div className="text-sm">
+                <p className="font-medium text-positive">RBI Rule: Zero prepayment penalty</p>
+                <p className="text-muted-foreground mt-0.5">
+                  Your floating rate {(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).label.toLowerCase()} is protected by RBI regulation. You can make part payments anytime with no penalty.
+                </p>
+              </div>
+            </div>
+          );
+        }
+
+        if (config.hasPrepaymentPenalty) {
+          return (
+            <div className="flex items-start gap-3 p-4 rounded-lg bg-warning/10 border border-warning/20 mb-6">
+              <span className="text-lg">⚠️</span>
+              <div className="text-sm">
+                <p className="font-medium text-warning">Prepayment penalty may apply</p>
+                <p className="text-muted-foreground mt-0.5">
+                  Typically {((config.prepaymentPenaltyPercent ?? 0) * 100).toFixed(1)}% of outstanding principal. Check your loan agreement for exact terms.
+                  {config.prepaymentLockInMonths
+                    ? ` Lock-in period: ${config.prepaymentLockInMonths} months.`
+                    : ""}
+                </p>
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <div className="flex items-start gap-3 p-4 rounded-lg bg-primary/5 border border-primary/20 mb-6">
+            <span className="text-lg">ℹ️</span>
+            <div className="text-sm">
+              <p className="font-medium text-primary">No prepayment penalty</p>
+              <p className="text-muted-foreground mt-0.5">
+                This loan type typically has no prepayment penalty. You can make part payments freely.
+              </p>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Part Payment Logger */}
       <div className="mb-6">

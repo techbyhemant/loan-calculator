@@ -21,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/calculators/consumer-emi-true-cost`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${baseUrl}/calculators/personal-loan-payoff`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
     { url: `${baseUrl}/calculators/education-loan-80e`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/calculators/car-loan-prepayment`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
     { url: `${baseUrl}/rbi-rates`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/pricing`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: "daily", priority: 0.8 },

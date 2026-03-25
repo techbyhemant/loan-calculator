@@ -4,19 +4,11 @@ import Link from "next/link";
 import type { Loan } from "@/types";
 import { formatINR, formatDate } from "@/lib/utils/formatters";
 import { trpcReact } from "@/lib/trpc/hooks";
-
-const LOAN_TYPE_ICONS: Record<string, string> = {
-  home: "\u{1F3E0}",
-  car: "\u{1F697}",
-  personal: "\u{1F4BC}",
-  gold: "\u{1F947}",
-  education: "\u{1F393}",
-  credit_card: "\u{1F4B3}",
-  other: "\u{1F4CB}",
-};
+import { LOAN_TYPE_DISPLAY } from "@/lib/calculations/loanTypeConfig";
+import type { LoanType } from "@/lib/calculations/loanTypeConfig";
 
 function LoanRow({ loan }: { loan: Loan }) {
-  const icon = LOAN_TYPE_ICONS[loan.type] ?? "\u{1F4CB}";
+  const display = LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other;
   const paidPercent = loan.originalAmount > 0
     ? Math.round(((loan.originalAmount - loan.currentOutstanding) / loan.originalAmount) * 100)
     : 0;
@@ -26,9 +18,14 @@ function LoanRow({ loan }: { loan: Loan }) {
       href={`/dashboard/loans/${loan._id}`}
       className="flex items-center gap-4 bg-card border border-border rounded-xl shadow-sm p-4 hover:border-primary/20 transition-colors"
     >
-      <span className="text-2xl">{icon}</span>
+      <span className="text-2xl">{display.icon}</span>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-foreground truncate">{loan.name}</p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-semibold text-foreground truncate">{loan.name}</p>
+          <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full shrink-0">
+            {display.icon} {display.shortLabel}
+          </span>
+        </div>
         <p className="text-xs text-muted-foreground">
           {loan.lender} &middot; {loan.interestRate}% &middot; {loan.tenureMonths} months
         </p>

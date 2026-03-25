@@ -106,10 +106,14 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-border pt-4 text-center">
+        <div className="border-t border-border pt-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-muted-foreground">
             &copy; 2026 LastEMI. All rights reserved.
           </p>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground">Privacy Policy</Link>
+            <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground">Terms of Service</Link>
+          </div>
         </div>
       </div>
     </footer>

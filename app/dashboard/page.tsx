@@ -8,16 +8,8 @@ import type { Loan } from "@/types";
 import { calculateDashboardStats } from "@/lib/calculations/loanCalcs";
 import { formatINR, formatLakhs, formatDate } from "@/lib/utils/formatters";
 import { trpcReact } from "@/lib/trpc/hooks";
-
-const LOAN_TYPE_ICONS: Record<string, string> = {
-  home: "\u{1F3E0}",
-  car: "\u{1F697}",
-  personal: "\u{1F4BC}",
-  gold: "\u{1F947}",
-  education: "\u{1F393}",
-  credit_card: "\u{1F4B3}",
-  other: "\u{1F4CB}",
-};
+import { LOAN_TYPE_DISPLAY, sortByPayoffPriority } from "@/lib/calculations/loanTypeConfig";
+import type { LoanType } from "@/lib/calculations/loanTypeConfig";
 
 function StatCard({
   label,
@@ -38,6 +30,7 @@ function StatCard({
 }
 
 function LoanCard({ loan }: { loan: Loan }) {
+  const display = LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other;
   const paidPercent = Math.min(
     100,
     Math.max(
@@ -52,10 +45,15 @@ function LoanCard({ loan }: { loan: Loan }) {
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2.5">
           <span className="text-xl">
-            {LOAN_TYPE_ICONS[loan.type] ?? "\u{1F4CB}"}
+            {display.icon}
           </span>
           <div>
-            <h3 className="text-sm font-semibold text-foreground">{loan.name}</h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-foreground">{loan.name}</h3>
+              <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                {display.icon} {display.shortLabel}
+              </span>
+            </div>
             {loan.lender && (
               <p className="text-xs text-muted-foreground">{loan.lender}</p>
             )}
@@ -131,11 +129,6 @@ export default function DashboardPage() {
     [loans],
   );
 
-  const highestRateLoan =
-    loans.length > 0
-      ? loans.reduce((max, l) => (l.interestRate > max.interestRate ? l : max))
-      : null;
-
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -187,6 +180,30 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* Payoff Priority Recommendation */}
+      {!isLoading && loans.length >= 2 && (() => {
+        const sorted = sortByPayoffPriority(
+          loans.map((l) => ({
+            type: l.type as LoanType,
+            ratePA: l.interestRate / 100,
+            outstanding: l.currentOutstanding,
+          }))
+        );
+        const top = sorted[0];
+        const topDisplay = LOAN_TYPE_DISPLAY[top.type] ?? LOAN_TYPE_DISPLAY.other;
+        return (
+          <div className="flex items-start gap-3 p-4 rounded-lg bg-primary/5 border border-primary/20 mb-6">
+            <span className="text-primary text-lg">💡</span>
+            <div className="text-sm">
+              <p className="font-medium text-foreground">
+                Pay your {topDisplay.label} first
+              </p>
+              <p className="text-muted-foreground mt-0.5">{top.reason}</p>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Loan Cards */}
       {isLoading ? (
         <div className="space-y-4">
@@ -212,27 +229,11 @@ export default function DashboardPage() {
           </Link>
         </div>
       ) : (
-        <>
-          <div className="space-y-4 mb-6">
-            {loans.map((loan) => (
-              <LoanCard key={loan._id} loan={loan} />
-            ))}
-          </div>
-
-          {highestRateLoan && loans.length > 1 && (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-              <p className="text-sm font-semibold text-amber-800">
-                &#x1F4A1; Quick insight
-              </p>
-              <p className="text-sm text-amber-700 mt-1">
-                Your highest interest loan is{" "}
-                <strong>{highestRateLoan.name}</strong> at{" "}
-                {highestRateLoan.interestRate}%. Attacking this loan first
-                (avalanche method) will save you the most interest overall.
-              </p>
-            </div>
-          )}
-        </>
+        <div className="space-y-4 mb-6">
+          {loans.map((loan) => (
+            <LoanCard key={loan._id} loan={loan} />
+          ))}
+        </div>
       )}
     </div>
   );

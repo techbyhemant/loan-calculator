@@ -55,6 +55,7 @@ export default function NewLoanPage() {
   const [tenureMonths, setTenureMonths] = useState<number | "">(0);
   const [rateType, setRateType] = useState<RateType>("floating");
   const [penalty, setPenalty] = useState<number | "">(0);
+  const [moratoriumEndDate, setMoratoriumEndDate] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -113,6 +114,7 @@ export default function NewLoanPage() {
       rateType,
       prepaymentPenalty: isRBIZeroPenaltyApplicable(loanType, rateType) ? 0 : ((penalty as number) || 0),
       notes: "",
+      ...(loanType === "education" && moratoriumEndDate ? { moratoriumEndDate } : {}),
     });
   };
 
@@ -249,6 +251,15 @@ export default function NewLoanPage() {
               step={0.1}
               className={inputClass}
             />
+            {(loanType === "home" || loanType === "lap") && rateType === "floating" && (
+              <p className="text-xs text-positive mt-1">RBI mandates zero prepayment penalty on floating rate</p>
+            )}
+            {(loanType === "personal" || loanType === "car") && (
+              <p className="text-xs text-warning mt-1">Note: prepayment penalty typically 2-5%</p>
+            )}
+            {loanType === "education" && (
+              <p className="text-xs text-primary mt-1">Section 80E: entire interest deductible (no cap)</p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">
@@ -301,6 +312,24 @@ export default function NewLoanPage() {
             />
           </div>
         </div>
+
+        {/* Moratorium End Date — Education loans only */}
+        {loanType === "education" && (
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1">
+              Moratorium End Date (when EMIs start)
+            </label>
+            <input
+              type="date"
+              value={moratoriumEndDate}
+              onChange={(e) => setMoratoriumEndDate(e.target.value)}
+              className={inputClass}
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              Your moratorium period — interest accrues but no EMI due until this date
+            </p>
+          </div>
+        )}
 
         {/* Tenure */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

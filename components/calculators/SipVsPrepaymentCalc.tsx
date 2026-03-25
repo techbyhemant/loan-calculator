@@ -8,6 +8,12 @@ import {
   type Recommendation,
 } from "@/lib/calculations/sipVsPrepayCalcs";
 import { formatINR, formatMonths } from "@/lib/utils/formatters";
+import {
+  LOAN_TYPE_DISPLAY,
+  LOAN_TYPE_FINANCIALS,
+  getEffectiveAnnualRate,
+  type LoanType,
+} from "@/lib/calculations/loanTypeConfig";
 
 import NumericInput from "@/components/ui/NumericInput";
 import {
@@ -17,16 +23,71 @@ import {
   TableCard,
   Verdict,
   ToggleGroup,
+  Callout,
   Label,
 } from "./shared";
 
+const SIP_RELEVANT_TYPES: LoanType[] = [
+  "home",
+  "car",
+  "personal",
+  "education",
+  "lap",
+  "gold",
+];
+
+function getTaxNote(
+  type: LoanType,
+  nominalRate: number,
+  taxBracket: number
+): { text: string; type: "info" | "warning" } | null {
+  const effectiveInfo = getEffectiveAnnualRate(type, nominalRate / 100, taxBracket / 100);
+
+  if (type === "home") {
+    return {
+      text: `${nominalRate.toFixed(1)}% actual → ~${(effectiveInfo.effectiveRate * 100).toFixed(1)}% effective after Section 24(b)`,
+      type: "info",
+    };
+  }
+
+  if (type === "education") {
+    return {
+      text: `${nominalRate.toFixed(1)}% actual → ~${(effectiveInfo.effectiveRate * 100).toFixed(1)}% effective after Section 80E`,
+      type: "info",
+    };
+  }
+
+  if (type === "personal" || type === "car" || type === "gold" || type === "lap") {
+    return {
+      text: "No tax benefit — effective rate equals nominal rate",
+      type: "warning",
+    };
+  }
+
+  return null;
+}
+
 export default function SipVsPrepaymentCalc() {
+  const [loanType, setLoanType] = useState<LoanType>("home");
   const [loanOutstanding, setLoanOutstanding] = useState<number | "">(3000000);
   const [interestRate, setInterestRate] = useState<number | "">(8.5);
   const [remainingMonths, setRemainingMonths] = useState<number | "">(180);
   const [monthlyExtra, setMonthlyExtra] = useState<number | "">(10000);
   const [sipReturn, setSipReturn] = useState<number | "">(12);
   const [taxBracket, setTaxBracket] = useState<"10" | "20" | "30">("30");
+
+  const handleLoanTypeChange = (newType: LoanType) => {
+    setLoanType(newType);
+    const financials = LOAN_TYPE_FINANCIALS[newType];
+    setInterestRate(+(financials.defaultRatePA * 100).toFixed(1));
+    setLoanOutstanding(financials.defaultAmountINR);
+    setRemainingMonths(financials.defaultTenureMonths);
+  };
+
+  const taxNote = useMemo(() => {
+    if (!interestRate) return null;
+    return getTaxNote(loanType, interestRate as number, Number(taxBracket));
+  }, [loanType, interestRate, taxBracket]);
 
   const results = useMemo(() => {
     if (!loanOutstanding || !interestRate || !remainingMonths || !monthlyExtra || !sipReturn) return null;
@@ -44,10 +105,46 @@ export default function SipVsPrepaymentCalc() {
 
   return (
     <div className="space-y-6">
+      <CalcSection title="Select Loan Type">
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+          {SIP_RELEVANT_TYPES.map((type) => {
+            const display = LOAN_TYPE_DISPLAY[type];
+            return (
+              <button
+                key={type}
+                type="button"
+                onClick={() => handleLoanTypeChange(type)}
+                className={`flex flex-col items-center gap-1 rounded-lg border p-3 text-center transition-colors ${
+                  loanType === type
+                    ? "border-primary bg-primary/5 text-primary"
+                    : "border-border bg-card text-muted-foreground hover:border-primary/40"
+                }`}
+              >
+                <span className="text-xl">{display.icon}</span>
+                <span className="text-xs font-medium">{display.shortLabel}</span>
+              </button>
+            );
+          })}
+        </div>
+      </CalcSection>
+
+      {taxNote && (
+        <Callout type={taxNote.type}>
+          <strong>{LOAN_TYPE_DISPLAY[loanType].label}:</strong> {taxNote.text}
+        </Callout>
+      )}
+
+      {loanType === "personal" && (
+        <Callout type="warning">
+          At 16% with no tax benefit, prepaying almost always beats SIP. The
+          guaranteed interest saving far exceeds uncertain market returns.
+        </Callout>
+      )}
+
       <CalcSection title="Enter Your Details">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Label>Loan Outstanding (₹)</Label>
+            <Label>Loan Outstanding (&#8377;)</Label>
             <NumericInput value={loanOutstanding} onChange={setLoanOutstanding} placeholder="30,00,000" min={0} className={CALC_INPUT_CLASS} />
           </div>
           <div>
@@ -59,7 +156,7 @@ export default function SipVsPrepaymentCalc() {
             <NumericInput value={remainingMonths} onChange={setRemainingMonths} placeholder="180" min={1} max={360} className={CALC_INPUT_CLASS} />
           </div>
           <div>
-            <Label>Monthly Surplus Amount (₹)</Label>
+            <Label>Monthly Surplus Amount (&#8377;)</Label>
             <NumericInput value={monthlyExtra} onChange={setMonthlyExtra} placeholder="10,000" min={0} className={CALC_INPUT_CLASS} />
           </div>
           <div>
