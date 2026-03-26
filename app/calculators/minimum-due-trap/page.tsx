@@ -4,6 +4,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 
 import MinimumDueTrapCalc from "@/components/calculators/MinimumDueTrapCalc";
+import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 
 export const metadata = buildMetadata({
   title:
@@ -173,6 +174,8 @@ export default function MinimumDueTrapPage() {
             </p>
           </div>
         </section>
+
+        <RelatedCalculators />
       </main>
     </div>
   );

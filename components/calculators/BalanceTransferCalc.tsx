@@ -178,6 +178,22 @@ export default function BalanceTransferCalc() {
             )}
           </Verdict>
 
+          {results && (
+            <div className="mt-4 p-4 rounded-lg bg-warning/10 border border-warning/20">
+              <p className="text-sm font-medium text-foreground mb-1">
+                Before you start the transfer paperwork:
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Call your current bank and show them the new offer. Ask for a rate match.
+                Banks often reduce rates by 0.25–0.5% for CIBIL 750+ customers — especially
+                those with good repayment history. This saves 2–4 weeks of paperwork.
+              </p>
+              <p className="text-xs text-muted-foreground mt-2">
+                Only proceed with the transfer if your bank refuses to negotiate.
+              </p>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <StatCard
               label="Net Saving"
@@ -295,6 +311,43 @@ export default function BalanceTransferCalc() {
               </tbody>
             </table>
           </TableCard>
+
+          {results && results.breakEvenMonths > 0 && (
+            <div className="mt-6">
+              <h3 className="text-sm font-medium text-foreground mb-3">
+                When does the transfer break even?
+              </h3>
+              <div className="bg-card border border-border rounded-lg p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex-1">
+                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-primary rounded-full transition-all"
+                        style={{ width: `${Math.min(100, (results.breakEvenMonths / (remainingTenure as number)) * 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">
+                    {remainingTenure} months total
+                  </span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <div>
+                    <p className="text-negative font-medium">Transfer costs</p>
+                    <p className="text-muted-foreground">{formatINR(results.totalTransferCost)} upfront</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-primary font-medium">Break-even</p>
+                    <p className="text-muted-foreground">Month {results.breakEvenMonths}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-positive font-medium">Net saving</p>
+                    <p className="text-muted-foreground">{formatLakhs(results.netSaving)}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <Callout type="info">
             RBI mandates zero prepayment penalty on floating rate home loans.

@@ -4,6 +4,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import RentVsBuyCalc from "@/components/calculators/RentVsBuyCalc";
+import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 
 export const metadata = buildMetadata({
   title: "Rent vs Buy Calculator — Should You Buy a House in India?",
@@ -117,6 +118,8 @@ export default function RentVsBuyPage() {
             </p>
           </div>
         </section>
+
+        <RelatedCalculators />
       </main>
     </div>
   );

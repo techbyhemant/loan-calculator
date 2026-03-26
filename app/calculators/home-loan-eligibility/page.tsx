@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import EligibilityCalc from "@/components/calculators/EligibilityCalc";
 import { getFAQSchema } from "@/lib/seo/schema";
+import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 
 export const metadata: Metadata = {
   title: "Home Loan Eligibility Calculator — Check Your Loan Amount | LastEMI",
@@ -170,6 +171,8 @@ export default function HomeLoanEligibilityPage() {
             </p>
           </div>
         </section>
+
+        <RelatedCalculators />
       </main>
     </div>
   );

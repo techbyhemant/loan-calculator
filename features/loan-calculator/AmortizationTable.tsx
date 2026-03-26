@@ -10,127 +10,13 @@ import {
 import type { ExpandedState, OnChangeFn } from "@tanstack/react-table";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Mobile Input Row Component
-interface MobileInputRowProps {
-  row: AmortizationRowWithExtras;
-  reduceMode: "emi" | "tenure";
-  renderPartPaymentCell?: (
-    row: AmortizationRowWithExtras,
-    reduceMode: "emi" | "tenure",
-    inputType?: "partPayment" | "emiIncrease"
-  ) => React.ReactNode | undefined;
+// Short INR formatter for compact button labels
+function formatINRShort(n: number): string {
+  if (n >= 10000000) return `${(n / 10000000).toFixed(1)}Cr`;
+  if (n >= 100000) return `${(n / 100000).toFixed(1)}L`;
+  if (n >= 1000) return `${(n / 1000).toFixed(0)}K`;
+  return n.toLocaleString("en-IN");
 }
-
-const MobileInputRow: React.FC<MobileInputRowProps> = ({
-  row,
-  reduceMode,
-  renderPartPaymentCell,
-}) => {
-  const [showPartPaymentTooltip, setShowPartPaymentTooltip] =
-    React.useState(false);
-  const [showEmiIncreaseTooltip, setShowEmiIncreaseTooltip] =
-    React.useState(false);
-
-  return (
-    <div className="bg-muted/50 border-l-4 border-l-primary/20 px-4 py-2 relative space-y-2">
-      {/* First line: Part Payment */}
-      <div className="flex items-center gap-3">
-        {/* Label with info icon */}
-        <div className="flex items-center gap-1 min-w-0 relative">
-          <span className="text-foreground font-medium text-sm whitespace-nowrap">
-            Part Payment
-          </span>
-          <button
-            onMouseEnter={() => setShowPartPaymentTooltip(true)}
-            onMouseLeave={() => setShowPartPaymentTooltip(false)}
-            onTouchStart={() => setShowPartPaymentTooltip(true)}
-            onTouchEnd={() =>
-              setTimeout(() => setShowPartPaymentTooltip(false), 2000)
-            }
-            className="w-4 h-4 rounded-full bg-primary/10 text-positive flex items-center justify-center text-xs hover:bg-primary/20 transition-colors flex-shrink-0"
-            type="button"
-          >
-            i
-          </button>
-
-          {/* Part Payment Tooltip */}
-          {showPartPaymentTooltip && (
-            <div className="absolute bottom-full left-0 mb-1 w-64 bg-gray-800 text-white text-xs rounded-lg p-3 z-50 shadow-lg">
-              <div>
-                <span className="font-medium text-primary">
-                  Part Payment:
-                </span>{" "}
-                Make additional payments towards principal to reduce loan tenure
-                or EMI amount. This helps you save on total interest paid.
-              </div>
-              <div className="text-muted-foreground mt-2">
-                💡 Any extra amount you pay will directly reduce your
-                outstanding loan balance.
-              </div>
-              {/* Tooltip arrow */}
-              <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
-            </div>
-          )}
-        </div>
-
-        {/* Part Payment Input */}
-        <div className="flex-1 min-w-0">
-          {renderPartPaymentCell &&
-            renderPartPaymentCell(row, reduceMode, "partPayment")}
-        </div>
-      </div>
-
-      {/* Second line: EMI Increase (if in tenure mode) */}
-      {reduceMode === "tenure" && (
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 min-w-0 relative">
-            <span className="text-foreground font-medium text-sm whitespace-nowrap">
-              EMI Increase
-            </span>
-            <button
-              onMouseEnter={() => setShowEmiIncreaseTooltip(true)}
-              onMouseLeave={() => setShowEmiIncreaseTooltip(false)}
-              onTouchStart={() => setShowEmiIncreaseTooltip(true)}
-              onTouchEnd={() =>
-                setTimeout(() => setShowEmiIncreaseTooltip(false), 2000)
-              }
-              className="w-4 h-4 rounded-full bg-primary/10 text-positive flex items-center justify-center text-xs hover:bg-primary/20 transition-colors flex-shrink-0"
-              type="button"
-            >
-              i
-            </button>
-
-            {/* EMI Increase Tooltip */}
-            {showEmiIncreaseTooltip && (
-              <div className="absolute bottom-full left-0 mb-1 w-64 bg-gray-800 text-white text-xs rounded-lg p-3 z-50 shadow-lg">
-                <div>
-                  <span className="font-medium text-primary">
-                    EMI Increase:
-                  </span>{" "}
-                  Increase your monthly EMI to pay off the loan faster. This
-                  reduces the total tenure and interest paid over the loan
-                  lifetime.
-                </div>
-                <div className="text-muted-foreground mt-2">
-                  💡 Higher EMI means faster loan closure and significant
-                  interest savings.
-                </div>
-                {/* Tooltip arrow */}
-                <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
-              </div>
-            )}
-          </div>
-
-          {/* EMI Increase Input */}
-          <div className="flex-1 min-w-0">
-            {renderPartPaymentCell &&
-              renderPartPaymentCell(row, reduceMode, "emiIncrease")}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
 
 export type AmortizationRowWithExtras = {
   idx: number;
@@ -172,11 +58,12 @@ interface AmortizationTableProps {
   formatINR: (value: number) => string;
   loanPaidPct: (balance: number) => string;
   reduceMode: "emi" | "tenure";
-  renderPartPaymentCell?: (
-    row: AmortizationRowWithExtras,
-    reduceMode: "emi" | "tenure",
-    inputType?: "partPayment" | "emiIncrease"
-  ) => React.ReactNode | undefined;
+  partPayments: Record<number, number>;
+  setPartPayments: (payments: Record<number, number>) => void;
+  emiIncreases: Record<number, { type: "percent" | "value"; value: number }>;
+  emiStartDate: string;
+  openPartPaymentModal: (monthIndex: number, monthLabel: string, balance: number) => void;
+  openEmiIncreaseModal: (monthIndex: number, monthLabel: string) => void;
   expanded: ExpandedState;
   onExpandedChange: OnChangeFn<ExpandedState>;
 }
@@ -187,12 +74,32 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
   formatINR,
   loanPaidPct,
   reduceMode,
-  renderPartPaymentCell,
+  partPayments,
+  setPartPayments,
+  emiIncreases,
+  emiStartDate,
+  openPartPaymentModal,
+  openEmiIncreaseModal,
   expanded,
   onExpandedChange,
 }) => {
   // Mobile detection state
   const [isMobile, setIsMobile] = React.useState(false);
+
+  // Pagination: show 24 months by default, load more
+  const [visibleMonths, setVisibleMonths] = React.useState(24);
+  const totalMonths = scheduleWithCalendar.length;
+
+  // Compute current month index for "now" badge
+  const currentMonthIdx = React.useMemo(() => {
+    const today = new Date();
+    const startDate = new Date(emiStartDate + "-01");
+    return Math.max(
+      0,
+      (today.getFullYear() - startDate.getFullYear()) * 12 +
+        (today.getMonth() - startDate.getMonth())
+    );
+  }, [emiStartDate]);
 
   // Responsive column visibility state
   const [columnVisibility, setColumnVisibility] =
@@ -551,47 +458,71 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
       {
         header: () => (
           <ResponsiveHeader>
-            {isMobile ? "Part Payment" : "Part-payment"}
+            {isMobile ? "Actions" : "Simulate"}
           </ResponsiveHeader>
         ),
         id: "partPayment",
-        size: isMobile ? 150 : 120,
-        minSize: isMobile ? 130 : 100,
+        size: isMobile ? 150 : 180,
+        minSize: isMobile ? 130 : 140,
         maxSize: 300,
-        meta: { align: "center", padding: "px-1" },
+        meta: { align: "right", padding: "px-1" },
         cell: ({ row }) => {
           if (row.original.isGroup) return null;
-          if (renderPartPaymentCell && row.original.originalRow) {
-            const result = renderPartPaymentCell(
-              row.original.originalRow,
-              reduceMode
-            );
-            if (
-              typeof result === "string" ||
-              typeof result === "number" ||
-              React.isValidElement(result as React.ReactElement)
-            ) {
-              return (
-                <div
-                  className={`${
-                    isMobile
-                      ? "flex flex-col gap-1"
-                      : "flex gap-2 items-center justify-center"
-                  }`}
-                >
-                  {result as React.ReactNode}
-                </div>
-              );
-            }
-          }
-          return null;
+          const originalRow = row.original.originalRow;
+          if (!originalRow) return null;
+
+          const monthIndex = originalRow.idx;
+          const monthLabel = originalRow.calendarLabel;
+          const balance = originalRow.balance;
+          const hasPP = partPayments[monthIndex] > 0;
+          const hasEMI = emiIncreases[monthIndex] && emiIncreases[monthIndex].value > 0;
+          const isCurrentMonth = monthIndex === currentMonthIdx;
+          const isFutureMonth = monthIndex >= currentMonthIdx;
+
+          return (
+            <div className="flex items-center gap-1 justify-end">
+              {isCurrentMonth && (
+                <span className="text-[10px] bg-warning/20 text-warning px-1.5 py-0.5 rounded mr-1">
+                  now
+                </span>
+              )}
+              {isFutureMonth && (
+                <>
+                  <button
+                    onClick={() =>
+                      openPartPaymentModal(monthIndex, monthLabel, balance)
+                    }
+                    className="text-[11px] text-primary bg-primary/10 hover:bg-primary/20 rounded px-2 py-1 transition-colors whitespace-nowrap"
+                  >
+                    {hasPP
+                      ? `₹${formatINRShort(partPayments[monthIndex])}`
+                      : "+ Part pay"}
+                  </button>
+                  <button
+                    onClick={() =>
+                      openEmiIncreaseModal(monthIndex, monthLabel)
+                    }
+                    className="text-[11px] text-muted-foreground bg-muted hover:bg-accent rounded px-2 py-1 transition-colors whitespace-nowrap"
+                  >
+                    {hasEMI
+                      ? `EMI +₹${formatINRShort(emiIncreases[monthIndex].value)}`
+                      : "↑ EMI"}
+                  </button>
+                </>
+              )}
+            </div>
+          );
         },
       },
     ],
     [
       formatINR,
       loanPaidPct,
-      renderPartPaymentCell,
+      partPayments,
+      emiIncreases,
+      currentMonthIdx,
+      openPartPaymentModal,
+      openEmiIncreaseModal,
       reduceMode,
       yearGrouping,
       isMobile,
@@ -785,37 +716,115 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="overflow-hidden"
               >
-                {row.original.subRows?.map((subRow) => (
-                  <div key={subRow.id} className="relative">
-                    {renderGridRow({
-                      key: subRow.id,
-                      className: `bg-card hover:bg-accent ${
-                        isMobile
-                          ? "border-l-2 border-l-primary/10 text-sm"
-                          : ""
-                      }`,
-                      cells:
-                        table
-                          .getRow(subRow.id)
-                          ?.getVisibleCells()
-                          .map((cell) =>
-                            flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )
-                          ) || [],
-                    })}
-                    {/* Mobile nested row for part payment inputs */}
-                    {isMobile && subRow.originalRow && (
-                      <MobileInputRow
-                        key={`mobile-input-${subRow.originalRow.idx}`}
-                        row={subRow.originalRow}
-                        reduceMode={reduceMode}
-                        renderPartPaymentCell={renderPartPaymentCell}
-                      />
-                    )}
-                  </div>
-                ))}
+                {row.original.subRows
+                  ?.filter((subRow) => {
+                    // Pagination: only show months within visibleMonths
+                    const idx = subRow.originalRow?.idx ?? 0;
+                    return idx < visibleMonths;
+                  })
+                  .map((subRow) => {
+                    const monthIdx = subRow.originalRow?.idx ?? -1;
+                    const hasPP = partPayments[monthIdx] > 0;
+                    const hasEMI =
+                      emiIncreases[monthIdx] &&
+                      emiIncreases[monthIdx].value > 0;
+
+                    return (
+                      <div key={subRow.id} className="relative">
+                        {renderGridRow({
+                          key: subRow.id,
+                          className: `bg-card hover:bg-accent ${
+                            isMobile
+                              ? "border-l-2 border-l-primary/10 text-sm"
+                              : ""
+                          }`,
+                          cells:
+                            table
+                              .getRow(subRow.id)
+                              ?.getVisibleCells()
+                              .map((cell) =>
+                                flexRender(
+                                  cell.column.columnDef.cell,
+                                  cell.getContext()
+                                )
+                              ) || [],
+                        })}
+
+                        {/* Mobile action buttons row */}
+                        {isMobile && subRow.originalRow && monthIdx >= currentMonthIdx && (
+                          <div className="bg-muted/50 border-l-4 border-l-primary/20 px-4 py-2 flex items-center gap-2">
+                            {monthIdx === currentMonthIdx && (
+                              <span className="text-[10px] bg-warning/20 text-warning px-1.5 py-0.5 rounded">
+                                now
+                              </span>
+                            )}
+                            <button
+                              onClick={() =>
+                                openPartPaymentModal(
+                                  monthIdx,
+                                  subRow.originalRow!.calendarLabel,
+                                  subRow.originalRow!.balance
+                                )
+                              }
+                              className="text-xs text-primary bg-primary/10 hover:bg-primary/20 rounded px-3 py-1.5 transition-colors whitespace-nowrap"
+                            >
+                              {hasPP
+                                ? `₹${formatINRShort(partPayments[monthIdx])}`
+                                : "+ Part pay"}
+                            </button>
+                            <button
+                              onClick={() =>
+                                openEmiIncreaseModal(
+                                  monthIdx,
+                                  subRow.originalRow!.calendarLabel
+                                )
+                              }
+                              className="text-xs text-muted-foreground bg-muted hover:bg-accent rounded px-3 py-1.5 transition-colors whitespace-nowrap"
+                            >
+                              {hasEMI
+                                ? `EMI +₹${formatINRShort(emiIncreases[monthIdx].value)}`
+                                : "↑ EMI"}
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Inline simulation card: part payment */}
+                        {hasPP && (
+                          <div className="border-l-2 border-positive bg-positive/5 flex items-center justify-between px-3 py-1.5">
+                            <div className="flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 rounded-full bg-positive flex-shrink-0" />
+                              <span className="text-xs font-medium text-foreground">
+                                Part payment: {formatINR(partPayments[monthIdx])}
+                              </span>
+                            </div>
+                            <button
+                              onClick={() => {
+                                const newPP = { ...partPayments };
+                                delete newPP[monthIdx];
+                                setPartPayments(newPP);
+                              }}
+                              className="text-xs text-muted-foreground hover:text-destructive transition-colors px-1"
+                              aria-label="Remove part payment"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Inline simulation card: EMI increase */}
+                        {hasEMI && (
+                          <div className="border-l-2 border-primary bg-primary/5 flex items-center justify-between px-3 py-1.5">
+                            <div className="flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
+                              <span className="text-xs font-medium text-foreground">
+                                EMI increase: +{formatINR(emiIncreases[monthIdx].value)}/mo
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
               </motion.div>
             )}
           </AnimatePresence>
@@ -824,10 +833,44 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
     }
   });
 
+  // Compute debt-free date from last schedule row
+  const lastRow = scheduleWithCalendar[scheduleWithCalendar.length - 1];
+  const debtFreeLabel = lastRow
+    ? `${lastRow.calendarMonth} ${lastRow.calendarYear}`
+    : "";
+
   return (
     <div className="w-full" role="table" aria-label="Amortization Schedule">
       <div role="rowgroup">{headerRow}</div>
-      <div className="overflow-x-auto" role="rowgroup">{allRows}</div>
+      <div className="overflow-x-auto" role="rowgroup">
+        {allRows}
+
+        {/* Show more button for pagination */}
+        {visibleMonths < totalMonths && (
+          <button
+            onClick={() =>
+              setVisibleMonths((prev) => Math.min(prev + 24, totalMonths))
+            }
+            className="w-full py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-accent transition-colors border-t border-border"
+          >
+            Show next 2 years ({totalMonths - visibleMonths} months remaining)
+          </button>
+        )}
+
+        {/* Debt-free row */}
+        {debtFreeLabel && (
+          <div className="bg-positive/10 border-t-2 border-positive flex items-center justify-between px-4 py-3 rounded-b-lg">
+            <div>
+              <span className="text-sm font-medium text-positive">
+                {debtFreeLabel}
+              </span>
+              <span className="text-xs text-muted-foreground ml-2">
+                loan fully paid
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

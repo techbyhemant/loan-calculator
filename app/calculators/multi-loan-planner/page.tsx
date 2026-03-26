@@ -4,6 +4,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 
 import MultiLoanPlannerCalc from "@/components/calculators/MultiLoanPlannerCalc";
+import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 
 export const metadata = buildMetadata({
   title: "Which Loan to Pay Off First? Multi-Loan Payoff Planner",
@@ -125,6 +126,8 @@ export default function MultiLoanPlannerPage() {
             </p>
           </div>
         </section>
+
+        <RelatedCalculators />
       </main>
     </div>
   );

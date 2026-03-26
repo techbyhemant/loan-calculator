@@ -1,10 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="bg-background min-h-screen" />}>
+      <LoginContent />
+    </Suspense>
+  );
+}
+
+function LoginContent() {
+  const searchParams = useSearchParams();
+  const isSavingCalculation = searchParams.get("save") === "true";
   const [showEmail, setShowEmail] = useState(false);
   const [email, setEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
@@ -37,9 +48,15 @@ export default function LoginPage() {
 
         {/* Auth Card */}
         <div className="bg-card border border-border rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-foreground mb-6 text-center">
+          <h2 className="text-lg font-semibold text-foreground mb-2 text-center">
             Sign in to your account
           </h2>
+          {isSavingCalculation && (
+            <p className="text-sm text-muted-foreground text-center mb-4">
+              Sign in to save your EMI calculation and track your loan.
+            </p>
+          )}
+          {!isSavingCalculation && <div className="mb-4" />}
 
           {/* Google Button */}
           <button

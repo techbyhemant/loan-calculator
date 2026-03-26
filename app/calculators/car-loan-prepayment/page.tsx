@@ -4,6 +4,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 
 import CarLoanPrepaymentCalc from "@/components/calculators/CarLoanPrepaymentCalc";
+import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 
 export const metadata = buildMetadata({
   title:
@@ -133,6 +134,8 @@ export default function CarLoanPrepaymentPage() {
             </p>
           </div>
         </section>
+
+        <RelatedCalculators />
       </main>
     </div>
   );

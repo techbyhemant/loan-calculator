@@ -4,6 +4,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 
 import PersonalLoanPayoffCalc from "@/components/calculators/PersonalLoanPayoffCalc";
+import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 
 export const metadata = buildMetadata({
   title:
@@ -125,6 +126,8 @@ export default function PersonalLoanPayoffPage() {
             </p>
           </div>
         </section>
+
+        <RelatedCalculators />
       </main>
     </div>
   );

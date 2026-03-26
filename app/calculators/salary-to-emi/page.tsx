@@ -4,6 +4,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import SalaryToEmiCalc from "@/components/calculators/SalaryToEmiCalc";
+import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 
 export const metadata = buildMetadata({
   title: "How Much Home Loan Can I Get on My Salary? — Calculator",
@@ -112,6 +113,8 @@ export default function SalaryToEmiPage() {
             </p>
           </div>
         </section>
+
+        <RelatedCalculators />
       </main>
     </div>
   );

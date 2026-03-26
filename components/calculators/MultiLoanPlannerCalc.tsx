@@ -38,6 +38,7 @@ const LOAN_TYPE_OPTIONS: LoanType[] = [
   "education",
   "gold",
   "consumer_durable",
+  "credit_card",
   "lap",
   "medical",
   "other",
@@ -81,9 +82,15 @@ export default function MultiLoanPlannerCalc() {
     value: string | number | ""
   ) {
     setLoans(
-      loans.map((loan, i) =>
-        i === index ? { ...loan, [field]: value } : loan
-      )
+      loans.map((loan, i) => {
+        if (i !== index) return loan;
+        const updated = { ...loan, [field]: value };
+        // Auto-set rate to 42% when credit card is selected
+        if (field === "type" && value === "credit_card") {
+          updated.ratePA = 42;
+        }
+        return updated;
+      })
     );
   }
 
@@ -204,6 +211,11 @@ export default function MultiLoanPlannerCalc() {
                         </option>
                       ))}
                     </select>
+                    {loan.type === "credit_card" && (
+                      <p className="text-xs text-negative mt-1">
+                        Credit cards at 42% PA — always the highest priority to pay off first.
+                      </p>
+                    )}
                   </div>
                   <div>
                     {index === 0 && <Label>Loan Name</Label>}
@@ -397,6 +409,53 @@ export default function MultiLoanPlannerCalc() {
             ))}
           </div>
 
+          {/* Gantt-style Payoff Timeline */}
+          {results.enriched.length > 1 && (
+            <div className="mt-6">
+              <h3 className="text-sm font-medium text-foreground mb-3">
+                When each loan clears
+              </h3>
+              <div className="space-y-2.5">
+                {results.enriched.map((loan, i) => {
+                  const surplus = typeof monthlySurplus === "number" && monthlySurplus > 0 ? monthlySurplus : 5000;
+                  const estimatedMonths = Math.round(
+                    loan.outstanding / (surplus * (1 / (i + 1)))
+                  );
+                  const maxMonths = Math.max(
+                    ...results.enriched.map((l, j) =>
+                      Math.round(l.outstanding / (surplus * (1 / (j + 1))))
+                    )
+                  );
+                  const barWidth = maxMonths > 0 ? (estimatedMonths / maxMonths) * 100 : 0;
+                  const years = Math.floor(estimatedMonths / 12);
+                  const months = estimatedMonths % 12;
+                  const display = LOAN_TYPE_DISPLAY[loan.type as LoanType];
+
+                  return (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className="w-24 text-xs text-muted-foreground text-right flex-shrink-0 truncate">
+                        {display?.icon ?? "📋"} {loan.name || display?.shortLabel || "Loan"}
+                      </div>
+                      <div className="flex-1 bg-muted rounded-full h-5 relative overflow-hidden">
+                        <div
+                          className="absolute top-0 left-0 h-full rounded-full bg-primary/60 flex items-center justify-end pr-2"
+                          style={{ width: `${Math.max(10, barWidth)}%` }}
+                        >
+                          <span className="text-[10px] text-primary-foreground font-medium whitespace-nowrap">
+                            {years > 0 ? `${years}y ${months}m` : `${months}m`}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Estimated based on {formatINR(typeof monthlySurplus === "number" && monthlySurplus > 0 ? monthlySurplus : 5000)}/mo surplus allocated by priority.
+              </p>
+            </div>
+          )}
+
           {/* Smart Callout: Home Loan + Higher Rate Loan */}
           {results.hasHomeLoan &&
             results.hasHigherRateLoan &&
@@ -423,11 +482,13 @@ export default function MultiLoanPlannerCalc() {
             </Callout>
           )}
 
-          {/* Credit Card Warning */}
-          <Callout type="warning">
-            Note: If you also have credit card debt, pay that off before any of these loans.
-            Credit cards at 42% PA are always the most expensive debt.
-          </Callout>
+          {/* Credit Card Warning — only show if no CC loan already added */}
+          {!results.enriched.some((l) => l.type === "credit_card") && (
+            <Callout type="warning">
+              Note: If you also have credit card debt, pay that off before any of these loans.
+              Credit cards at 42% PA are always the most expensive debt.
+            </Callout>
+          )}
         </div>
       )}
     </div>

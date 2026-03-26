@@ -24,7 +24,7 @@ export function BlogCard({ post }: BlogCardProps) {
           />
         </div>
       ) : (
-        <div className="w-full aspect-video bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+        <div className="w-full aspect-video bg-gradient-to-br from-muted to-accent flex items-center justify-center">
           <span className="text-3xl opacity-50">📝</span>
         </div>
       )}

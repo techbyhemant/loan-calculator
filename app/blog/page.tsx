@@ -3,14 +3,14 @@ import { getAllPosts } from "@/lib/blog/utils";
 import { BlogCard } from "@/components/blog/BlogCard";
 
 export const metadata: Metadata = {
-  title: "Blog — EMI, Loans & Debt Freedom Tips | EMIPartPay",
+  title: "Blog — EMI, Loans & Debt Freedom Tips | LastEMI",
   description:
     "Practical guides on home loans, EMI management, tax benefits, and becoming debt-free. Written by finance experts, backed by real math.",
   alternates: { canonical: "/blog" },
   openGraph: {
-    title: "EMIPartPay Blog",
+    title: "LastEMI Blog",
     url: "/blog",
-    siteName: "EMIPartPay",
+    siteName: "LastEMI",
     locale: "en_IN",
     type: "website",
   },
@@ -24,7 +24,7 @@ export default function BlogListPage() {
     <div className="bg-background min-h-screen">
       <main className="max-w-4xl mx-auto py-8 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
-          EMIPartPay Blog
+          LastEMI Blog
         </h1>
         <p className="text-muted-foreground text-sm sm:text-base mb-8">
           Honest, math-backed guides to help you pay off your loans faster.

@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { AmortizationTable } from "../AmortizationTable";
 import { CompactTabsToggle } from "@/components/ui/CompactTabsToggle";
 import { useLoanCalculator } from "../context/LoanCalculatorContext";
+import { PartPaymentModal } from "./PartPaymentModal";
+import { EmiIncreaseModal } from "./EmiIncreaseModal";
 
 export function AmortizationSection() {
   const {
@@ -17,7 +19,7 @@ export function AmortizationSection() {
     partPayments,
     setPartPayments,
     emiIncreases,
-    setEmiIncreases,
+    startDate,
   } = useLoanCalculator();
 
   // Mobile detection for responsive input layout
@@ -33,217 +35,30 @@ export function AmortizationSection() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Use refs so the render callback stays stable across state changes
-  const partPaymentsRef = React.useRef(partPayments);
-  partPaymentsRef.current = partPayments;
-  const emiIncreasesRef = React.useRef(emiIncreases);
-  emiIncreasesRef.current = emiIncreases;
-  const isMobileRef = React.useRef(isMobile);
-  isMobileRef.current = isMobile;
+  // Modal state
+  const [ppModalOpen, setPpModalOpen] = useState(false);
+  const [emiModalOpen, setEmiModalOpen] = useState(false);
+  const [selectedMonthIndex, setSelectedMonthIndex] = useState(0);
+  const [selectedMonthLabel, setSelectedMonthLabel] = useState("");
+  const [selectedBalance, setSelectedBalance] = useState(0);
 
-  const renderPartPaymentCell = React.useCallback(
-    (
-      row: { idx: number },
-      reduceMode: "emi" | "tenure",
-      inputType?: "partPayment" | "emiIncrease"
-    ) => {
-      const pp = partPaymentsRef.current;
-      const ei = emiIncreasesRef.current;
-      const mobile = isMobileRef.current;
-
-      // For mobile nested rows with specific input types
-      if (mobile && inputType) {
-        if (inputType === "partPayment") {
-          return (
-            <input
-              key={`pp-${row.idx}`}
-              type="number"
-              defaultValue={pp[row.idx]?.toString() ?? ""}
-              onBlur={(e) => {
-                const num = Number(e.target.value);
-                if (!isNaN(num) && num >= 0) {
-                  setPartPayments({
-                    ...partPaymentsRef.current,
-                    [row.idx]: num,
-                  });
-                }
-              }}
-              onChange={(e) => {
-                const num = Number(e.target.value);
-                if (!isNaN(num) && num >= 0) {
-                  setPartPayments({
-                    ...partPaymentsRef.current,
-                    [row.idx]: num,
-                  });
-                }
-              }}
-              className="w-full text-sm py-1.5 px-2 border border-input rounded focus:ring-1 focus:ring-ring focus:border-ring outline-none"
-              placeholder="Amount (₹)"
-              min="0"
-              step="1000"
-            />
-          );
-        } else if (inputType === "emiIncrease") {
-          return (
-            <input
-              key={`ei-${row.idx}`}
-              type="number"
-              defaultValue={ei[row.idx]?.value?.toString() ?? ""}
-              onBlur={(e) => {
-                const num = Number(e.target.value);
-                if (!isNaN(num) && num >= 0) {
-                  setEmiIncreases({
-                    ...emiIncreasesRef.current,
-                    [row.idx]: { type: "value", value: num },
-                  });
-                }
-              }}
-              onChange={(e) => {
-                const num = Number(e.target.value);
-                if (!isNaN(num) && num >= 0) {
-                  setEmiIncreases({
-                    ...emiIncreasesRef.current,
-                    [row.idx]: { type: "value", value: num },
-                  });
-                }
-              }}
-              className="w-full text-sm py-1.5 px-2 border border-input rounded focus:ring-1 focus:ring-ring focus:border-ring outline-none"
-              placeholder="Increase (₹)"
-              min="0"
-              step="1000"
-            />
-          );
-        }
-        return null;
-      }
-
-      // For mobile nested rows without specific input type (legacy support)
-      if (mobile) {
-        return (
-          <div className="flex gap-2">
-            <input
-              key={`pp-${row.idx}`}
-              type="number"
-              defaultValue={pp[row.idx]?.toString() ?? ""}
-              onBlur={(e) => {
-                const num = Number(e.target.value);
-                if (!isNaN(num) && num >= 0) {
-                  setPartPayments({
-                    ...partPaymentsRef.current,
-                    [row.idx]: num,
-                  });
-                }
-              }}
-              onChange={(e) => {
-                const num = Number(e.target.value);
-                if (!isNaN(num) && num >= 0) {
-                  setPartPayments({
-                    ...partPaymentsRef.current,
-                    [row.idx]: num,
-                  });
-                }
-              }}
-              className="flex-1 text-sm py-1.5 px-2 border border-input rounded focus:ring-1 focus:ring-ring focus:border-ring outline-none"
-              placeholder="Amount (₹)"
-              min="0"
-              step="1000"
-            />
-            {reduceMode === "tenure" && (
-              <input
-                key={`ei-${row.idx}`}
-                type="number"
-                defaultValue={ei[row.idx]?.value?.toString() ?? ""}
-                onBlur={(e) => {
-                  const num = Number(e.target.value);
-                  if (!isNaN(num) && num >= 0) {
-                    setEmiIncreases({
-                      ...emiIncreasesRef.current,
-                      [row.idx]: { type: "value", value: num },
-                    });
-                  }
-                }}
-                onChange={(e) => {
-                  const num = Number(e.target.value);
-                  if (!isNaN(num) && num >= 0) {
-                    setEmiIncreases({
-                      ...emiIncreasesRef.current,
-                      [row.idx]: { type: "value", value: num },
-                    });
-                  }
-                }}
-                className="flex-1 text-sm py-1.5 px-2 border border-input rounded focus:ring-1 focus:ring-ring focus:border-ring outline-none"
-                placeholder="Increase (₹)"
-                min="0"
-                step="1000"
-              />
-            )}
-          </div>
-        );
-      }
-
-      // Desktop layout
-      return (
-        <div className="flex gap-2 items-center">
-          <input
-            key={`pp-${row.idx}`}
-            type="number"
-            defaultValue={pp[row.idx]?.toString() ?? ""}
-            onBlur={(e) => {
-              const num = Number(e.target.value);
-              if (!isNaN(num) && num >= 0) {
-                setPartPayments({
-                  ...partPaymentsRef.current,
-                  [row.idx]: num,
-                });
-              }
-            }}
-            onChange={(e) => {
-              const num = Number(e.target.value);
-              if (!isNaN(num) && num >= 0) {
-                setPartPayments({
-                  ...partPaymentsRef.current,
-                  [row.idx]: num,
-                });
-              }
-            }}
-            className="w-20 text-xs py-1 px-2 border border-input rounded-md focus:ring-2 focus:ring-ring focus:border-ring outline-none"
-            placeholder="0"
-            min="0"
-            step="1000"
-          />
-          {reduceMode === "tenure" && (
-            <input
-              key={`ei-${row.idx}`}
-              type="number"
-              defaultValue={ei[row.idx]?.value?.toString() ?? ""}
-              onBlur={(e) => {
-                const num = Number(e.target.value);
-                if (!isNaN(num) && num >= 0) {
-                  setEmiIncreases({
-                    ...emiIncreasesRef.current,
-                    [row.idx]: { type: "value", value: num },
-                  });
-                }
-              }}
-              onChange={(e) => {
-                const num = Number(e.target.value);
-                if (!isNaN(num) && num >= 0) {
-                  setEmiIncreases({
-                    ...emiIncreasesRef.current,
-                    [row.idx]: { type: "value", value: num },
-                  });
-                }
-              }}
-              className="w-20 text-xs py-1 px-2 border border-input rounded-md focus:ring-2 focus:ring-ring focus:border-ring outline-none"
-              placeholder="0"
-              min="0"
-              step="1000"
-            />
-          )}
-        </div>
-      );
+  const openPartPaymentModal = React.useCallback(
+    (monthIndex: number, monthLabel: string, balance: number) => {
+      setSelectedMonthIndex(monthIndex);
+      setSelectedMonthLabel(monthLabel);
+      setSelectedBalance(balance);
+      setPpModalOpen(true);
     },
-    [setPartPayments, setEmiIncreases]
+    []
+  );
+
+  const openEmiIncreaseModal = React.useCallback(
+    (monthIndex: number, monthLabel: string) => {
+      setSelectedMonthIndex(monthIndex);
+      setSelectedMonthLabel(monthLabel);
+      setEmiModalOpen(true);
+    },
+    []
   );
 
   return (
@@ -272,15 +87,22 @@ export function AmortizationSection() {
                 isMobile ? "justify-center" : "items-center"
               } gap-2 flex-wrap`}
             >
-              <CompactTabsToggle
-                label="Reduce"
-                value={reduceMode}
-                onValueChange={(v) => setReduceMode(v as "emi" | "tenure")}
-                options={[
-                  { value: "emi", label: "EMI" },
-                  { value: "tenure", label: "Tenure" },
-                ]}
-              />
+              <div>
+                <CompactTabsToggle
+                  label="Reduce"
+                  value={reduceMode}
+                  onValueChange={(v) => setReduceMode(v as "emi" | "tenure")}
+                  options={[
+                    { value: "emi", label: "EMI" },
+                    { value: "tenure", label: "Tenure" },
+                  ]}
+                />
+                <p className="text-xs text-muted-foreground mt-1.5">
+                  {reduceMode === 'tenure'
+                    ? 'Reducing tenure saves more interest. Recommended for most borrowers.'
+                    : 'Reducing EMI lowers your monthly outflow. Better if cash flow is tight.'}
+                </p>
+              </div>
               <CompactTabsToggle
                 label="Group by"
                 value={yearGrouping}
@@ -316,9 +138,28 @@ export function AmortizationSection() {
           formatINR={formatINR}
           loanPaidPct={loanPaidPct}
           reduceMode={reduceMode}
-          renderPartPaymentCell={renderPartPaymentCell}
+          partPayments={partPayments}
+          setPartPayments={setPartPayments}
+          emiIncreases={emiIncreases}
+          emiStartDate={startDate}
+          openPartPaymentModal={openPartPaymentModal}
+          openEmiIncreaseModal={openEmiIncreaseModal}
         />
       </div>
+
+      <PartPaymentModal
+        open={ppModalOpen}
+        onOpenChange={setPpModalOpen}
+        monthIndex={selectedMonthIndex}
+        monthLabel={selectedMonthLabel}
+        currentBalance={selectedBalance}
+      />
+      <EmiIncreaseModal
+        open={emiModalOpen}
+        onOpenChange={setEmiModalOpen}
+        monthIndex={selectedMonthIndex}
+        monthLabel={selectedMonthLabel}
+      />
     </section>
   );
 }

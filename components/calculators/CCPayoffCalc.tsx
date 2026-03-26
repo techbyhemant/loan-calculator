@@ -115,6 +115,23 @@ export default function CCPayoffCalc() {
               min={0}
               className={CALC_INPUT_CLASS}
             />
+            {outstanding && monthlyRate && (
+              <div className="mt-2">
+                <input
+                  type="range"
+                  min={Math.max(200, Math.round((outstanding as number) * 0.05))}
+                  max={Math.round(calculateFixedPaymentForTarget({ outstanding: outstanding as number, monthlyRate: (monthlyRate as number) / 100 }, 6))}
+                  step={100}
+                  value={monthlyPayment || 0}
+                  onChange={(e) => setMonthlyPayment(Number(e.target.value))}
+                  className="w-full h-2 rounded-full bg-muted focus:outline-none cursor-pointer"
+                />
+                <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
+                  <span>Min due</span>
+                  <span>Clear in 6 mo</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -189,6 +206,28 @@ export default function CCPayoffCalc() {
                   </p>
                 </div>
               </div>
+
+              {results && !results.payoff.isNeverPayoff && monthlyPayment && (
+                (() => {
+                  const increased = calculateCCPayoff(
+                    { outstanding: outstanding as number, monthlyRate: (monthlyRate as number) / 100 },
+                    (monthlyPayment as number) + 500,
+                    includeGST
+                  );
+                  const monthsSaved = results.payoff.monthsToPayoff - increased.monthsToPayoff;
+                  const interestSaved = results.payoff.totalInterestPaid - increased.totalInterestPaid;
+                  if (monthsSaved <= 0) return null;
+                  return (
+                    <p className="text-xs text-muted-foreground mt-3">
+                      Tip: Pay ₹500 more/month →{" "}
+                      <span className="text-positive font-medium">saves {monthsSaved} months</span>{" "}
+                      and{" "}
+                      <span className="text-positive font-mono">₹{formatINR(Math.round(interestSaved))}</span>{" "}
+                      in interest + GST.
+                    </p>
+                  );
+                })()
+              )}
 
               <TableCard title="Your Payment vs Minimum Due Only">
                 <table className="w-full text-sm">

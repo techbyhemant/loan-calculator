@@ -4,6 +4,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 
 import CCPayoffCalc from "@/components/calculators/CCPayoffCalc";
+import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 
 export const metadata = buildMetadata({
   title: "Credit Card Payoff Calculator — How Long to Clear Your Balance?",
@@ -105,6 +106,8 @@ export default function CreditCardPayoffPage() {
             </p>
           </div>
         </section>
+
+        <RelatedCalculators />
       </main>
     </div>
   );

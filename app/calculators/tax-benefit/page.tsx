@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import TaxBenefitCalc from "@/components/calculators/TaxBenefitCalc";
 import { getFAQSchema } from "@/lib/seo/schema";
+import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 
 export const metadata: Metadata = {
   title: "Home Loan Tax Benefit Calculator — Section 80C & 24(b) | LastEMI",
@@ -153,6 +154,8 @@ export default function TaxBenefitPage() {
             </p>
           </div>
         </section>
+
+        <RelatedCalculators />
       </main>
     </div>
   );

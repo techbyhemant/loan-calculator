@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { RbiEmiImpact } from "./RbiEmiImpact";
 
 export const metadata: Metadata = {
   title: "RBI Repo Rate 2026 — Impact on Home Loan EMI | LastEMI",
@@ -132,6 +133,8 @@ export default function RBIRatesPage() {
             </table>
           </div>
         </div>
+
+        <RbiEmiImpact />
 
         {/* How It Affects You */}
         <section className="space-y-6 text-foreground text-sm sm:text-base leading-relaxed">

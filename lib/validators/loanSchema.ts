@@ -10,6 +10,7 @@ export const LoanInputSchema = z.object({
     "education",
     "gold",
     "consumer_durable",
+    "credit_card",
     "lap",
     "medical",
     "other",

@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 
 import { formatINR } from "@/lib/utils/formatters";
+import { cn } from "@/lib/utils";
 
 import NumericInput from "@/components/ui/NumericInput";
 import {
@@ -166,6 +167,62 @@ export default function ConsumerEMITrueCostCalc() {
               sub={`${purchasePrice ? formatINR(purchasePrice as number) : ""} / ${tenureMonths} months`}
             />
           </div>
+
+          {purchasePrice && tenureMonths && (
+            <div className="mt-6">
+              <h3 className="text-sm font-medium text-foreground mb-2">
+                How does the processing fee change the cost?
+              </h3>
+              <p className="text-xs text-muted-foreground mb-3">
+                For {formatINR(purchasePrice as number)} over {tenureMonths} months:
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-muted text-muted-foreground text-xs">
+                      <th className="text-left py-2 px-3">Fee %</th>
+                      <th className="text-right py-2 px-3">Extra cost</th>
+                      <th className="text-right py-2 px-3">Eff. rate (PA)</th>
+                      <th className="text-right py-2 px-3">Worth it?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[0.5, 1, 1.5, 2, 2.5, 3].map((feeP) => {
+                      const fee = (purchasePrice as number) * (feeP / 100);
+                      const gst = includeGST ? fee * 0.18 : 0;
+                      const totalExtra = fee + gst;
+                      const effRate = (2 * (feeP / 100) * 12) / ((tenureMonths as number) + 1);
+                      const worthIt = effRate < 0.07;
+                      const isCurrentFee = Math.abs(feeP - (processingFeePercent as number)) < 0.01;
+                      return (
+                        <tr
+                          key={feeP}
+                          className={cn(
+                            "border-b border-border",
+                            isCurrentFee ? "bg-primary/5 font-medium" : ""
+                          )}
+                        >
+                          <td className="py-2 px-3">{feeP}%{isCurrentFee ? " \u2190 yours" : ""}</td>
+                          <td className="py-2 px-3 font-mono text-right text-negative">
+                            {formatINR(Math.round(totalExtra))}
+                          </td>
+                          <td className="py-2 px-3 font-mono text-right">
+                            {(effRate * 100).toFixed(1)}%
+                          </td>
+                          <td className="py-2 px-3 text-right">
+                            {worthIt
+                              ? <span className="text-positive text-xs">{"\u2713"} OK</span>
+                              : <span className="text-negative text-xs">{"\u2717"} Avoid</span>
+                            }
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
 
           {includeGST && results.gstOnFee > 0 && (
             <Callout type="info">

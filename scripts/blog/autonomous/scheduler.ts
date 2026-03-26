@@ -1,6 +1,13 @@
 // Entry point for the autonomous blog system.
 // Run: npx tsx scripts/blog/autonomous/scheduler.ts
 // This is what GitHub Actions calls on its cron schedule.
+//
+// Flow:
+// 1. Check finance calendar — any event-triggered posts for today?
+// 2. Check mode: SPRINT (<90 posts) or MAINTENANCE (>=90)?
+// 3. SPRINT: 1 new post/day + 1 stale update if high-priority found
+// 4. MAINTENANCE: 1 new post every 3 days + 1 stale update/day
+// 5. Log cost: record tokens used
 
 import fs from 'fs'
 import path from 'path'
@@ -11,93 +18,122 @@ import {
   saveQueue,
   getQueueStats,
   getTotalPublishedCount,
-  getPostsPublishedThisWeek,
   isDuplicate,
   markPublished,
   logPublishAttempt,
+  type QueuedPost,
 } from './queue-manager'
 import { discoverNewTopics } from './topic-discoverer'
 import { getActiveSeasonalPosts } from './seasonal-topics'
+import { getEventsForToday, type FinanceEvent } from '../intelligence/finance-calendar'
+import { scanForStaleContent, getMostUrgentUpdate } from '../intelligence/freshness-scanner'
+import { updatePost, type UpdateResult } from '../intelligence/update-generator'
 import { generateBlogPost } from '../generate-post'
 import { checkPostQuality } from '../check-quality'
 
-const SPRINT_PHASE_MAX = 3
-const MAINTENANCE_PHASE_MAX = 1
-const SPRINT_PHASE_POST_COUNT = 36
+// ─── Constants ─────────────────────────────────────────
+const SPRINT_POST_THRESHOLD = 90
 const MIN_QUEUE_DEPTH = 10
+const COST_LOG_FILE = path.join(process.cwd(), 'data', 'blog-cost-log.json')
 
-async function run(): Promise<void> {
-  console.log('\n' + '═'.repeat(60))
-  console.log('LASTEMI AUTONOMOUS BLOG ENGINE')
-  console.log(`Date: ${new Date().toISOString()}`)
-  console.log('═'.repeat(60))
+// ─── Cost tracking ─────────────────────────────────────
+interface CostEntry {
+  date: string
+  action: 'generate' | 'update' | 'discover'
+  slug: string
+  tokensUsed: number
+}
 
-  const totalPublished = getTotalPublishedCount()
-  const isSprintPhase = totalPublished < SPRINT_PHASE_POST_COUNT
-  const maxPerWeek = isSprintPhase ? SPRINT_PHASE_MAX : MAINTENANCE_PHASE_MAX
-  const postsThisWeek = getPostsPublishedThisWeek()
-
-  console.log(`\n📊 Status:`)
-  console.log(`   Phase: ${isSprintPhase ? 'SPRINT (3x/week)' : 'MAINTENANCE (1x/week)'}`)
-  console.log(`   Total published: ${totalPublished}`)
-  console.log(`   Published this week: ${postsThisWeek}/${maxPerWeek}`)
-
-  if (postsThisWeek >= maxPerWeek) {
-    console.log(`\n✅ Weekly limit reached (${postsThisWeek}/${maxPerWeek}). No action needed today.`)
-    return
+function logCost(entry: CostEntry): void {
+  const dataDir = path.join(process.cwd(), 'data')
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true })
   }
+  const log: CostEntry[] = fs.existsSync(COST_LOG_FILE)
+    ? JSON.parse(fs.readFileSync(COST_LOG_FILE, 'utf-8'))
+    : []
+  log.push(entry)
+  fs.writeFileSync(COST_LOG_FILE, JSON.stringify(log, null, 2))
+}
 
-  // Inject seasonal topics at front of queue
-  console.log('\n📅 Checking for seasonal topics...')
-  const seasonalPosts = getActiveSeasonalPosts()
-  const newSeasonalPosts = seasonalPosts.filter(p => !isDuplicate(p.seoKeyword))
-  if (newSeasonalPosts.length > 0) {
-    console.log(`   Found ${newSeasonalPosts.length} active seasonal topics`)
-    const currentQueue = loadQueue()
-    saveQueue([...newSeasonalPosts, ...currentQueue])
+function getTodaysCostTotal(): number {
+  if (!fs.existsSync(COST_LOG_FILE)) return 0
+  const log: CostEntry[] = JSON.parse(fs.readFileSync(COST_LOG_FILE, 'utf-8'))
+  const today = new Date().toISOString().split('T')[0]
+  return log
+    .filter(e => e.date.startsWith(today))
+    .reduce((sum, e) => sum + e.tokensUsed, 0)
+}
+
+// ─── Helpers ───────────────────────────────────────────
+
+function getPostsPublishedToday(): number {
+  const dataDir = path.join(process.cwd(), 'data')
+  const publishedFile = path.join(dataDir, 'published-topics.json')
+  if (!fs.existsSync(publishedFile)) return 0
+  const published = JSON.parse(fs.readFileSync(publishedFile, 'utf-8'))
+  const today = new Date().toISOString().split('T')[0]
+  return published.filter((p: { publishedAt: string }) =>
+    p.publishedAt.startsWith(today)
+  ).length
+}
+
+function getUpdatesToday(): number {
+  if (!fs.existsSync(COST_LOG_FILE)) return 0
+  const log: CostEntry[] = JSON.parse(fs.readFileSync(COST_LOG_FILE, 'utf-8'))
+  const today = new Date().toISOString().split('T')[0]
+  return log.filter(e => e.date.startsWith(today) && e.action === 'update').length
+}
+
+function getDaysSinceLastNewPost(): number {
+  const dataDir = path.join(process.cwd(), 'data')
+  const publishedFile = path.join(dataDir, 'published-topics.json')
+  if (!fs.existsSync(publishedFile)) return Infinity
+  const published = JSON.parse(fs.readFileSync(publishedFile, 'utf-8'))
+  if (published.length === 0) return Infinity
+  const latest = published
+    .map((p: { publishedAt: string }) => new Date(p.publishedAt).getTime())
+    .sort((a: number, b: number) => b - a)[0]
+  return Math.floor((Date.now() - latest) / (1000 * 60 * 60 * 24))
+}
+
+function financeEventToQueuedPost(event: FinanceEvent): QueuedPost {
+  return {
+    slug: event.topic.slug,
+    title: event.topic.title,
+    description: event.topic.description,
+    seoKeyword: event.topic.seoKeyword,
+    searchVolume: 10000,
+    category: event.topic.category,
+    tags: [event.topic.category.toLowerCase(), 'rbi', 'emi'],
+    tier: 1 as const,
+    relatedCalculator: event.topic.relatedCalculator,
+    imagePrompt: `Professional financial illustration for ${event.name}, Indian fintech style, no text, no faces, clean vector`,
+    discoveredAt: new Date().toISOString(),
+    source: 'seasonal' as const,
   }
+}
 
-  // Discover new topics if queue is running low
-  const stats = getQueueStats()
-  console.log(`\n📋 Queue status: ${stats.total} posts waiting`)
-  console.log(`   Tier 1: ${stats.tier1} | Tier 2: ${stats.tier2} | Tier 3: ${stats.tier3}`)
+// ─── Core: Generate a new post ─────────────────────────
 
-  if (stats.total < MIN_QUEUE_DEPTH) {
-    console.log(`\n🔍 Queue running low (${stats.total} < ${MIN_QUEUE_DEPTH}). Discovering new topics...`)
-    const newTopics = await discoverNewTopics(15)
-    if (newTopics.length > 0) {
-      enqueue(newTopics)
-      console.log(`   Queue now has ${loadQueue().length} posts`)
-    }
-  }
-
-  // Get next post from queue
-  const nextPost = dequeueNext()
-  if (!nextPost) {
-    console.log('\n❌ Queue is empty and discovery failed. Cannot publish today.')
-    return
-  }
-
-  console.log(`\n🚀 Publishing next post:`)
-  console.log(`   Title: ${nextPost.title}`)
-  console.log(`   Keyword: ${nextPost.seoKeyword}`)
-  console.log(`   Tier: ${nextPost.tier} | Source: ${nextPost.source}`)
+async function generateNewPost(post: QueuedPost): Promise<{ success: boolean; tokensUsed: number }> {
+  let tokensUsed = 0
 
   try {
-    console.log('\n✍️  Generating post...')
-    await generateBlogPost(nextPost.slug, nextPost)
+    console.log('\n   Generating post...')
+    await generateBlogPost(post.slug, post)
 
-    console.log('\n📋 Running quality check...')
-    const qualityResult = checkPostQuality(nextPost.slug)
+    console.log('   Running quality check...')
+    const qualityResult = checkPostQuality(post.slug)
 
-    console.log(`\n   Quality score: ${qualityResult.passCount}/12`)
+    console.log(`   Quality score: ${qualityResult.passCount}/12`)
 
     if (qualityResult.passCount < 9) {
-      console.log(`\n⚠️  Quality too low (${qualityResult.passCount}/12). Skipping.`)
+      console.log(`   Quality too low (${qualityResult.passCount}/12). Skipping.`)
       qualityResult.failures.forEach(f => console.log(`   - ${f}`))
 
       logPublishAttempt({
-        slug: nextPost.slug,
+        slug: post.slug,
         generatedAt: new Date().toISOString(),
         qualityScore: qualityResult.passCount,
         published: false,
@@ -106,51 +142,271 @@ async function run(): Promise<void> {
 
       if (qualityResult.passCount >= 7) {
         console.log('   Re-queuing for retry...')
-        enqueue([{ ...nextPost, discoveredAt: new Date().toISOString() }])
+        enqueue([{ ...post, discoveredAt: new Date().toISOString() }])
       }
-      return
+      return { success: false, tokensUsed: 3000 } // Estimate for failed generation
     }
 
     const mdxContent = fs.readFileSync(
-      path.join(process.cwd(), 'content/blog', `${nextPost.slug}.mdx`),
+      path.join(process.cwd(), 'content/blog', `${post.slug}.mdx`),
       'utf-8',
     )
     const wordCount = mdxContent.split(/\s+/).length
 
     // Post-generation SEO: internal links + distribution content
-    console.log('\n🔗 Adding internal links...')
+    console.log('   Adding internal links...')
     const { addInternalLinks } = await import('./internal-linker')
-    await addInternalLinks(nextPost.slug)
+    await addInternalLinks(post.slug)
 
-    console.log('\n📣 Generating distribution content...')
+    console.log('   Generating distribution content...')
     const { generateDistributionContent } = await import('./distributor')
-    await generateDistributionContent(nextPost)
+    await generateDistributionContent(post)
 
-    markPublished(nextPost, wordCount)
+    markPublished(post, wordCount)
     logPublishAttempt({
-      slug: nextPost.slug,
+      slug: post.slug,
       generatedAt: new Date().toISOString(),
       qualityScore: qualityResult.passCount,
       published: true,
     })
 
-    console.log('\n' + '═'.repeat(60))
-    console.log('✅ POST GENERATED SUCCESSFULLY')
-    console.log('═'.repeat(60))
-    console.log(`   File: content/blog/${nextPost.slug}.mdx`)
-    console.log(`   Image: public/images/blog/${nextPost.slug}.webp`)
-    console.log(`   Quality: ${qualityResult.passCount}/12`)
-    console.log(`   Word count: ~${wordCount}`)
+    // Estimate tokens: ~1000 prompt + ~2000 completion for generation + ~500 for distribution
+    tokensUsed = 3500
+
+    console.log(`   POST GENERATED: content/blog/${post.slug}.mdx (${wordCount} words, ${qualityResult.passCount}/12 quality)`)
+
+    return { success: true, tokensUsed }
   } catch (err) {
-    console.error('\n❌ Generation failed:', err)
+    console.error('   Generation failed:', err)
     logPublishAttempt({
-      slug: nextPost.slug,
+      slug: post.slug,
       generatedAt: new Date().toISOString(),
       qualityScore: 0,
       published: false,
       error: String(err),
     })
+    return { success: false, tokensUsed: 1000 }
   }
+}
+
+// ─── Core: Update a stale post ─────────────────────────
+
+async function refreshStalePost(): Promise<UpdateResult | null> {
+  const urgent = getMostUrgentUpdate()
+  if (!urgent) {
+    console.log('   No stale posts found — all content is fresh.')
+    return null
+  }
+
+  console.log(`   Updating stale post: "${urgent.title}"`)
+  console.log(`   Priority: ${urgent.priority} | Action: ${urgent.suggestedAction}`)
+  urgent.reasons.forEach(r => console.log(`   -> ${r}`))
+
+  const result = await updatePost(urgent)
+
+  if (result.success) {
+    console.log(`   UPDATED: ${result.slug}`)
+    logCost({
+      date: new Date().toISOString(),
+      action: 'update',
+      slug: result.slug,
+      tokensUsed: result.tokensUsed ?? 2000,
+    })
+  } else {
+    console.log(`   Update failed: ${result.error}`)
+  }
+
+  return result
+}
+
+// ─── Main scheduler ────────────────────────────────────
+
+async function run(): Promise<void> {
+  console.log('\n' + '='.repeat(60))
+  console.log('LASTEMI AUTONOMOUS BLOG ENGINE')
+  console.log(`Date: ${new Date().toISOString()}`)
+  console.log('='.repeat(60))
+
+  const totalPublished = getTotalPublishedCount()
+  const isSprintPhase = totalPublished < SPRINT_POST_THRESHOLD
+  const alreadyPublishedToday = getPostsPublishedToday()
+  const alreadyUpdatedToday = getUpdatesToday()
+  const daysSinceLastPost = getDaysSinceLastNewPost()
+
+  console.log(`\nStatus:`)
+  console.log(`   Phase: ${isSprintPhase ? `SPRINT (daily, ${totalPublished}/${SPRINT_POST_THRESHOLD})` : 'MAINTENANCE (1 new/3 days)'}`)
+  console.log(`   Total published: ${totalPublished}`)
+  console.log(`   Published today: ${alreadyPublishedToday}`)
+  console.log(`   Updated today: ${alreadyUpdatedToday}`)
+  console.log(`   Days since last post: ${daysSinceLastPost === Infinity ? 'never' : daysSinceLastPost}`)
+  console.log(`   Tokens used today: ${getTodaysCostTotal()}`)
+
+  // ─── Step 1: Check finance calendar ──────────────────
+  console.log('\n--- Step 1: Finance Calendar Check ---')
+  const calendarEvents = getEventsForToday()
+  if (calendarEvents.length > 0) {
+    console.log(`   Found ${calendarEvents.length} event-triggered topic(s):`)
+    const eventPosts: QueuedPost[] = []
+    for (const event of calendarEvents) {
+      console.log(`   -> ${event.name}: "${event.topic.title}"`)
+      const queuedPost = financeEventToQueuedPost(event)
+      if (!isDuplicate(queuedPost.seoKeyword)) {
+        eventPosts.push(queuedPost)
+      } else {
+        console.log(`      (skipped — already published or queued)`)
+      }
+    }
+    if (eventPosts.length > 0) {
+      const currentQueue = loadQueue()
+      saveQueue([...eventPosts, ...currentQueue]) // Front of queue = high priority
+      console.log(`   Queued ${eventPosts.length} event post(s) with high priority`)
+    }
+  } else {
+    console.log('   No calendar events for today.')
+  }
+
+  // ─── Step 1b: Inject seasonal topics ─────────────────
+  console.log('\n--- Step 1b: Seasonal Topics Check ---')
+  const seasonalPosts = getActiveSeasonalPosts()
+  const newSeasonalPosts = seasonalPosts.filter(p => !isDuplicate(p.seoKeyword))
+  if (newSeasonalPosts.length > 0) {
+    console.log(`   Found ${newSeasonalPosts.length} active seasonal topic(s)`)
+    const currentQueue = loadQueue()
+    saveQueue([...newSeasonalPosts, ...currentQueue])
+  } else {
+    console.log('   No new seasonal topics.')
+  }
+
+  // ─── Step 2: Ensure queue depth ──────────────────────
+  const stats = getQueueStats()
+  console.log(`\n--- Step 2: Queue Status ---`)
+  console.log(`   Queue: ${stats.total} posts (T1: ${stats.tier1} | T2: ${stats.tier2} | T3: ${stats.tier3})`)
+
+  if (stats.total < MIN_QUEUE_DEPTH) {
+    console.log(`   Queue running low (${stats.total} < ${MIN_QUEUE_DEPTH}). Discovering new topics...`)
+    const newTopics = await discoverNewTopics(15)
+    if (newTopics.length > 0) {
+      enqueue(newTopics)
+      logCost({
+        date: new Date().toISOString(),
+        action: 'discover',
+        slug: 'topic-discovery',
+        tokensUsed: 4000, // Estimate for discovery call
+      })
+      console.log(`   Queue now has ${loadQueue().length} posts`)
+    }
+  }
+
+  // ─── Step 3: Decide what to do today ─────────────────
+  if (isSprintPhase) {
+    // SPRINT MODE: 1 new post per day + 1 update if high-priority stale found
+    console.log('\n--- Step 3: SPRINT Mode ---')
+
+    // 3a. Generate 1 new post (if not already done today)
+    if (alreadyPublishedToday === 0) {
+      const nextPost = dequeueNext()
+      if (nextPost) {
+        console.log(`\n   NEW POST: "${nextPost.title}"`)
+        console.log(`   Keyword: ${nextPost.seoKeyword} | Tier: ${nextPost.tier} | Source: ${nextPost.source}`)
+
+        const result = await generateNewPost(nextPost)
+        logCost({
+          date: new Date().toISOString(),
+          action: 'generate',
+          slug: nextPost.slug,
+          tokensUsed: result.tokensUsed,
+        })
+      } else {
+        console.log('   Queue is empty — cannot generate a new post today.')
+      }
+    } else {
+      console.log(`   Already published ${alreadyPublishedToday} post(s) today — skipping generation.`)
+    }
+
+    // 3b. Run freshness scanner and update 1 stale post if high-priority
+    console.log('\n--- Step 3b: Freshness Check (Sprint) ---')
+    if (alreadyUpdatedToday === 0) {
+      const staleResults = scanForStaleContent()
+      const highPriority = staleResults.filter(p => p.priority === 'high')
+      console.log(`   Stale posts: ${staleResults.length} total, ${highPriority.length} high-priority`)
+
+      if (highPriority.length > 0) {
+        console.log('   Updating 1 high-priority stale post...')
+        await refreshStalePost()
+      } else {
+        console.log('   No high-priority stale posts — skipping update.')
+      }
+    } else {
+      console.log(`   Already updated ${alreadyUpdatedToday} post(s) today — skipping.`)
+    }
+
+  } else {
+    // MAINTENANCE MODE: 1 new post every 3 days + 1 update per day
+    console.log('\n--- Step 3: MAINTENANCE Mode ---')
+
+    // 3a. Generate 1 new post every 3 days
+    const shouldGenerateNew = daysSinceLastPost >= 3 && alreadyPublishedToday === 0
+    if (shouldGenerateNew) {
+      const nextPost = dequeueNext()
+      if (nextPost) {
+        console.log(`\n   NEW POST (maintenance): "${nextPost.title}"`)
+        console.log(`   Keyword: ${nextPost.seoKeyword} | Tier: ${nextPost.tier} | Source: ${nextPost.source}`)
+
+        const result = await generateNewPost(nextPost)
+        logCost({
+          date: new Date().toISOString(),
+          action: 'generate',
+          slug: nextPost.slug,
+          tokensUsed: result.tokensUsed,
+        })
+      } else {
+        console.log('   Queue is empty — cannot generate a new post.')
+      }
+    } else if (alreadyPublishedToday > 0) {
+      console.log(`   Already published today — skipping generation.`)
+    } else {
+      console.log(`   Last post was ${daysSinceLastPost} day(s) ago — next new post in ${3 - daysSinceLastPost} day(s).`)
+    }
+
+    // 3b. Update 1 stale post every day
+    console.log('\n--- Step 3b: Daily Update (Maintenance) ---')
+    if (alreadyUpdatedToday === 0) {
+      await refreshStalePost()
+    } else {
+      console.log(`   Already updated ${alreadyUpdatedToday} post(s) today — skipping.`)
+    }
+
+    // 3c. Run freshness scanner weekly (on Mondays)
+    const today = new Date()
+    if (today.getDay() === 1) { // Monday
+      console.log('\n--- Weekly Freshness Report (Monday) ---')
+      const staleResults = scanForStaleContent()
+      if (staleResults.length === 0) {
+        console.log('   All posts are fresh.')
+      } else {
+        console.log(`   ${staleResults.length} posts need attention:`)
+        const byPriority = { high: 0, medium: 0, low: 0 }
+        for (const p of staleResults) {
+          byPriority[p.priority]++
+        }
+        console.log(`   High: ${byPriority.high} | Medium: ${byPriority.medium} | Low: ${byPriority.low}`)
+        // Show top 5
+        staleResults.slice(0, 5).forEach(p => {
+          console.log(`   - [${p.priority.toUpperCase()}] ${p.title} (${p.ageInDays}d old)`)
+        })
+      }
+    }
+  }
+
+  // ─── Step 4: Cost summary ────────────────────────────
+  const todayCost = getTodaysCostTotal()
+  console.log('\n--- Cost Summary ---')
+  console.log(`   Tokens used today: ${todayCost}`)
+  console.log(`   Estimated cost: $${(todayCost * 0.0000003).toFixed(4)} (Groq Llama 3.3 70B)`)
+
+  console.log('\n' + '='.repeat(60))
+  console.log('SCHEDULER RUN COMPLETE')
+  console.log('='.repeat(60))
 }
 
 run().catch(err => {

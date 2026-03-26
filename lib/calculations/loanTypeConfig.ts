@@ -13,6 +13,7 @@ export type LoanType =
   | "education"
   | "gold"
   | "consumer_durable"
+  | "credit_card"
   | "lap" // Loan Against Property
   | "medical"
   | "other";
@@ -76,6 +77,13 @@ export const LOAN_TYPE_DISPLAY: Record<LoanType, LoanTypeDisplay> = {
     icon: "📱",
     color: "pink",
     description: "EMI for electronics, appliances, or other goods",
+  },
+  credit_card: {
+    label: "Credit Card",
+    shortLabel: "CC Debt",
+    icon: "💳",
+    color: "red",
+    description: "Revolving credit card debt at ~3.5%/month (42% PA)",
   },
   lap: {
     label: "Loan Against Property",
@@ -324,6 +332,34 @@ export const LOAN_TYPE_FINANCIALS: Record<LoanType, LoanTypeFinancials> = {
       "Tata Capital",
       "ZestMoney",
       "Kissht",
+    ],
+  },
+  credit_card: {
+    defaultRatePA: 0.42,
+    defaultTenureMonths: 12,
+    defaultAmountINR: 100000,
+    typicalRateMin: 0.36,
+    typicalRateMax: 0.48,
+    typicalTenureMin: 1,
+    typicalTenureMax: 60,
+    hasPrepaymentPenalty: false,
+    rbiZeroPenaltyApplies: false,
+    taxBenefit80C: false,
+    taxBenefit24b: false,
+    taxBenefit80E: false,
+    taxBenefit80EE: false,
+    taxBenefitSection37: false,
+    hasMoratoriumOption: false,
+    payoffPriority: 1,
+    payoffPriorityReason:
+      "At 42% PA (3.5%/month), credit card debt is the most expensive. Always pay this off first — no exceptions.",
+    commonLenders: [
+      "HDFC Bank",
+      "ICICI Bank",
+      "SBI Card",
+      "Axis Bank",
+      "Kotak Mahindra Bank",
+      "American Express",
     ],
   },
   lap: {

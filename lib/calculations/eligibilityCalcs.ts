@@ -3,13 +3,14 @@
  * Pure functions — no React, no async, no side effects.
  */
 
-const FOIR_RATIO = 0.5;
+const DEFAULT_FOIR_RATIO = 0.5;
 
 export function calculateMaxEMI(
   monthlyIncome: number,
   existingEMIs: number,
+  foirRatio: number = DEFAULT_FOIR_RATIO,
 ): number {
-  return monthlyIncome * FOIR_RATIO - existingEMIs;
+  return monthlyIncome * foirRatio - existingEMIs;
 }
 
 export function calculateMaxLoan(

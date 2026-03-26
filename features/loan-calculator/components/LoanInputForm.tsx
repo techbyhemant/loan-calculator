@@ -347,6 +347,23 @@ export function LoanInputForm() {
           max="2100-12"
         />
       </div>
+
+      {/* Trust badges */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-3">
+        {[
+          "No phone number required",
+          "No spam calls, ever",
+          "No lead generation",
+        ].map((text) => (
+          <div
+            key={text}
+            className="flex items-center gap-1 text-xs text-muted-foreground"
+          >
+            <span className="text-positive font-medium">✓</span>
+            {text}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

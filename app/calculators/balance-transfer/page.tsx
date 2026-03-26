@@ -4,6 +4,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import BalanceTransferCalc from "@/components/calculators/BalanceTransferCalc";
+import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 
 export const metadata = buildMetadata({
   title: "Home Loan Balance Transfer Calculator — Is It Worth Switching?",
@@ -123,6 +124,8 @@ export default function BalanceTransferPage() {
             </p>
           </div>
         </section>
+
+        <RelatedCalculators />
       </main>
     </div>
   );

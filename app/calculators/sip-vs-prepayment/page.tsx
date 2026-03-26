@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import SipVsPrepaymentCalc from "@/components/calculators/SipVsPrepaymentCalc";
 import { getFAQSchema } from "@/lib/seo/schema";
+import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 
 export const metadata: Metadata = {
   title: "SIP vs Home Loan Prepayment Calculator — Which is Better? | LastEMI",
@@ -163,6 +164,8 @@ export default function SipVsPrepaymentPage() {
             </p>
           </div>
         </section>
+
+        <RelatedCalculators />
       </main>
     </div>
   );

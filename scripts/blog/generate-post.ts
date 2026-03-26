@@ -47,7 +47,7 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
 
   const completion = await groq.chat.completions.create({
     model: 'llama-3.3-70b-versatile',
-    max_tokens: 3000,
+    max_tokens: 5000,
     temperature: 0.7,
     messages: [
       {
@@ -67,39 +67,42 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
   console.log(`   ✅ Article written in ${((Date.now() - startText) / 1000).toFixed(1)}s`)
   console.log(`   📝 Word count: ~${articleContent.split(' ').length} words`)
 
-  // 4. Generate image via Replicate (Flux Schnell)
+  // 4. Generate image via Replicate (Flux Schnell) — optional, graceful failure
   console.log('\n🎨 Generating featured image via Replicate (Flux Schnell)...')
   const startImage = Date.now()
 
-  const imageOutput = await replicate.run(
-    'black-forest-labs/flux-schnell',
-    {
-      input: {
-        prompt: buildImagePrompt(post.imagePrompt),
-        num_outputs: 1,
-        aspect_ratio: '16:9',
-        output_format: 'webp',
-        output_quality: 85,
-        go_fast: true,
+  try {
+    const imageOutput = await replicate.run(
+      'black-forest-labs/flux-schnell',
+      {
+        input: {
+          prompt: buildImagePrompt(post.imagePrompt),
+          num_outputs: 1,
+          aspect_ratio: '16:9',
+          output_format: 'webp',
+          output_quality: 85,
+          go_fast: true,
+        }
       }
+    )
+
+    const imageUrl = Array.isArray(imageOutput) ? imageOutput[0] : imageOutput
+    const imageResponse = await fetch(imageUrl as string)
+    const imageBuffer = Buffer.from(await imageResponse.arrayBuffer())
+
+    if (!fs.existsSync(IMAGE_DIR)) {
+      fs.mkdirSync(IMAGE_DIR, { recursive: true })
     }
-  )
 
-  // Replicate returns a URL or ReadableStream
-  const imageUrl = Array.isArray(imageOutput) ? imageOutput[0] : imageOutput
-  const imageResponse = await fetch(imageUrl as string)
-  const imageBuffer = Buffer.from(await imageResponse.arrayBuffer())
+    const imagePath = path.join(IMAGE_DIR, `${post.slug}.webp`)
+    fs.writeFileSync(imagePath, imageBuffer)
 
-  // Ensure image directory exists
-  if (!fs.existsSync(IMAGE_DIR)) {
-    fs.mkdirSync(IMAGE_DIR, { recursive: true })
+    console.log(`   ✅ Image saved in ${((Date.now() - startImage) / 1000).toFixed(1)}s`)
+    console.log(`   📁 Saved to: public/images/blog/${post.slug}.webp`)
+  } catch (imgErr) {
+    console.log(`   ⚠️  Image generation failed (${imgErr instanceof Error ? imgErr.message.slice(0, 80) : 'unknown error'})`)
+    console.log(`   📝 Post will be published without a featured image`)
   }
-
-  const imagePath = path.join(IMAGE_DIR, `${post.slug}.webp`)
-  fs.writeFileSync(imagePath, imageBuffer)
-
-  console.log(`   ✅ Image saved in ${((Date.now() - startImage) / 1000).toFixed(1)}s`)
-  console.log(`   📁 Saved to: public/images/blog/${post.slug}.webp`)
 
   // 5. Build the complete MDX file
   const frontmatter = buildFrontmatter(post)
@@ -136,7 +139,9 @@ function buildArticleUserPrompt(post: PostSpec | QueuedPost): string {
     3: 'This is a Tier 3 post — broader topic for topical authority building. Depth and internal linking matter more than sharp keyword focus here. This builds the topic cluster that helps Tier 1 and 2 posts rank.',
   }
 
-  return `Write a complete blog post for LastEMI (lastemi.com).
+  return `Write a COMPLETE, COMPREHENSIVE blog post for LastEMI (lastemi.com).
+
+CRITICAL: The article MUST be between 1,500-1,800 words. Articles under 1,400 words are AUTOMATICALLY REJECTED. Write in-depth with detailed examples, calculations, and analysis. Do NOT write a summary — write a full guide.
 
 TITLE: ${post.title}
 TARGET KEYWORD: "${post.seoKeyword}"
@@ -187,21 +192,27 @@ function getCalculatorComponent(calcPath: string): string {
 
 // Build the MDX frontmatter block
 function buildFrontmatter(post: PostSpec | QueuedPost): string {
-  return `---
-title: "${post.title.replace(/"/g, '\\"')}"
-slug: "${post.slug}"
-description: "${post.description.replace(/"/g, '\\"')}"
-publishedAt: "${post.publishedAt ?? new Date().toISOString().split('T')[0]}"
-category: "${post.category}"
-tags: [${post.tags.map(t => `"${t}"`).join(', ')}]
-featured: ${post.featured ?? false}
-tier: ${post.tier}
-${post.publishWeek != null ? `publishWeek: ${post.publishWeek}` : ''}
-seoKeyword: "${post.seoKeyword}"
-searchVolume: ${post.searchVolume}
-image: "/images/blog/${post.slug}.webp"
-author: "LastEMI Editorial Team"
-${post.relatedCalculator ? `relatedCalculator: "${post.relatedCalculator}"` : ''}---`
+  const lines = [
+    '---',
+    `title: "${post.title.replace(/"/g, '\\"')}"`,
+    `slug: "${post.slug}"`,
+    `description: "${post.description.replace(/"/g, '\\"')}"`,
+    `publishedAt: "${post.publishedAt ?? new Date().toISOString().split('T')[0]}"`,
+    `category: "${post.category}"`,
+    `tags: [${post.tags.map(t => `"${t}"`).join(', ')}]`,
+    `featured: ${post.featured ?? false}`,
+    `tier: ${post.tier}`,
+  ];
+  if (post.publishWeek != null) lines.push(`publishWeek: ${post.publishWeek}`);
+  lines.push(
+    `seoKeyword: "${post.seoKeyword}"`,
+    `searchVolume: ${post.searchVolume}`,
+    `image: "/images/blog/${post.slug}.webp"`,
+    `author: "LastEMI Editorial Team"`,
+  );
+  if (post.relatedCalculator) lines.push(`relatedCalculator: "${post.relatedCalculator}"`);
+  lines.push('---');
+  return lines.join('\n');
 }
 
 // Simple stdin prompt helper

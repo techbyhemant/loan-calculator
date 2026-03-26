@@ -4,6 +4,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 
 import CCvsPLCalc from "@/components/calculators/CCvsPLCalc";
+import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 
 export const metadata = buildMetadata({
   title: "Credit Card vs Personal Loan — Should You Switch? Honest Calculator",
@@ -106,6 +107,8 @@ export default function CCvsPersonalLoanPage() {
             </p>
           </div>
         </section>
+
+        <RelatedCalculators />
       </main>
     </div>
   );

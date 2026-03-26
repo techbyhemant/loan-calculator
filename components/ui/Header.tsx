@@ -137,9 +137,14 @@ export function Header() {
                 Sign out
               </button>
             ) : (
-              <Link href="/login" className="bg-primary hover:bg-primary/90 text-white rounded-lg px-3 py-1.5 text-sm font-medium transition-colors">
-                Sign in
-              </Link>
+              <>
+                <Link href="/login" className="hidden md:inline-flex text-muted-foreground hover:text-foreground rounded-lg px-3 py-1.5 text-sm font-medium transition-colors">
+                  Sign in
+                </Link>
+                <Link href="/login?ref=nav" className="bg-primary hover:bg-primary/90 text-white rounded-lg px-3 py-1.5 text-sm font-medium transition-colors">
+                  Try free
+                </Link>
+              </>
             )}
             <button
               onClick={() => { setMenuOpen(!menuOpen); setCalcDropdown(false); }}

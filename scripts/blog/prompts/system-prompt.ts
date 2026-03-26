@@ -122,10 +122,22 @@ Section 8 — Closing CTA (1 sentence)
 
 TECHNICAL WRITING RULES:
 
-Length: 1,400-1,800 words. Count matters.
-  - Under 1,400: will not rank for competitive keywords
-  - Over 1,800: bounce rate rises sharply
-  - Sweet spot: 1,500-1,650 words
+CRITICAL — WORD COUNT IS NON-NEGOTIABLE:
+  - MINIMUM 1,500 words. If your output is under 1,500 words, it WILL be rejected.
+  - Target: 1,600-1,800 words.
+  - Under 1,400 = immediate rejection, will not rank on Google.
+  - Each H2 section should be 250-350 words with real substance, not filler.
+  - Include at least 2-3 detailed numerical examples with ₹ amounts.
+  - Include at least 1 comparison table and 1 step-by-step list.
+  - DO NOT write a short summary — write a comprehensive, authoritative guide.
+
+MDX SYNTAX RULES (CRITICAL — breaking these causes build errors):
+  - NEVER mention component names like ComparisonTable, EmiCalculator, Callout in regular text.
+    BAD: "Using a <ComparisonTable> component, we can compare..."
+    GOOD: "Here is the comparison:" followed by the actual component on its own line.
+  - Components MUST be on their own line, not inside a paragraph.
+  - NEVER use angle brackets < > in regular text — use "less than" / "greater than" instead.
+  - All component props with arrays must use valid JS: headers={["A", "B"]} rows={[["1", "2"]]}
 
 Headings:
   - Do NOT include H1 (the title is the H1, added by the system)

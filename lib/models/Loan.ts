@@ -19,6 +19,7 @@ const LoanSchema = new Schema(
         "education",
         "gold",
         "consumer_durable",
+        "credit_card",
         "lap",
         "medical",
         "other",
