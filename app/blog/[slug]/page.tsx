@@ -11,6 +11,7 @@ import {
 import { MdxRenderer } from "@/components/blog/MdxRenderer";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { ShareButton } from "@/components/blog/ShareButton";
+import { CalculatorIcon } from "lucide-react";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -287,7 +288,7 @@ export default async function BlogPostPage({ params }: Props) {
         {post.relatedCalculator && (
           <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 mt-10">
             <p className="text-primary text-sm font-medium flex items-center gap-2">
-              <span className="text-lg">📊</span>
+            <CalculatorIcon className="w-5 h-5 text-primary" />
               Try the calculator mentioned in this post:{" "}
               <Link
                 href={post.relatedCalculator}

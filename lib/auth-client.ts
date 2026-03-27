@@ -1,11 +1,8 @@
 // MongoDB client for Auth.js adapter
+// Must not throw at build time — Vercel builds without env vars
 import { MongoClient } from "mongodb";
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Missing MONGODB_URI environment variable');
-}
-
-const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI ?? "";
 
 let client: MongoClient;
 
