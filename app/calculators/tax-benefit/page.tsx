@@ -1,6 +1,6 @@
 import Link from "next/link";
 import TaxBenefitCalc from "@/components/calculators/TaxBenefitCalc";
-import { getFAQSchema } from "@/lib/seo/schema";
+import { getFAQSchema, getHowToSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -39,6 +39,17 @@ const faqs = [
 export default function TaxBenefitPage() {
   const faqSchema = getFAQSchema(faqs);
 
+  const howToSchema = getHowToSchema({
+    name: "How to Calculate Home Loan Tax Benefits",
+    description: "Calculate your tax savings under Section 80C and Section 24(b) for your home loan.",
+    steps: [
+      { name: "Enter your loan details", text: "Provide your home loan amount, interest rate, and tenure to calculate the EMI breakdown." },
+      { name: "Enter your income details", text: "Enter your gross annual income and existing Section 80C investments like EPF, PPF, and ELSS." },
+      { name: "Select your tax regime", text: "Choose old or new tax regime. The calculator compares both and recommends the better option." },
+      { name: "View your tax savings", text: "See deductions under Section 80C (principal) and Section 24(b) (interest), and total tax saved in each regime." },
+    ],
+  });
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
@@ -64,6 +75,10 @@ export default function TaxBenefitPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">

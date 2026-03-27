@@ -1,5 +1,6 @@
 import LoanCalculator from "@/features/loan-calculator/LoanCalculator";
 import { buildMetadata } from "@/lib/seo/metadata";
+import { getSpeakableSchema } from "@/lib/seo/schema";
 
 export const metadata = buildMetadata({
   title: "EMI Calculator & Loan Simulator — Plan Your Debt-Free Date",
@@ -32,12 +33,21 @@ const jsonLd = {
   },
 };
 
+const speakableSchema = getSpeakableSchema({
+  url: "https://lastemi.com/",
+  cssSelectors: ["h1", "main > p:first-of-type"],
+});
+
 export default function Home() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }}
       />
       <LoanCalculator />
     </>

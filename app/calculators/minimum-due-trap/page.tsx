@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema, getHowToSchema, getSpeakableSchema } from "@/lib/seo/schema";
 
 import MinimumDueTrapCalc from "@/components/calculators/MinimumDueTrapCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
@@ -61,6 +61,22 @@ export default function MinimumDueTrapPage() {
 
   const faqSchema = getFAQSchema(faqs);
 
+  const howToSchema = getHowToSchema({
+    name: "How to Calculate the Cost of Paying Minimum Due",
+    description: "See exactly how many years and how much extra interest you pay when you only pay the minimum due on your credit card.",
+    steps: [
+      { name: "Enter your credit card balance", text: "Enter the total outstanding amount on your credit card statement." },
+      { name: "Set the interest rate", text: "Enter your monthly interest rate (typically 3.5% per month or 42% per year for Indian credit cards)." },
+      { name: "View the minimum due projection", text: "See how long it takes to clear the balance paying only 5% minimum due each month." },
+      { name: "Compare with fixed payments", text: "Enter a fixed monthly payment amount to see how much faster and cheaper you can become debt-free." },
+    ],
+  });
+
+  const speakableSchema = getSpeakableSchema({
+    url: "https://lastemi.com/calculators/minimum-due-trap",
+    cssSelectors: ["h1", "main > p:first-of-type"],
+  });
+
   return (
     <div className="bg-background min-h-screen">
       <script
@@ -74,6 +90,14 @@ export default function MinimumDueTrapPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">

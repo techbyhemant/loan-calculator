@@ -1,6 +1,6 @@
 import Link from "next/link";
 import EligibilityCalc from "@/components/calculators/EligibilityCalc";
-import { getFAQSchema } from "@/lib/seo/schema";
+import { getFAQSchema, getHowToSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -39,6 +39,17 @@ const faqs = [
 export default function HomeLoanEligibilityPage() {
   const faqSchema = getFAQSchema(faqs);
 
+  const howToSchema = getHowToSchema({
+    name: "How to Check Your Home Loan Eligibility",
+    description: "Find out the maximum home loan amount you qualify for based on your salary and existing obligations.",
+    steps: [
+      { name: "Enter your monthly income", text: "Enter your net monthly salary (take-home pay after tax deductions)." },
+      { name: "Add existing EMIs", text: "Enter the total of all existing EMIs you pay each month — car loan, personal loan, credit card dues, etc." },
+      { name: "Set loan parameters", text: "Choose your preferred interest rate and loan tenure. Longer tenure means higher eligibility but more interest." },
+      { name: "View your eligibility", text: "See the maximum loan amount you qualify for based on the FOIR (Fixed Obligation to Income Ratio) method used by banks." },
+    ],
+  });
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
@@ -64,6 +75,10 @@ export default function HomeLoanEligibilityPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">

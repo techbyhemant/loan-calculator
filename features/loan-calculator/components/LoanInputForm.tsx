@@ -56,9 +56,9 @@ export function LoanInputForm() {
 
   return (
     <div className="w-auto mx-auto bg-card rounded-xl shadow-sm px-4 sm:px-6 py-4 sm:py-5 flex flex-col gap-4">
-      <h1 className="text-base sm:text-lg font-semibold text-foreground mb-2 text-center">
+      <h2 className="text-base sm:text-lg font-semibold text-foreground mb-2 text-center">
         Loan Details
-      </h1>
+      </h2>
 
       {/* Loan Type Tabs */}
       <div className="flex justify-center mb-2">

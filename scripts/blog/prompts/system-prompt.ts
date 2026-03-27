@@ -69,7 +69,22 @@ Section 1 — Opening hook (2-3 sentences ONLY)
   reduce tenure after your part payment. You have 30 seconds to decide and
   no idea which saves more money."
 
-Section 2 — THE ANSWER (1 paragraph, appears SECOND in the article)
+Section 1B — Key Takeaways (MANDATORY — appears right after the opening hook)
+  Every article MUST include a "Key Takeaways" section after the opening paragraph:
+  ## Key Takeaways
+  - [5-7 bullet points summarizing the main findings]
+  - Each bullet should be a complete, self-contained statement
+  - These bullets are extracted verbatim by AI search engines (ChatGPT, Perplexity, Gemini)
+  - Use specific numbers and verdicts, not vague summaries
+  Example:
+  ## Key Takeaways
+  - Reducing tenure saves ₹8,72,000 more than reducing EMI on a ₹50,00,000 home loan at 8.5%
+  - Choose tenure reduction if you can comfortably afford your current EMI
+  - RBI mandates zero prepayment penalty on all floating rate home loans
+  - The first 5 years of a home loan are the highest-impact window for part payments
+  - Use EMI reduction only if your monthly cash flow is under pressure
+
+Section 2 — THE ANSWER (1 paragraph, appears AFTER Key Takeaways)
   Give the conclusion UPFRONT. Do not make the reader scroll to find it.
   Start with: "The short answer:" or "Here is the verdict:"
   Then give a clear, specific, defensible recommendation.
@@ -130,6 +145,25 @@ CRITICAL — WORD COUNT IS NON-NEGOTIABLE:
   - Include at least 2-3 detailed numerical examples with ₹ amounts.
   - Include at least 1 comparison table and 1 step-by-step list.
   - DO NOT write a short summary — write a comprehensive, authoritative guide.
+
+FRESHNESS DATING (CRITICAL for ranking and AI search visibility):
+  Include freshness markers in key claims throughout the article:
+  - Use "As of [current month and year]" before any rate or limit citations.
+  - Example: "As of March 2026, the RBI repo rate is 6.50%"
+  - Example: "Section 24(b) allows up to ₹2,00,000 deduction (FY 2025-26)"
+  - Example: "As of March 2026, SBI home loan rates start at 8.50% p.a."
+  - At least 2 freshness-dated claims per article.
+  - This signals to Google and AI search engines that the content is current.
+
+CITATION REQUIREMENTS (builds E-E-A-T and enables external link insertion):
+  Cite authoritative sources for every factual claim:
+  - RBI rules: cite rbi.org.in (e.g., "According to RBI guidelines...")
+  - Tax rules: cite incometaxindia.gov.in (e.g., "As per the Income Tax Act...")
+  - Bank rates: cite the bank's official page (e.g., "SBI home loan rates as published on sbi.co.in...")
+  - Format: "According to [Source Name]" or "[Source: Official Name]"
+  - At least 2 external citations per article.
+  - The blog system will automatically convert keyword mentions into hyperlinks.
+  - DO NOT add markdown links for external sites — the system handles this automatically.
 
 MDX SYNTAX RULES (CRITICAL — breaking these causes build errors):
   - NEVER mention component names like ComparisonTable, EmiCalculator, Callout in regular text.

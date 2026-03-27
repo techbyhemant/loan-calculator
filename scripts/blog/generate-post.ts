@@ -8,6 +8,7 @@ import Replicate from 'replicate'
 import { POSTS, type PostSpec } from './post-list'
 import { BLOG_SYSTEM_PROMPT } from './prompts/system-prompt'
 import { buildImagePrompt } from './prompts/image-prompts'
+import { insertExternalLinks } from './intelligence/external-links'
 import type { QueuedPost } from './autonomous/queue-manager'
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
@@ -104,9 +105,16 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
     console.log(`   📝 Post will be published without a featured image`)
   }
 
-  // 5. Build the complete MDX file
+  // 5. Insert external links (before internal links, which run separately on the saved file)
+  console.log('\n🔗 Inserting external links...')
+  const contentWithLinks = insertExternalLinks(articleContent.trim(), 5)
+  const externalLinksAdded = (contentWithLinks.match(/\]\(https?:\/\//g) || []).length -
+    (articleContent.trim().match(/\]\(https?:\/\//g) || []).length
+  console.log(`   ✅ Added ${externalLinksAdded} external links`)
+
+  // 6. Build the complete MDX file
   const frontmatter = buildFrontmatter(post)
-  const fullMdx = `${frontmatter}\n\n${articleContent.trim()}\n`
+  const fullMdx = `${frontmatter}\n\n${contentWithLinks}\n`
 
   // Ensure blog directory exists
   if (!fs.existsSync(BLOG_DIR)) {
@@ -116,7 +124,7 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
   fs.writeFileSync(mdxPath, fullMdx, 'utf-8')
   console.log(`\n✅ Blog post saved to: content/blog/${post.slug}.mdx`)
 
-  // 6. Summary
+  // 7. Summary
   console.log('\n═══════════════════════════════════════')
   console.log('GENERATION COMPLETE')
   console.log('═══════════════════════════════════════')

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import SipVsPrepaymentCalc from "@/components/calculators/SipVsPrepaymentCalc";
-import { getFAQSchema } from "@/lib/seo/schema";
+import { getFAQSchema, getHowToSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -39,6 +39,17 @@ const faqs = [
 export default function SipVsPrepaymentPage() {
   const faqSchema = getFAQSchema(faqs);
 
+  const howToSchema = getHowToSchema({
+    name: "How to Compare SIP vs Home Loan Prepayment",
+    description: "Calculate whether investing in SIP mutual funds or prepaying your home loan saves more money.",
+    steps: [
+      { name: "Select your loan type", text: "Choose home loan, car loan, or personal loan from the type selector." },
+      { name: "Enter loan details", text: "Enter your outstanding balance, interest rate, and remaining tenure." },
+      { name: "Set your monthly surplus", text: "Enter the extra amount you can invest or use for prepayment each month." },
+      { name: "Compare results", text: "See the side-by-side comparison of SIP corpus vs prepayment interest saved." },
+    ],
+  });
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
@@ -64,6 +75,10 @@ export default function SipVsPrepaymentPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">

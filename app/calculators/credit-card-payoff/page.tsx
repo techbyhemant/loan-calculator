@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema, getHowToSchema, getSpeakableSchema } from "@/lib/seo/schema";
 
 import CCPayoffCalc from "@/components/calculators/CCPayoffCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
@@ -54,11 +54,29 @@ export default function CreditCardPayoffPage() {
 
   const faqSchema = getFAQSchema(faqs);
 
+  const howToSchema = getHowToSchema({
+    name: "How to Calculate Credit Card Payoff Time",
+    description: "Find out exactly how many months it takes to pay off your credit card balance and how much interest you'll pay.",
+    steps: [
+      { name: "Enter your outstanding balance", text: "Enter the total amount you owe on your credit card." },
+      { name: "Check your interest rate", text: "Most Indian credit cards charge 3.5% per month (42% per year). Adjust if yours differs." },
+      { name: "Set your monthly payment", text: "Enter how much you plan to pay each month. Use the slider to see how different amounts change the payoff time." },
+      { name: "Review the results", text: "See months to payoff, total interest paid, and compare with the minimum due trap." },
+    ],
+  });
+
+  const speakableSchema = getSpeakableSchema({
+    url: "https://lastemi.com/calculators/credit-card-payoff",
+    cssSelectors: ["h1", "main > p:first-of-type"],
+  });
+
   return (
     <div className="bg-background min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }} />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Credit Card Payoff Calculator: How Long to Clear Your Balance?

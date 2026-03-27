@@ -6,6 +6,8 @@
  * DuckDuckGo and ChatGPT search also consume IndexNow data.
  */
 
+export {};
+
 const INDEXNOW_KEY = "34eb3762e4f83b0d19f6a1df92520d6b";
 const HOST = "lastemi.com";
 const KEY_LOCATION = `https://${HOST}/${INDEXNOW_KEY}.txt`;

@@ -165,3 +165,18 @@ export function getHowToSchema(params: {
     })),
   };
 }
+
+export function getSpeakableSchema(params: {
+  url: string;
+  cssSelectors: string[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    url: params.url,
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: params.cssSelectors,
+    },
+  };
+}
