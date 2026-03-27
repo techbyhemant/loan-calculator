@@ -108,7 +108,8 @@ function financeEventToQueuedPost(event: FinanceEvent): QueuedPost {
     tags: [event.topic.category.toLowerCase(), 'rbi', 'emi'],
     tier: 1 as const,
     relatedCalculator: event.topic.relatedCalculator,
-    imagePrompt: `Professional financial illustration for ${event.name}, Indian fintech style, no text, no faces, clean vector`,
+    imagePrompt: '',
+    imageMetaphor: 'TIMELINE' as const,  // calendar events are always timeline-related
     discoveredAt: new Date().toISOString(),
     source: 'seasonal' as const,
   }

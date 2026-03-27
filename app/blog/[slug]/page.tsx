@@ -64,6 +64,25 @@ function getReadingTime(content: string): number {
   return Math.max(1, Math.ceil(words / 200));
 }
 
+/** Smart tag capitalization:
+ *  - "EMI" "SIP" "RBI" "GST" "CC" "PL" "CIBIL" → UPPERCASE
+ *  - "home loan" → "Home Loan"
+ *  - "reduce EMI" → "Reduce EMI"
+ */
+const UPPERCASE_TAGS = new Set(["emi", "sip", "rbi", "gst", "cc", "pl", "cibil", "foir", "nps", "ppf", "elss", "lic", "dsa", "nbfc", "lap"]);
+
+function formatTag(tag: string): string {
+  return tag
+    .split(/\s+/)
+    .map((word) => {
+      const lower = word.toLowerCase();
+      if (UPPERCASE_TAGS.has(lower)) return word.toUpperCase();
+      // Capitalize first letter
+      return lower.charAt(0).toUpperCase() + lower.slice(1);
+    })
+    .join(" ");
+}
+
 function getRelatedPosts(
   currentSlug: string,
   currentTags: string[],
@@ -190,7 +209,7 @@ export default async function BlogPostPage({ params }: Props) {
               key={tag}
               className="text-xs bg-muted text-muted-foreground px-2.5 py-1 rounded-full"
             >
-              {tag}
+              {formatTag(tag)}
             </span>
           ))}
         </div>
@@ -212,12 +231,13 @@ export default async function BlogPostPage({ params }: Props) {
               )}
             </div>
           </div>
-          <ShareButton />
+          <ShareButton title={post.title} description={post.description} />
         </div>
 
-        {/* ── Featured Image ── */}
-        {post.image && (
-          <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-8 border border-border">
+        {/* ── Hero Image with Text Overlay ── */}
+        <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-8 border border-border">
+          {/* Background: AI image or gradient fallback */}
+          {post.image ? (
             <Image
               src={post.image}
               alt={post.title}
@@ -226,8 +246,26 @@ export default async function BlogPostPage({ params }: Props) {
               priority
               className="object-cover w-full h-full"
             />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0D1526] via-[#0B2A3C] to-[#0D1526]" />
+          )}
+
+          {/* Subtle gradient overlay at bottom for branding */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+          {/* Logo + category badge — bottom left */}
+          <div className="absolute bottom-4 left-4 sm:bottom-5 sm:left-5 flex items-center gap-2.5">
+            <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-sm rounded-full pl-1.5 pr-3 py-1">
+              <div className="w-5 h-5 rounded-md bg-gradient-to-br from-[#0B7A8C] to-[#26C49A] flex items-center justify-center text-white text-[9px] font-bold">
+                %
+              </div>
+              <span className="text-white/70 text-xs font-medium">LastEMI</span>
+            </div>
+            <span className="text-[10px] sm:text-xs font-semibold text-white bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-full">
+              {post.category}
+            </span>
           </div>
-        )}
+        </div>
 
         {/* ── MDX Content ── */}
         <div className="text-sm sm:text-base">

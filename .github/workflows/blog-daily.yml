@@ -1,0 +1,58 @@
+name: Daily Blog Generation
+
+on:
+  schedule:
+    # Runs at 4:00 AM UTC = 9:30 AM IST daily
+    - cron: '0 4 * * *'
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  generate-blog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run blog scheduler
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+        run: npx tsx scripts/blog/autonomous/scheduler.ts
+
+      - name: Check for new content
+        id: check
+        run: |
+          if [[ -n $(git status --porcelain content/ public/images/blog/ data/) ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push
+        if: steps.check.outputs.has_changes == 'true'
+        run: |
+          git config user.name "LastEMI Blog Bot"
+          git config user.email "bot@lastemi.com"
+          git add content/ public/images/blog/ data/
+          git commit -m "blog: auto-generate daily post $(date +%Y-%m-%d)"
+          git push
+
+      - name: Submit to IndexNow
+        if: steps.check.outputs.has_changes == 'true'
+        run: npx tsx scripts/seo/submit-indexnow.ts

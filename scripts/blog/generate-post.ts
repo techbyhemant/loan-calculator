@@ -7,7 +7,7 @@ import Groq from 'groq-sdk'
 import Replicate from 'replicate'
 import { POSTS, type PostSpec } from './post-list'
 import { BLOG_SYSTEM_PROMPT } from './prompts/system-prompt'
-import { buildImagePrompt } from './prompts/image-prompts'
+import { POST_PROMPTS, METAPHORS, buildPrompt } from './prompts/image-prompts'
 import { insertExternalLinks } from './intelligence/external-links'
 import type { QueuedPost } from './autonomous/queue-manager'
 
@@ -72,16 +72,37 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
   console.log('\n🎨 Generating featured image via Replicate (Flux Schnell)...')
   const startImage = Date.now()
 
+  const imagePrompt = (() => {
+    // 1. Canonical prompt for this slug
+    if (POST_PROMPTS[post.slug]) return POST_PROMPTS[post.slug];
+
+    // 2. Metaphor template
+    const metaphor = (post as unknown as Record<string, unknown>).imageMetaphor;
+    if (metaphor) {
+      const key = (metaphor as string).toLowerCase() as keyof typeof METAPHORS;
+      if (METAPHORS[key]) return METAPHORS[key];
+    }
+
+    // 3. Raw imagePrompt with suffix enforced
+    if (post.imagePrompt) return buildPrompt(post.imagePrompt);
+
+    // 4. Fallback
+    console.warn(`⚠️  No image prompt for ${post.slug} — using decline template`);
+    return METAPHORS.decline;
+  })();
+
+  console.log(`   Prompt: ${imagePrompt.slice(0, 100)}...`)
+
   try {
     const imageOutput = await replicate.run(
       'black-forest-labs/flux-schnell',
       {
         input: {
-          prompt: buildImagePrompt(post.imagePrompt),
+          prompt: imagePrompt,
           num_outputs: 1,
           aspect_ratio: '16:9',
           output_format: 'webp',
-          output_quality: 85,
+          output_quality: 90,
           go_fast: true,
         }
       }

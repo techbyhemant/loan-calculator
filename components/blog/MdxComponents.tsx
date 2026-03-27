@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Calculator, Lightbulb, Info, AlertTriangle, ArrowRight } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Custom MDX components used in blog posts
@@ -60,11 +61,11 @@ function CalculatorCard({ href, label }: { href: string; label: string }) {
       href={href}
       className="flex items-center justify-center gap-2 bg-primary/5 hover:bg-primary/10 border border-primary/20 rounded-xl p-5 my-6 transition-colors group"
     >
-      <span className="text-2xl">📊</span>
+      <Calculator className="w-5 h-5 text-primary" />
       <span className="text-primary font-semibold group-hover:underline">
         {label}
       </span>
-      <span className="text-primary">→</span>
+      <ArrowRight className="w-4 h-4 text-primary" />
     </Link>
   );
 }
@@ -119,16 +120,18 @@ function Callout({
     warning:
       "bg-amber-50 border-l-4 border-amber-500 text-foreground dark:bg-amber-950/30 dark:border-amber-400",
   };
-  const icons: Record<string, string> = {
-    tip: "💡",
-    info: "ℹ️",
-    warning: "⚠️",
-  };
+  const IconComponent = {
+    tip: Lightbulb,
+    info: Info,
+    warning: AlertTriangle,
+  }[type];
 
   return (
     <div className={`rounded-r-lg p-4 my-6 text-sm ${styles[type]}`}>
-      <span className="mr-2">{icons[type]}</span>
-      {children}
+      <div className="flex items-start gap-2.5">
+        <IconComponent className="w-4 h-4 mt-0.5 flex-shrink-0 opacity-70" />
+        <div>{children}</div>
+      </div>
     </div>
   );
 }

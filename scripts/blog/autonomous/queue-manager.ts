@@ -19,6 +19,7 @@ export interface QueuedPost {
   featured?: boolean
   relatedCalculator?: string
   imagePrompt: string
+  imageMetaphor?: string
   publishedAt?: string
   discoveredAt: string
   scheduledFor?: string

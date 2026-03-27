@@ -1,5 +1,6 @@
 import Groq from 'groq-sdk'
 import { loadPublishedTopics, loadQueue, type QueuedPost } from './queue-manager'
+import { GROQ_IMAGE_METAPHOR_INSTRUCTIONS } from '../prompts/image-prompts'
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
@@ -33,7 +34,7 @@ OUTPUT FORMAT — Return ONLY valid JSON, no preamble, no explanation:
       "tags": ["tag1", "tag2", "tag3"],
       "tier": 1,
       "relatedCalculator": "/",
-      "imagePrompt": "Detailed image prompt for Flux Schnell, no text, no faces, professional fintech style",
+      "imageMetaphor": "COMPARISON",
       "rationale": "Why this topic is a good opportunity right now"
     }
   ]
@@ -42,10 +43,13 @@ OUTPUT FORMAT — Return ONLY valid JSON, no preamble, no explanation:
 Provide exactly 10 topics. Tier 1 = low competition fast wins. Tier 2 = medium competition. Tier 3 = broad authority-building.
 Prioritize Tier 1 and Tier 2 topics.
 
+${GROQ_IMAGE_METAPHOR_INSTRUCTIONS}
+
 IMPORTANT CONSTRAINTS:
 - seoKeyword must be 3-6 words
 - searchVolume must be a realistic estimate (500-30000)
 - slug must be URL-safe, lowercase, hyphens only
+- imageMetaphor must be one of: COMPARISON, DECLINE, GROWTH, WARNING, FORK, TIMELINE, FREEDOM, CALCULATION
 - Do NOT suggest topics that are variations of what is already covered
 - Avoid topics requiring real-time data you do not have
 - All examples and calculations must use Indian context (₹, RBI, SBI, HDFC, etc.)`
@@ -60,7 +64,8 @@ interface DiscoveredTopic {
   tags: string[]
   tier: 1 | 2 | 3
   relatedCalculator?: string
-  imagePrompt: string
+  imageMetaphor: string
+  imagePrompt?: string   // legacy fallback
   rationale: string
 }
 
@@ -129,7 +134,8 @@ Return ONLY valid JSON.`
       tags: t.tags,
       tier: t.tier,
       relatedCalculator: t.relatedCalculator,
-      imagePrompt: t.imagePrompt,
+      imagePrompt: t.imagePrompt ?? '',
+      imageMetaphor: t.imageMetaphor,
       discoveredAt: new Date().toISOString(),
       source: 'discovered' as const,
     }))
