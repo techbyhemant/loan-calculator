@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import ConsumerEMITrueCostCalc from "@/components/calculators/ConsumerEMITrueCostCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
@@ -21,6 +21,19 @@ export const metadata = buildMetadata({
     "EMI processing fee calculator",
   ],
 });
+
+const faqs = [
+  {
+    question: "Is no-cost EMI really free in India?",
+    answer:
+      "Not always. Most \u2018no-cost EMI\u2019 offers include a 1-3% processing fee which IS the hidden interest. 18% GST is charged on this fee too. A 2% fee on \u20B940K for 12 months = \u20B9944 total extra cost.",
+  },
+  {
+    question: "Does GST apply on no-cost EMI processing fee?",
+    answer:
+      "Yes. 18% GST is charged on the processing fee. So a \u20B9800 processing fee becomes \u20B9944 after GST.",
+  },
+];
 
 export default function ConsumerEMITrueCostPage() {
   const calcSchema = getCalculatorSchema({
@@ -42,6 +55,8 @@ export default function ConsumerEMITrueCostPage() {
     },
   ]);
 
+  const faqSchema = getFAQSchema(faqs);
+
   return (
     <div className="bg-background min-h-screen">
       <script
@@ -51,6 +66,10 @@ export default function ConsumerEMITrueCostPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
@@ -157,6 +176,18 @@ export default function ConsumerEMITrueCostPage() {
               Credit Card Payoff Calculator →
             </Link>
           </div>
+
+          <h2 className="text-xl font-semibold text-foreground">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-muted-foreground">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
             <p className="text-primary font-medium">

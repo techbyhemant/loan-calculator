@@ -6,6 +6,9 @@ export const metadata = buildMetadata({
   description:
     "LastEMI's privacy policy: how we collect, use, and protect your data. We never sell your personal information.",
   path: "/privacy",
+  keywords: [
+    "LastEMI privacy policy",
+  ],
 });
 
 export default function PrivacyPolicyPage() {

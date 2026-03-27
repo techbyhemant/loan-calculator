@@ -1,11 +1,12 @@
-import { Metadata } from "next";
 import Link from "next/link";
 import { RbiEmiImpact } from "./RbiEmiImpact";
+import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "RBI Repo Rate 2026 — Impact on Home Loan EMI | LastEMI",
+export const metadata = buildMetadata({
+  title: "RBI Repo Rate 2026 — Impact on Home Loan EMI",
   description:
     "Track the latest RBI repo rate and understand how it affects your floating rate home loan EMI. Historical rate data and EMI impact calculator.",
+  path: "/rbi-rates",
   keywords: [
     "RBI repo rate 2026",
     "repo rate today",
@@ -13,16 +14,7 @@ export const metadata: Metadata = {
     "home loan rate change",
     "floating rate impact",
   ],
-  alternates: { canonical: "/rbi-rates" },
-  openGraph: {
-    title: "RBI Repo Rate 2026 — Impact on Your Home Loan",
-    url: "/rbi-rates",
-    siteName: "LastEMI",
-    locale: "en_IN",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
-};
+});
 
 const RATE_HISTORY = [
   { date: "Feb 2025", rate: 6.25, change: -0.25 },

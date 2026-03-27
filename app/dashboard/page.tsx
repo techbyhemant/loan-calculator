@@ -10,6 +10,7 @@ import { formatINR, formatLakhs, formatDate } from "@/lib/utils/formatters";
 import { trpcReact } from "@/lib/trpc/hooks";
 import { LOAN_TYPE_DISPLAY, sortByPayoffPriority } from "@/lib/calculations/loanTypeConfig";
 import type { LoanType } from "@/lib/calculations/loanTypeConfig";
+import { LoanTypeIcon } from "@/components/ui/LoanTypeIcon";
 
 function StatCard({
   label,
@@ -44,14 +45,12 @@ function LoanCard({ loan }: { loan: Loan }) {
     <div className="bg-card border border-border rounded-xl shadow-sm p-4">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2.5">
-          <span className="text-xl">
-            {display.icon}
-          </span>
+          <LoanTypeIcon icon={display.icon} size="lg" />
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-semibold text-foreground">{loan.name}</h3>
               <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                {display.icon} {display.shortLabel}
+                <LoanTypeIcon icon={display.icon} size="sm" className="mr-1 inline-block align-middle" /> {display.shortLabel}
               </span>
             </div>
             {loan.lender && (

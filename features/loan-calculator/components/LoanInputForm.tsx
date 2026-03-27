@@ -1,5 +1,6 @@
 import React from "react";
 import NumericInput from "@/components/ui/NumericInput";
+import { CompactTabsToggle } from "@/components/ui/CompactTabsToggle";
 import { useLoanCalculator } from "../context/LoanCalculatorContext";
 
 // Piecewise-linear mapping: ticks get equal slider spacing, interpolate between.
@@ -47,6 +48,12 @@ export function LoanInputForm() {
     config,
   } = useLoanCalculator();
 
+  const loanTypeOptions = [
+    { value: "personal", label: "Personal Loan" },
+    { value: "home", label: "Home Loan" },
+    { value: "car", label: "Car Loan" },
+  ] as const;
+
   return (
     <div className="w-auto mx-auto bg-card rounded-xl shadow-sm px-4 sm:px-6 py-4 sm:py-5 flex flex-col gap-4">
       <h1 className="text-base sm:text-lg font-semibold text-foreground mb-2 text-center">
@@ -55,27 +62,13 @@ export function LoanInputForm() {
 
       {/* Loan Type Tabs */}
       <div className="flex justify-center mb-2">
-        <div className="inline-flex rounded-lg bg-muted p-1">
-          {(["personal", "home", "car"] as const).map((type) => (
-            <button
-              key={type}
-              type="button"
-              className={`px-3 sm:px-4 py-1.5 rounded-md font-medium text-xs sm:text-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-ring ${
-                loanType === type
-                  ? "bg-primary text-white shadow"
-                  : "text-foreground bg-transparent"
-              }`}
-              onClick={() => setLoanType(type)}
-              aria-pressed={loanType === type}
-            >
-              {type === "personal"
-                ? "Personal Loan"
-                : type === "home"
-                ? "Home Loan"
-                : "Car Loan"}
-            </button>
-          ))}
-        </div>
+        <CompactTabsToggle
+          label="Loan type"
+          value={loanType}
+          onValueChange={(value) => setLoanType(value as (typeof loanTypeOptions)[number]["value"])}
+          options={[...loanTypeOptions]}
+          className="justify-center"
+        />
       </div>
 
       {/* Loan Amount */}
@@ -101,7 +94,7 @@ export function LoanInputForm() {
             placeholder="Loan Amount"
             min={config.loanAmount.min}
             max={config.loanAmount.max}
-            className="rounded-md border border-input px-3 py-2 text-sm w-full focus:ring-2 focus:ring-ring focus:border-ring transition-all pr-10 outline-none border-[1px]"
+            className="rounded-md border border-input px-3 py-2 text-sm w-full focus:ring-2 focus:ring-ring focus:border-ring transition-all pr-10 outline-none"
             maxLength={11}
           />
           <span className="absolute right-2 top-2.5 text-sm text-muted-foreground">
@@ -168,7 +161,7 @@ export function LoanInputForm() {
             min={config.interestRate.min}
             max={config.interestRate.max}
             step={0.01}
-            className="rounded-md border border-input px-3 py-2 text-sm w-full focus:ring-2 focus:ring-ring focus:border-ring transition-all pr-10 outline-none border-[1px]"
+            className="rounded-md border border-input px-3 py-2 text-sm w-full focus:ring-2 focus:ring-ring focus:border-ring transition-all pr-10 outline-none"
           />
           <span className="absolute right-2 top-2.5 text-sm text-muted-foreground">
             {config.interestRate.unit}
@@ -271,7 +264,7 @@ export function LoanInputForm() {
                 ? config.tenure.max
                 : config.tenure.max * 12
             }
-            className="rounded-md border border-input px-3 py-2 text-sm w-full focus:ring-2 focus:ring-ring focus:border-ring transition-all pr-10 outline-none border-[1px]"
+            className="rounded-md border border-input px-3 py-2 text-sm w-full focus:ring-2 focus:ring-ring focus:border-ring transition-all pr-10 outline-none"
           />
           <span className="absolute right-2 top-2.5 text-sm text-muted-foreground">
             {tenureUnit === "years" ? config.tenure.unit : "mo"}
@@ -342,7 +335,7 @@ export function LoanInputForm() {
           type="month"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
-          className="rounded-md border border-input px-3 py-2 text-sm w-full focus:ring-2 focus:ring-ring focus:border-ring transition-all outline-none border-[1px]"
+          className="rounded-md border border-input px-3 py-2 text-sm w-full focus:ring-2 focus:ring-ring focus:border-ring transition-all outline-none"
           min="2000-01"
           max="2100-12"
         />

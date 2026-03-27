@@ -6,6 +6,7 @@ import { LoanInputForm } from "./components/LoanInputForm";
 import { LoanSummary } from "./components/LoanSummary";
 import { AmortizationSection } from "./components/AmortizationSection";
 import { DownloadButtons } from "./components/DownloadButtons";
+import { ShieldCheck, Ruler, Target } from "lucide-react";
 import dynamic from "next/dynamic";
 
 const YearlyBreakdownSection = dynamic(
@@ -163,26 +164,26 @@ export default function LoanCalculator() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
                 {
-                  icon: "🔒",
+                  icon: <ShieldCheck className="w-5 h-5 text-primary" />,
                   title: "No phone number needed",
                   body: "We never ask for your mobile number. No DSA will call you. Ever.",
                 },
                 {
-                  icon: "📐",
+                  icon: <Ruler className="w-5 h-5 text-primary" />,
                   title: "RBI-accurate calculations",
                   body: "Zero prepayment penalty on floating rate home loans — the RBI rule banks forget to mention.",
                 },
                 {
-                  icon: "🎯",
+                  icon: <Target className="w-5 h-5 text-primary" />,
                   title: "No commissions, no bias",
                   body: "We don't earn from recommending loans. The math is the math.",
                 },
-              ].map((card) => (
+              ].map((card, i) => (
                 <div
-                  key={card.title}
+                  key={i}
                   className="bg-card border border-border rounded-lg p-5 text-center"
                 >
-                  <div className="text-2xl mb-3">{card.icon}</div>
+                  <div className="flex justify-center mb-3">{card.icon}</div>
                   <h3 className="font-medium text-foreground text-sm mb-2">
                     {card.title}
                   </h3>

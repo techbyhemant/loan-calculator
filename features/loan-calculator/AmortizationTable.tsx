@@ -86,8 +86,8 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
   // Mobile detection state
   const [isMobile, setIsMobile] = React.useState(false);
 
-  // Pagination: show 24 months by default, load more
-  const [visibleMonths, setVisibleMonths] = React.useState(24);
+  // Show all months — year group expand/collapse handles the UX
+  const visibleMonths = scheduleWithCalendar.length;
   const totalMonths = scheduleWithCalendar.length;
 
   // Compute current month index for "now" badge
@@ -844,18 +844,6 @@ export const AmortizationTable: React.FC<AmortizationTableProps> = ({
       <div role="rowgroup">{headerRow}</div>
       <div className="overflow-x-auto" role="rowgroup">
         {allRows}
-
-        {/* Show more button for pagination */}
-        {visibleMonths < totalMonths && (
-          <button
-            onClick={() =>
-              setVisibleMonths((prev) => Math.min(prev + 24, totalMonths))
-            }
-            className="w-full py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-accent transition-colors border-t border-border"
-          >
-            Show next 2 years ({totalMonths - visibleMonths} months remaining)
-          </button>
-        )}
 
         {/* Debt-free row */}
         {debtFreeLabel && (

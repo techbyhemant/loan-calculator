@@ -6,6 +6,7 @@ import Link from "next/link";
 import { formatINR } from "@/lib/utils/formatters";
 import { trpcReact } from "@/lib/trpc/hooks";
 import NumericInput from "@/components/ui/NumericInput";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const COMMON_ISSUERS = [
   "HDFC Bank", "SBI", "ICICI Bank", "Axis Bank", "Kotak Mahindra",
@@ -84,16 +85,16 @@ export default function NewCreditCardPage() {
 
         <div>
           <label className="block text-sm font-medium text-foreground mb-1">Issuing Bank</label>
-          <select
-            value={issuer}
-            onChange={(e) => setIssuer(e.target.value)}
-            className="w-full rounded-md border border-border px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
-          >
-            <option value="">Select bank...</option>
-            {COMMON_ISSUERS.map((bank) => (
-              <option key={bank} value={bank}>{bank}</option>
-            ))}
-          </select>
+          <Select value={issuer} onValueChange={setIssuer}>
+            <SelectTrigger className="h-9 text-sm">
+              <SelectValue placeholder="Select bank..." />
+            </SelectTrigger>
+            <SelectContent>
+              {COMMON_ISSUERS.map((bank) => (
+                <SelectItem key={bank} value={bank}>{bank}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="grid grid-cols-2 gap-4">

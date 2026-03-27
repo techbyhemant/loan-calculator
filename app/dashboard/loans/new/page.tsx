@@ -11,6 +11,7 @@ import {
   LOAN_TYPE_FINANCIALS,
   isRBIZeroPenaltyApplicable,
 } from "@/lib/calculations/loanTypeConfig";
+import { LoanTypeIcon } from "@/components/ui/LoanTypeIcon";
 
 import { calculateEMI } from "@/lib/calculations/loanCalcs";
 import { formatINR } from "@/lib/utils/formatters";
@@ -169,7 +170,7 @@ export default function NewLoanPage() {
                     : "bg-card text-foreground border-border hover:border-border"
                 }`}
               >
-                <span>{lt.icon}</span> {lt.label}
+                <LoanTypeIcon icon={lt.icon} size="sm" /> {lt.label}
               </button>
             ))}
           </div>

@@ -1,13 +1,14 @@
-import { Metadata } from "next";
 import Link from "next/link";
 import EligibilityCalc from "@/components/calculators/EligibilityCalc";
 import { getFAQSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
+import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "Home Loan Eligibility Calculator — Check Your Loan Amount | LastEMI",
+export const metadata = buildMetadata({
+  title: "Home Loan Eligibility Calculator — Check Your Loan Amount",
   description:
     "Check how much home loan you can get based on your salary, existing EMIs and interest rate. Compare eligibility across SBI, HDFC, ICICI, and Kotak with the FOIR method.",
+  path: "/calculators/home-loan-eligibility",
   keywords: [
     "home loan eligibility calculator",
     "home loan eligibility calculator salary",
@@ -15,16 +16,7 @@ export const metadata: Metadata = {
     "loan eligibility calculator india",
     "maximum home loan amount",
   ],
-  alternates: { canonical: "/calculators/home-loan-eligibility" },
-  openGraph: {
-    title: "Home Loan Eligibility Calculator — How Much Can You Borrow?",
-    url: "/calculators/home-loan-eligibility",
-    siteName: "LastEMI",
-    locale: "en_IN",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
-};
+});
 
 const faqs = [
   {

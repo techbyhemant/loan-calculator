@@ -1,13 +1,14 @@
-import { Metadata } from "next";
 import Link from "next/link";
 import SipVsPrepaymentCalc from "@/components/calculators/SipVsPrepaymentCalc";
 import { getFAQSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
+import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "SIP vs Home Loan Prepayment Calculator — Which is Better? | LastEMI",
+export const metadata = buildMetadata({
+  title: "SIP vs Home Loan Prepayment Calculator — Which is Better?",
   description:
     "Should you invest your extra money in SIP mutual funds or prepay your home loan? Compare returns after LTCG tax, interest saved, and find the optimal split.",
+  path: "/calculators/sip-vs-prepayment",
   keywords: [
     "sip vs home loan prepayment",
     "sip vs prepayment calculator",
@@ -15,16 +16,7 @@ export const metadata: Metadata = {
     "mutual fund vs loan prepayment",
     "extra money invest or prepay",
   ],
-  alternates: { canonical: "/calculators/sip-vs-prepayment" },
-  openGraph: {
-    title: "SIP vs Home Loan Prepayment — Which Saves More?",
-    url: "/calculators/sip-vs-prepayment",
-    siteName: "LastEMI",
-    locale: "en_IN",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
-};
+});
 
 const faqs = [
   {

@@ -39,6 +39,7 @@ Key principles:
 ### All Loan Types
 - Which Loan to Pay Off First: https://lastemi.com/calculators/multi-loan-planner
 - Personal Loan Prepayment Calculator: https://lastemi.com/calculators/personal-loan-payoff
+- Car Loan Prepayment Calculator: https://lastemi.com/calculators/car-loan-prepayment
 - Education Loan 80E Planner: https://lastemi.com/calculators/education-loan-80e
 - 0% EMI True Cost Calculator: https://lastemi.com/calculators/consumer-emi-true-cost
 
@@ -71,6 +72,8 @@ with embedded calculators, RBI rule citations, and honest verdicts.
 
 **Credit Card Interest:** 3.5% per month = 42% PA. Paying only minimum due
 (5%) on ₹50,000 means 8+ years of payments and ₹1.8L+ in interest.
+18% GST is charged on ALL credit card fees including interest, late payment
+charges, annual fees, and processing fees — making the true cost even higher.
 
 **Loan Payoff Priority:** Credit cards first (42%), then personal loans (16%),
 then car loans (9.5%), then education loans (10.5% but 80E reduces effective

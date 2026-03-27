@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import MinimumDueTrapCalc from "@/components/calculators/MinimumDueTrapCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
@@ -20,6 +20,24 @@ export const metadata = buildMetadata({
     "credit card debt calculator",
   ],
 });
+
+const faqs = [
+  {
+    question: "How long does it take to pay off a credit card with minimum due only?",
+    answer:
+      "On a \u20B950,000 balance at 3.5% monthly interest, paying only 5% minimum due takes approximately 8-10 years and costs \u20B91.5-2L in total interest + GST.",
+  },
+  {
+    question: "What is the minimum due on a credit card in India?",
+    answer:
+      "Minimum due is typically 5% of your outstanding balance or \u20B9200, whichever is higher. Banks set this to keep you in debt as long as possible.",
+  },
+  {
+    question: "How to escape the minimum due trap?",
+    answer:
+      "Pay a fixed amount each month (not the shrinking minimum). Even \u20B93,000/month on a \u20B950,000 balance clears it in 18 months instead of 8+ years.",
+  },
+];
 
 export default function MinimumDueTrapPage() {
   const calcSchema = getCalculatorSchema({
@@ -41,6 +59,8 @@ export default function MinimumDueTrapPage() {
     },
   ]);
 
+  const faqSchema = getFAQSchema(faqs);
+
   return (
     <div className="bg-background min-h-screen">
       <script
@@ -50,6 +70,10 @@ export default function MinimumDueTrapPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
@@ -163,6 +187,18 @@ export default function MinimumDueTrapPage() {
               CC vs Personal Loan Calculator →
             </Link>
           </div>
+
+          <h2 className="text-xl font-semibold text-foreground">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-muted-foreground">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
             <p className="text-primary font-medium">

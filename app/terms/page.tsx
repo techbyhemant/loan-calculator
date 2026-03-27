@@ -6,6 +6,9 @@ export const metadata = buildMetadata({
   description:
     "LastEMI's terms of service: usage terms, disclaimers, and your responsibilities when using our loan calculators and dashboard.",
   path: "/terms",
+  keywords: [
+    "LastEMI terms of service",
+  ],
 });
 
 export default function TermsOfServicePage() {

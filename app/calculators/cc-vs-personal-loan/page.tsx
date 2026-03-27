@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import CCvsPLCalc from "@/components/calculators/CCvsPLCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
@@ -19,6 +19,19 @@ export const metadata = buildMetadata({
   ],
 });
 
+const faqs = [
+  {
+    question: "Is it worth taking a personal loan to clear credit card debt?",
+    answer:
+      "If your CC charges 42% PA and a PL charges 14-18% PA, the math usually favors the PL. But factor in the 2-3% processing fee + 18% GST on both. Use this calculator for your exact numbers.",
+  },
+  {
+    question: "What is the processing fee on a personal loan in India?",
+    answer:
+      "Typically 1-3% of the loan amount, plus 18% GST on the fee. On a \u20B92L loan at 2% fee, that\u2019s \u20B94,000 + \u20B9720 GST = \u20B94,720 upfront.",
+  },
+];
+
 export default function CCvsPersonalLoanPage() {
   const calcSchema = getCalculatorSchema({
     name: "Credit Card vs Personal Loan Calculator",
@@ -33,10 +46,13 @@ export default function CCvsPersonalLoanPage() {
     { name: "CC vs Personal Loan", url: "https://lastemi.com/calculators/cc-vs-personal-loan" },
   ]);
 
+  const faqSchema = getFAQSchema(faqs);
+
   return (
     <div className="bg-background min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(calcSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Credit Card vs Personal Loan: Should You Switch?
@@ -97,6 +113,18 @@ export default function CCvsPersonalLoanPage() {
               Credit Card Payoff Calculator →
             </Link>
           </div>
+
+          <h2 className="text-xl font-semibold text-foreground">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-muted-foreground">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
             <p className="text-primary font-medium">

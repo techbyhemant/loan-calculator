@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import NumericInput from "@/components/ui/NumericInput";
 import { CALC_INPUT_CLASS } from "@/components/calculators/shared";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 function calculateEMI(principal: number, annualRate: number, months: number): number {
   if (annualRate === 0) return principal / months;
@@ -42,16 +43,17 @@ export function RbiEmiImpact() {
         </div>
         <div>
           <label className="text-xs text-muted-foreground block mb-1">Rate change</label>
-          <select
-            value={rateChange}
-            onChange={(e) => setRateChange(Number(e.target.value))}
-            className="h-9 w-full border border-input bg-card rounded-md px-3 text-sm text-foreground"
-          >
-            <option value={-0.5}>-0.50% (big cut)</option>
-            <option value={-0.25}>-0.25% (standard cut)</option>
-            <option value={0.25}>+0.25% (hike)</option>
-            <option value={0.5}>+0.50% (big hike)</option>
-          </select>
+          <Select value={String(rateChange)} onValueChange={(v) => setRateChange(Number(v))}>
+            <SelectTrigger className="h-9 text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="-0.5">-0.50% (big cut)</SelectItem>
+              <SelectItem value="-0.25">-0.25% (standard cut)</SelectItem>
+              <SelectItem value="0.25">+0.25% (hike)</SelectItem>
+              <SelectItem value="0.5">+0.50% (big hike)</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       {result && (

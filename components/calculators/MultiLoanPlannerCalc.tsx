@@ -20,6 +20,8 @@ import {
   sortByPayoffPriority,
   getEffectiveAnnualRate,
 } from "@/lib/calculations/loanTypeConfig";
+import { LoanTypeIcon } from "@/components/ui/LoanTypeIcon";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // ─── Types ──────────────────────────────────────────────────────
 interface LoanEntry {
@@ -194,23 +196,25 @@ export default function MultiLoanPlannerCalc() {
               key={index}
               className="border border-border rounded-lg p-3 space-y-2"
             >
-              <div className="grid grid-cols-[1fr_auto] gap-2 items-center">
+              <div className="grid grid-cols-[1fr_auto] gap-2 items-start">
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    {index === 0 && <Label>Type</Label>}
-                    <select
-                      value={loan.type}
-                      onChange={(e) =>
-                        updateLoan(index, "type", e.target.value as LoanType)
-                      }
-                      className={CALC_INPUT_CLASS}
-                    >
-                      {LOAN_TYPE_OPTIONS.map((type) => (
-                        <option key={type} value={type}>
-                          {LOAN_TYPE_DISPLAY[type].icon} {LOAN_TYPE_DISPLAY[type].label}
-                        </option>
-                      ))}
-                    </select>
+                    <Label>Type</Label>
+                    <Select value={loan.type} onValueChange={(v) => updateLoan(index, "type", v as LoanType)}>
+                      <SelectTrigger className="h-9 text-sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {LOAN_TYPE_OPTIONS.map((type) => (
+                          <SelectItem key={type} value={type}>
+                            <span className="flex items-center gap-2">
+                              <LoanTypeIcon icon={LOAN_TYPE_DISPLAY[type].icon} size="sm" />
+                              {LOAN_TYPE_DISPLAY[type].label}
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     {loan.type === "credit_card" && (
                       <p className="text-xs text-negative mt-1">
                         Credit cards at 42% PA — always the highest priority to pay off first.
@@ -218,7 +222,7 @@ export default function MultiLoanPlannerCalc() {
                     )}
                   </div>
                   <div>
-                    {index === 0 && <Label>Loan Name</Label>}
+                    <Label>Loan Name</Label>
                     <input
                       type="text"
                       value={loan.name}
@@ -228,7 +232,7 @@ export default function MultiLoanPlannerCalc() {
                     />
                   </div>
                 </div>
-                <div className="self-end">
+                <div className="mt-6">
                   <button
                     type="button"
                     onClick={() => removeLoan(index)}
@@ -242,12 +246,7 @@ export default function MultiLoanPlannerCalc() {
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  {index === 0 && <Label>Outstanding (₹)</Label>}
-                  {index !== 0 && (
-                    <span className="block text-xs text-muted-foreground mb-1 sm:hidden">
-                      Outstanding
-                    </span>
-                  )}
+                  <Label>Outstanding (₹)</Label>
                   <NumericInput
                     value={loan.outstanding}
                     onChange={(val) => updateLoan(index, "outstanding", val)}
@@ -257,12 +256,7 @@ export default function MultiLoanPlannerCalc() {
                   />
                 </div>
                 <div>
-                  {index === 0 && <Label>Rate (% PA)</Label>}
-                  {index !== 0 && (
-                    <span className="block text-xs text-muted-foreground mb-1 sm:hidden">
-                      Rate
-                    </span>
-                  )}
+                  <Label>Rate (% PA)</Label>
                   <NumericInput
                     value={loan.ratePA}
                     onChange={(val) => updateLoan(index, "ratePA", val)}
@@ -274,12 +268,7 @@ export default function MultiLoanPlannerCalc() {
                   />
                 </div>
                 <div>
-                  {index === 0 && <Label>EMI (₹)</Label>}
-                  {index !== 0 && (
-                    <span className="block text-xs text-muted-foreground mb-1 sm:hidden">
-                      EMI
-                    </span>
-                  )}
+                  <Label>EMI (₹)</Label>
                   <NumericInput
                     value={loan.emi}
                     onChange={(val) => updateLoan(index, "emi", val)}
@@ -366,7 +355,7 @@ export default function MultiLoanPlannerCalc() {
                       {loan.priority}
                     </td>
                     <td className="px-4 py-3 font-medium">
-                      <span className="mr-1">{loan.icon}</span>
+                      <LoanTypeIcon icon={loan.icon} size="sm" className="mr-1 inline-block" />
                       {loan.name}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground hidden sm:table-cell">
@@ -402,7 +391,7 @@ export default function MultiLoanPlannerCalc() {
                 className="bg-muted/30 rounded-lg px-3 py-2 text-xs text-muted-foreground"
               >
                 <span className="font-medium text-foreground">
-                  #{loan.priority} {loan.icon} {loan.name}:
+                  #{loan.priority} <LoanTypeIcon icon={loan.icon} size="sm" className="inline-block mx-1" /> {loan.name}:
                 </span>{" "}
                 {loan.reason}
               </div>
@@ -417,14 +406,47 @@ export default function MultiLoanPlannerCalc() {
               </h3>
               <div className="space-y-2.5">
                 {results.enriched.map((loan, i) => {
+                  // Estimate months to payoff using EMI + surplus for the focus loan
+                  // Higher-priority loans (lower index) get the surplus first
+                  const emi = typeof loan.emi === "number" ? loan.emi : 0;
                   const surplus = typeof monthlySurplus === "number" && monthlySurplus > 0 ? monthlySurplus : 5000;
-                  const estimatedMonths = Math.round(
-                    loan.outstanding / (surplus * (1 / (i + 1)))
-                  );
+                  const monthlyRate = (typeof loan.nominalRate === "number" ? loan.nominalRate : 10) / 100 / 12;
+                  const totalMonthlyPayment = emi + (i === 0 ? surplus : 0); // Focus loan gets full surplus
+                  const monthlyInterest = loan.outstanding * monthlyRate;
+
+                  let estimatedMonths: number;
+                  if (totalMonthlyPayment <= monthlyInterest) {
+                    // Can't pay it off with this payment — use EMI-only estimate
+                    estimatedMonths = monthlyRate > 0
+                      ? Math.ceil(Math.log(emi / (emi - loan.outstanding * monthlyRate)) / Math.log(1 + monthlyRate))
+                      : Math.ceil(loan.outstanding / emi);
+                  } else {
+                    // With surplus, estimate using standard payoff formula
+                    if (monthlyRate > 0) {
+                      estimatedMonths = Math.ceil(
+                        Math.log(totalMonthlyPayment / (totalMonthlyPayment - loan.outstanding * monthlyRate)) / Math.log(1 + monthlyRate)
+                      );
+                    } else {
+                      estimatedMonths = Math.ceil(loan.outstanding / totalMonthlyPayment);
+                    }
+                  }
+                  // Clamp to reasonable range
+                  estimatedMonths = Math.min(estimatedMonths, 360);
+                  if (!isFinite(estimatedMonths) || isNaN(estimatedMonths)) estimatedMonths = 360;
+
                   const maxMonths = Math.max(
-                    ...results.enriched.map((l, j) =>
-                      Math.round(l.outstanding / (surplus * (1 / (j + 1))))
-                    )
+                    ...results.enriched.map((l, j) => {
+                      const lEmi = typeof l.emi === "number" ? l.emi : 0;
+                      const lRate = (typeof l.nominalRate === "number" ? l.nominalRate : 10) / 100 / 12;
+                      const lPayment = lEmi + (j === 0 ? surplus : 0);
+                      if (lPayment <= l.outstanding * lRate || lRate === 0) {
+                        return lRate > 0
+                          ? Math.min(360, Math.ceil(Math.log(lEmi / (lEmi - l.outstanding * lRate)) / Math.log(1 + lRate)))
+                          : Math.ceil(l.outstanding / lEmi);
+                      }
+                      const m = Math.ceil(Math.log(lPayment / (lPayment - l.outstanding * lRate)) / Math.log(1 + lRate));
+                      return Math.min(360, isFinite(m) ? m : 360);
+                    })
                   );
                   const barWidth = maxMonths > 0 ? (estimatedMonths / maxMonths) * 100 : 0;
                   const years = Math.floor(estimatedMonths / 12);
@@ -433,8 +455,8 @@ export default function MultiLoanPlannerCalc() {
 
                   return (
                     <div key={i} className="flex items-center gap-3">
-                      <div className="w-24 text-xs text-muted-foreground text-right flex-shrink-0 truncate">
-                        {display?.icon ?? "📋"} {loan.name || display?.shortLabel || "Loan"}
+                      <div className="w-24 text-xs text-muted-foreground  flex-shrink-0 truncate">
+                        <LoanTypeIcon icon={display?.icon ?? "file-text"} size="sm" className="mr-1 inline-block" />{loan.name || display?.shortLabel || "Loan"}
                       </div>
                       <div className="flex-1 bg-muted rounded-full h-5 relative overflow-hidden">
                         <div

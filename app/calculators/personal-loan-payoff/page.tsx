@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import PersonalLoanPayoffCalc from "@/components/calculators/PersonalLoanPayoffCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
@@ -20,6 +20,19 @@ export const metadata = buildMetadata({
     "should I prepay personal loan",
   ],
 });
+
+const faqs = [
+  {
+    question: "Can I prepay a personal loan without penalty in India?",
+    answer:
+      "Unlike home loans, personal loans are NOT protected by RBI\u2019s zero-penalty rule. Banks can charge 2-5% foreclosure penalty. Check your loan agreement for the exact terms.",
+  },
+  {
+    question: "When is the best time to prepay a personal loan?",
+    answer:
+      "Earlier is better \u2014 interest is highest in the first half of the tenure. Also wait until the lock-in period (usually 6-12 months) ends to avoid rejection.",
+  },
+];
 
 export default function PersonalLoanPayoffPage() {
   const calcSchema = getCalculatorSchema({
@@ -41,6 +54,8 @@ export default function PersonalLoanPayoffPage() {
     },
   ]);
 
+  const faqSchema = getFAQSchema(faqs);
+
   return (
     <div className="bg-background min-h-screen">
       <script
@@ -50,6 +65,10 @@ export default function PersonalLoanPayoffPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
@@ -116,6 +135,18 @@ export default function PersonalLoanPayoffPage() {
             rates and no penalty protection. Clear personal loans before making
             extra home loan payments.
           </p>
+
+          <h2 className="text-xl font-semibold text-foreground">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-muted-foreground">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
             <p className="text-primary font-medium">

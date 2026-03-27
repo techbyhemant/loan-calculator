@@ -23,22 +23,27 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = buildMetadata({
-  title: "LastEMI — Find Your Debt-Free Date",
-  description:
-    "Free EMI calculator for home loans, personal loans, car loans & credit cards. Simulate part payments, find your debt-free date, and plan your debt payoff — no phone number, no spam calls.",
-  path: "/",
-  type: "website",
-  keywords: [
-    "EMI calculator India",
-    "home loan part payment calculator",
-    "debt free date calculator India",
-    "personal loan EMI calculator",
-    "SIP vs prepayment calculator",
-    "credit card payoff calculator",
-    "car loan prepayment calculator",
-  ],
-});
+export const metadata = {
+  ...buildMetadata({
+    title: "LastEMI — Find Your Debt-Free Date",
+    description:
+      "Free EMI calculator for home loans, personal loans, car loans & credit cards. Simulate part payments, find your debt-free date, and plan your debt payoff — no phone number, no spam calls.",
+    path: "/",
+    type: "website",
+    keywords: [
+      "EMI calculator India",
+      "home loan part payment calculator",
+      "debt free date calculator India",
+      "personal loan EMI calculator",
+      "SIP vs prepayment calculator",
+      "credit card payoff calculator",
+      "car loan prepayment calculator",
+    ],
+  }),
+  verification: {
+    google: "placeholder-google-verification-code",
+  },
+};
 
 export const viewport = "width=device-width, initial-scale=1";
 

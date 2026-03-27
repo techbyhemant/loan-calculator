@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import EducationLoan80ECalc from "@/components/calculators/EducationLoan80ECalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
@@ -20,6 +20,19 @@ export const metadata = buildMetadata({
     "education loan interest deduction",
   ],
 });
+
+const faqs = [
+  {
+    question: "Is there a limit on Section 80E deduction?",
+    answer:
+      "No upper limit \u2014 the entire interest amount is deductible for 8 years from the year you start repaying. This makes education loans one of the cheapest after-tax borrowing options.",
+  },
+  {
+    question: "What happens during the moratorium period of an education loan?",
+    answer:
+      "Interest accrues on your loan during the moratorium (course duration + 1 year) but you pay no EMIs. When EMIs start, your outstanding will be higher than the original loan amount.",
+  },
+];
 
 export default function EducationLoan80EPage() {
   const calcSchema = getCalculatorSchema({
@@ -41,6 +54,8 @@ export default function EducationLoan80EPage() {
     },
   ]);
 
+  const faqSchema = getFAQSchema(faqs);
+
   return (
     <div className="bg-background min-h-screen">
       <script
@@ -50,6 +65,10 @@ export default function EducationLoan80EPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
@@ -124,6 +143,18 @@ export default function EducationLoan80EPage() {
             a close call. In lower tax brackets, the effective rate is higher,
             making prepayment more attractive.
           </p>
+
+          <h2 className="text-xl font-semibold text-foreground">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-muted-foreground">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
             <p className="text-primary font-medium">

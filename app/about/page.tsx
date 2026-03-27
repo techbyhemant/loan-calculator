@@ -5,6 +5,10 @@ export const metadata = buildMetadata({
   description:
     "LastEMI was built because Indian borrowers deserved a calculator with no conflicts of interest. No commissions, no cold calls, no hidden agenda.",
   path: "/about",
+  keywords: [
+    "about LastEMI",
+    "Indian debt platform",
+  ],
 });
 
 export default function AboutPage() {

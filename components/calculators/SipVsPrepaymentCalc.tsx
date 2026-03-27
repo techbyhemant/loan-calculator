@@ -14,6 +14,7 @@ import {
   getEffectiveAnnualRate,
   type LoanType,
 } from "@/lib/calculations/loanTypeConfig";
+import { LoanTypeIcon } from "@/components/ui/LoanTypeIcon";
 
 import NumericInput from "@/components/ui/NumericInput";
 import {
@@ -26,6 +27,8 @@ import {
   Callout,
   Label,
 } from "./shared";
+import { LoanInputMode } from "./LoanInputMode";
+import type { LoanSnapshot } from "./LoanInputMode";
 
 const SIP_RELEVANT_TYPES: LoanType[] = [
   "home",
@@ -69,31 +72,21 @@ function getTaxNote(
 
 export default function SipVsPrepaymentCalc() {
   const [loanType, setLoanType] = useState<LoanType>("home");
-  const [loanOutstanding, setLoanOutstanding] = useState<number | "">(3000000);
-  const [interestRate, setInterestRate] = useState<number | "">(8.5);
-  const [remainingMonths, setRemainingMonths] = useState<number | "">(180);
+  const [loan, setLoan] = useState<LoanSnapshot | null>(null);
   const [monthlyExtra, setMonthlyExtra] = useState<number | "">(10000);
   const [sipReturn, setSipReturn] = useState<number | "">(12);
   const [taxBracket, setTaxBracket] = useState<"10" | "20" | "30">("30");
 
-  const handleLoanTypeChange = (newType: LoanType) => {
-    setLoanType(newType);
-    const financials = LOAN_TYPE_FINANCIALS[newType];
-    setInterestRate(+(financials.defaultRatePA * 100).toFixed(1));
-    setLoanOutstanding(financials.defaultAmountINR);
-    setRemainingMonths(financials.defaultTenureMonths);
-  };
-
   const taxNote = useMemo(() => {
-    if (!interestRate) return null;
-    return getTaxNote(loanType, interestRate as number, Number(taxBracket));
-  }, [loanType, interestRate, taxBracket]);
+    if (!loan) return null;
+    return getTaxNote(loanType, loan.ratePA, Number(taxBracket));
+  }, [loanType, loan, taxBracket]);
 
   const results = useMemo(() => {
-    if (!loanOutstanding || !interestRate || !remainingMonths || !monthlyExtra || !sipReturn) return null;
+    if (!loan || !monthlyExtra || !sipReturn) return null;
 
-    const prepay = calculatePrepayBenefit(loanOutstanding, interestRate, remainingMonths, monthlyExtra, Number(taxBracket));
-    const sip = calculateSipBenefit(monthlyExtra, remainingMonths, sipReturn);
+    const prepay = calculatePrepayBenefit(loan.outstanding, loan.ratePA, loan.remainingMonths, monthlyExtra, Number(taxBracket));
+    const sip = calculateSipBenefit(monthlyExtra, loan.remainingMonths, sipReturn);
 
     let recommendation: Recommendation;
     if (prepay.netBenefit > sip.netCorpus - sip.totalInvested) recommendation = "PREPAY";
@@ -101,7 +94,7 @@ export default function SipVsPrepaymentCalc() {
     else recommendation = "SPLIT";
 
     return { prepay, sip, recommendation };
-  }, [loanOutstanding, interestRate, remainingMonths, monthlyExtra, sipReturn, taxBracket]);
+  }, [loan, monthlyExtra, sipReturn, taxBracket]);
 
   return (
     <div className="space-y-6">
@@ -113,14 +106,14 @@ export default function SipVsPrepaymentCalc() {
               <button
                 key={type}
                 type="button"
-                onClick={() => handleLoanTypeChange(type)}
+                onClick={() => setLoanType(type)}
                 className={`flex flex-col items-center gap-1 rounded-lg border p-3 text-center transition-colors ${
                   loanType === type
                     ? "border-primary bg-primary/5 text-primary"
                     : "border-border bg-card text-muted-foreground hover:border-primary/40"
                 }`}
               >
-                <span className="text-xl">{display.icon}</span>
+                <LoanTypeIcon icon={display.icon} size="lg" />
                 <span className="text-xs font-medium">{display.shortLabel}</span>
               </button>
             );
@@ -141,20 +134,21 @@ export default function SipVsPrepaymentCalc() {
         </Callout>
       )}
 
-      <CalcSection title="Enter Your Details">
+      <LoanInputMode
+        key={loanType}
+        title="Your Loan"
+        onChange={setLoan}
+        defaults={{
+          outstanding: LOAN_TYPE_FINANCIALS[loanType].defaultAmountINR,
+          rate: +(LOAN_TYPE_FINANCIALS[loanType].defaultRatePA * 100).toFixed(1),
+          remainingMonths: LOAN_TYPE_FINANCIALS[loanType].defaultTenureMonths,
+        }}
+        rateHint={`Typical for ${LOAN_TYPE_DISPLAY[loanType].label.toLowerCase()}`}
+        showStartMonth={false}
+      />
+
+      <CalcSection title="SIP & Tax Details">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <Label>Loan Outstanding (&#8377;)</Label>
-            <NumericInput value={loanOutstanding} onChange={setLoanOutstanding} placeholder="30,00,000" min={0} className={CALC_INPUT_CLASS} />
-          </div>
-          <div>
-            <Label>Annual Interest Rate (%)</Label>
-            <NumericInput value={interestRate} onChange={setInterestRate} placeholder="8.5" min={0} max={30} step={0.1} className={CALC_INPUT_CLASS} />
-          </div>
-          <div>
-            <Label>Remaining Months</Label>
-            <NumericInput value={remainingMonths} onChange={setRemainingMonths} placeholder="180" min={1} max={360} className={CALC_INPUT_CLASS} />
-          </div>
           <div>
             <Label>Monthly Surplus Amount (&#8377;)</Label>
             <NumericInput value={monthlyExtra} onChange={setMonthlyExtra} placeholder="10,000" min={0} className={CALC_INPUT_CLASS} />

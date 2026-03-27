@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import MultiCardPayoffCalc from "@/components/calculators/MultiCardPayoffCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
@@ -21,6 +21,19 @@ export const metadata = buildMetadata({
   ],
 });
 
+const faqs = [
+  {
+    question: "Should I pay off the highest interest card first or the smallest balance?",
+    answer:
+      "Avalanche (highest rate first) saves the most money mathematically. Snowball (smallest balance first) gives faster psychological wins. For most people, avalanche saves \u20B95,000-\u20B920,000 more.",
+  },
+  {
+    question: "How do I pay off multiple credit cards in India?",
+    answer:
+      "Pay minimum due on all cards, then put ALL extra money toward one focus card. Once that\u2019s cleared, roll its payment into the next card.",
+  },
+];
+
 export default function MultiCardPayoffPage() {
   const calcSchema = getCalculatorSchema({
     name: "Multi-Card Payoff Calculator",
@@ -35,6 +48,8 @@ export default function MultiCardPayoffPage() {
     { name: "Multi-Card Payoff", url: "https://lastemi.com/calculators/multi-card-payoff" },
   ]);
 
+  const faqSchema = getFAQSchema(faqs);
+
   return (
     <div className="bg-background min-h-screen">
       <script
@@ -44,6 +59,10 @@ export default function MultiCardPayoffPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
@@ -127,6 +146,18 @@ export default function MultiCardPayoffPage() {
             </Link>{" "}
             for a detailed month-by-month breakdown.
           </p>
+
+          <h2 className="text-xl font-semibold text-foreground">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-muted-foreground">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
             <p className="text-primary font-medium">

@@ -1,21 +1,18 @@
-import { Metadata } from "next";
 import { getAllPosts } from "@/lib/blog/utils";
 import { BlogCard } from "@/components/blog/BlogCard";
+import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "Blog — EMI, Loans & Debt Freedom Tips | LastEMI",
+export const metadata = buildMetadata({
+  title: "Blog — EMI, Loans & Debt Freedom Tips",
   description:
     "Practical guides on home loans, EMI management, tax benefits, and becoming debt-free. Written by finance experts, backed by real math.",
-  alternates: { canonical: "/blog" },
-  openGraph: {
-    title: "LastEMI Blog",
-    url: "/blog",
-    siteName: "LastEMI",
-    locale: "en_IN",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
-};
+  path: "/blog",
+  keywords: [
+    "loan blog India",
+    "EMI tips",
+    "debt freedom guide",
+  ],
+});
 
 export default function BlogListPage() {
   const posts = getAllPosts();

@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-
 import { formatINR, formatLakhs, formatMonths } from "@/lib/utils/formatters";
-
 import NumericInput from "@/components/ui/NumericInput";
 import {
   CALC_INPUT_CLASS,
@@ -14,311 +12,231 @@ import {
   Callout,
   Label,
 } from "./shared";
+import { cn } from "@/lib/utils";
+import { LoanInputMode } from "./LoanInputMode";
+import type { LoanSnapshot } from "./LoanInputMode";
 
-type PrepayVerdict = "WORTH_IT" | "MARGINAL" | "NOT_WORTH_IT";
-
-interface SimResult {
-  months: number;
-  totalInterest: number;
-  totalPaid: number;
+interface MonthRow {
+  month: number;
+  label: string;
+  emi: number;
+  principal: number;
+  interest: number;
+  partPayment: number;
+  penalty: number;
+  balance: number;
 }
 
-function simulatePayoff(
-  balance: number,
-  ratePA: number,
-  emi: number
-): SimResult {
-  if (balance <= 0) return { months: 0, totalInterest: 0, totalPaid: 0 };
-
+function generateSchedule(params: {
+  outstanding: number;
+  ratePA: number;
+  emi: number;
+  partPayments: { month: number; amount: number }[];
+  penaltyPercent: number;
+  lockInMonths: number;
+  startMonth: string;
+}): { rows: MonthRow[]; totalInterest: number; totalPenalty: number } {
+  const { outstanding, ratePA, emi, partPayments, penaltyPercent, lockInMonths, startMonth } = params;
   const monthlyRate = ratePA / 100 / 12;
-  let outstanding = balance;
-  let months = 0;
+  const ppMap = new Map(partPayments.map(pp => [pp.month, pp.amount]));
+
+  let balance = outstanding;
   let totalInterest = 0;
-  let totalPaid = 0;
+  let totalPenalty = 0;
+  const rows: MonthRow[] = [];
+  const startDate = startMonth ? new Date(startMonth + "-01") : new Date();
 
-  while (outstanding > 0.01 && months < 600) {
-    months++;
-    const interest = outstanding * monthlyRate;
-    const principalPaid = Math.min(emi - interest, outstanding);
+  for (let m = 1; balance > 0.01 && m <= 600; m++) {
+    const d = new Date(startDate);
+    d.setMonth(d.getMonth() + m - 1);
+    const label = d.toLocaleDateString("en-IN", { month: "short", year: "numeric" });
 
-    if (principalPaid <= 0) {
-      return { months: Infinity, totalInterest: Infinity, totalPaid: Infinity };
+    const interest = balance * monthlyRate;
+    const principalPaid = Math.min(emi - interest, balance);
+    if (principalPaid <= 0) break;
+
+    balance = Math.max(0, balance - principalPaid);
+    totalInterest += interest;
+
+    let ppAmount = 0;
+    let penaltyAmount = 0;
+
+    if (ppMap.has(m) && balance > 0) {
+      ppAmount = Math.min(ppMap.get(m)!, balance);
+      penaltyAmount = ppAmount * (penaltyPercent / 100);
+      balance = Math.max(0, balance - ppAmount);
+      totalPenalty += penaltyAmount;
     }
 
-    totalInterest += interest;
-    totalPaid += Math.min(emi, outstanding + interest);
-    outstanding = Math.max(0, outstanding - principalPaid);
+    rows.push({ month: m, label, emi: Math.min(emi, principalPaid + interest), principal: principalPaid, interest, partPayment: ppAmount, penalty: penaltyAmount, balance });
+    if (balance <= 0) break;
   }
 
-  return { months, totalInterest, totalPaid };
+  return { rows, totalInterest, totalPenalty };
 }
 
 export default function CarLoanPrepaymentCalc() {
-  const [outstanding, setOutstanding] = useState<number | "">(600000);
-  const [ratePA, setRatePA] = useState<number | "">(9.5);
-  const [monthlyEMI, setMonthlyEMI] = useState<number | "">(12500);
-  const [prepaymentAmount, setPrepaymentAmount] = useState<number | "">(100000);
+  // Loan details (single snapshot from LoanInputMode)
+  const [loan, setLoan] = useState<LoanSnapshot | null>(null);
+
   const [penaltyPercent, setPenaltyPercent] = useState<number | "">(3);
-  const [lockInRemaining, setLockInRemaining] = useState<number | "">(0);
+  const [lockInMonths, setLockInMonths] = useState<number | "">(6);
+  const [partPayments, setPartPayments] = useState<{ month: number; amount: number }[]>([
+    { month: 6, amount: 100000 },
+  ]);
 
   const results = useMemo(() => {
-    if (!outstanding || !ratePA || !monthlyEMI || !prepaymentAmount)
-      return null;
+    if (!loan) return null;
 
-    const bal = outstanding as number;
-    const rate = ratePA as number;
-    const emi = monthlyEMI as number;
-    const prepay = Math.min(prepaymentAmount as number, bal);
+    const emi = loan.emi;
+    const bal = loan.outstanding;
+    const rate = loan.ratePA;
     const penalty = (penaltyPercent as number) || 0;
-    const lockIn = (lockInRemaining as number) || 0;
+    const lockIn = (lockInMonths as number) || 0;
+    const startMonth = loan.startMonth;
 
-    // Without prepayment
-    const without = simulatePayoff(bal, rate, emi);
-    if (without.months === Infinity) return null;
+    const without = generateSchedule({ outstanding: bal, ratePA: rate, emi, partPayments: [], penaltyPercent: 0, lockInMonths: 0, startMonth });
+    const withPP = generateSchedule({ outstanding: bal, ratePA: rate, emi, partPayments: partPayments.filter(pp => pp.amount > 0), penaltyPercent: penalty, lockInMonths: lockIn, startMonth });
 
-    // With prepayment
-    const newBalance = bal - prepay;
-    const withPrepay = simulatePayoff(newBalance, rate, emi);
+    const interestSaved = without.totalInterest - withPP.totalInterest;
+    const netSaving = interestSaved - withPP.totalPenalty;
+    const monthsReduced = without.rows.length - withPP.rows.length;
 
-    const interestSaved = without.totalInterest - withPrepay.totalInterest;
-    const penaltyAmount = prepay * (penalty / 100);
-    const netSaving = interestSaved - penaltyAmount;
-    const monthsReduced = without.months - withPrepay.months;
+    let verdict: "WORTH_IT" | "MARGINAL" | "NOT_WORTH_IT";
+    if (netSaving > 5000) verdict = "WORTH_IT";
+    else if (netSaving >= 1000) verdict = "MARGINAL";
+    else verdict = "NOT_WORTH_IT";
 
-    let verdict: PrepayVerdict;
-    if (netSaving > 5000) {
-      verdict = "WORTH_IT";
-    } else if (netSaving >= 1000) {
-      verdict = "MARGINAL";
-    } else {
-      verdict = "NOT_WORTH_IT";
-    }
+    return { emi, without, withPP, interestSaved, netSaving, monthsReduced, totalPenalty: withPP.totalPenalty, totalPrepaid: partPayments.reduce((s, pp) => s + pp.amount, 0), verdict, lockIn };
+  }, [loan, partPayments, penaltyPercent, lockInMonths]);
 
-    return {
-      without,
-      withPrepay,
-      interestSaved,
-      penaltyAmount,
-      netSaving,
-      monthsReduced,
-      verdict,
-      lockIn,
-      prepay,
-    };
-  }, [outstanding, ratePA, monthlyEMI, prepaymentAmount, penaltyPercent, lockInRemaining]);
+  const addPartPayment = () => {
+    const lastMonth = partPayments.length > 0 ? partPayments[partPayments.length - 1].month : 0;
+    setPartPayments([...partPayments, { month: lastMonth + 6, amount: 50000 }]);
+  };
+
+  const removePartPayment = (index: number) => setPartPayments(partPayments.filter((_, i) => i !== index));
+
+  const updatePartPayment = (index: number, field: "month" | "amount", value: number) => {
+    const updated = [...partPayments];
+    updated[index] = { ...updated[index], [field]: value };
+    setPartPayments(updated);
+  };
 
   return (
     <div className="space-y-6">
-      <Callout type="warning">
-        Unlike home loans, car loans are <strong>NOT</strong> protected by
-        RBI&apos;s zero prepayment penalty rule. Your bank can charge 2-5% on
-        the outstanding balance.
-      </Callout>
+      <LoanInputMode
+        title="Your Car Loan"
+        onChange={setLoan}
+        defaults={{ outstanding: 800000, rate: 9.5, remainingMonths: 48 }}
+        rateHint="Typical: 8.5–14% for car loans"
+      />
 
-      <CalcSection title="Enter Your Car Loan Details">
+      <CalcSection title="Prepayment Penalty">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Label>Outstanding Balance (&#8377;)</Label>
-            <NumericInput
-              value={outstanding}
-              onChange={setOutstanding}
-              placeholder="6,00,000"
-              min={0}
-              className={CALC_INPUT_CLASS}
-            />
+            <Label>Penalty (%)</Label>
+            <NumericInput value={penaltyPercent} onChange={setPenaltyPercent} placeholder="3" min={0} max={10} step={0.5} className={CALC_INPUT_CLASS} />
+            <p className="text-xs text-muted-foreground mt-1">Car loans typically charge 2–5%</p>
           </div>
           <div>
-            <Label>Interest Rate (% p.a.)</Label>
-            <NumericInput
-              value={ratePA}
-              onChange={setRatePA}
-              placeholder="9.5"
-              min={0}
-              max={30}
-              step={0.1}
-              className={CALC_INPUT_CLASS}
-            />
+            <Label>Lock-in Period (months)</Label>
+            <NumericInput value={lockInMonths} onChange={setLockInMonths} placeholder="6" min={0} max={24} className={CALC_INPUT_CLASS} />
           </div>
-          <div>
-            <Label>Monthly EMI (&#8377;)</Label>
-            <NumericInput
-              value={monthlyEMI}
-              onChange={setMonthlyEMI}
-              placeholder="12,500"
-              min={1}
-              className={CALC_INPUT_CLASS}
-            />
+        </div>
+      </CalcSection>
+
+      <CalcSection title="Plan Your Prepayments">
+        <p className="text-sm text-muted-foreground mb-4">
+          Add one or more prepayments. Specify which month and how much.
+        </p>
+        <div className="space-y-3">
+          <div className="hidden sm:grid grid-cols-[1fr_1fr_auto] gap-3 text-xs text-muted-foreground font-medium px-1">
+            <span>Month #</span><span>Amount (₹)</span><span className="w-8" />
           </div>
-          <div>
-            <Label>Prepayment Amount (&#8377;)</Label>
-            <NumericInput
-              value={prepaymentAmount}
-              onChange={setPrepaymentAmount}
-              placeholder="1,00,000"
-              min={0}
-              className={CALC_INPUT_CLASS}
-            />
-          </div>
-          <div>
-            <Label>Prepayment Penalty (%)</Label>
-            <NumericInput
-              value={penaltyPercent}
-              onChange={setPenaltyPercent}
-              placeholder="3"
-              min={0}
-              max={10}
-              step={0.1}
-              className={CALC_INPUT_CLASS}
-            />
-          </div>
-          <div>
-            <Label>Lock-in Remaining (Months)</Label>
-            <NumericInput
-              value={lockInRemaining}
-              onChange={setLockInRemaining}
-              placeholder="0"
-              min={0}
-              max={60}
-              className={CALC_INPUT_CLASS}
-            />
-          </div>
+          {partPayments.map((pp, i) => (
+            <div key={i} className="grid grid-cols-[1fr_1fr_auto] gap-3 items-center">
+              <div>
+                <Label className="sm:hidden">Month #</Label>
+                <NumericInput value={pp.month} onChange={(v) => updatePartPayment(i, "month", v || 1)} min={1} max={loan?.remainingMonths || 84} className={CALC_INPUT_CLASS} />
+                {pp.month && results?.withPP.rows[pp.month - 1] && (
+                  <p className="text-[10px] text-muted-foreground mt-0.5">= {results.withPP.rows[Math.min(pp.month - 1, results.withPP.rows.length - 1)]?.label}</p>
+                )}
+              </div>
+              <div>
+                <Label className="sm:hidden">Amount</Label>
+                <NumericInput value={pp.amount} onChange={(v) => updatePartPayment(i, "amount", v || 0)} min={0} className={CALC_INPUT_CLASS} />
+              </div>
+              <button onClick={() => removePartPayment(i)} disabled={partPayments.length === 1} className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-negative hover:bg-negative/10 transition-colors disabled:opacity-30" title="Remove">×</button>
+            </div>
+          ))}
+          <button onClick={addPartPayment} className="text-sm text-primary hover:text-primary/80 font-medium transition-colors">+ Add another prepayment</button>
         </div>
       </CalcSection>
 
       {results && (
         <div className="space-y-4">
-          <Verdict
-            type={
-              results.verdict === "WORTH_IT"
-                ? "good"
-                : results.verdict === "MARGINAL"
-                  ? "neutral"
-                  : "bad"
-            }
-          >
+          <Verdict type={results.verdict === "WORTH_IT" ? "good" : results.verdict === "MARGINAL" ? "neutral" : "bad"}>
             {results.verdict === "WORTH_IT"
-              ? `Worth prepaying! Net saving after penalty: ${formatINR(results.netSaving)}`
+              ? `Prepay! Net saving after ${formatINR(results.totalPenalty)} penalty: ${formatINR(results.netSaving)}`
               : results.verdict === "MARGINAL"
-                ? `Marginal benefit of ${formatINR(results.netSaving)} — consider if it's worth the hassle`
-                : `Not worth it given penalty. After ${formatINR(results.penaltyAmount)} penalty, you ${results.netSaving < 0 ? "lose" : "save only"} ${formatINR(Math.abs(results.netSaving))}`}
-            {results.monthsReduced > 0 && (
-              <span className="block text-sm font-normal mt-1">
-                Loan closes {formatMonths(results.monthsReduced)} earlier
-              </span>
-            )}
+                ? `Marginal saving of ${formatINR(results.netSaving)} after penalty`
+                : `Not worth it — penalty of ${formatINR(results.totalPenalty)} eats most of the saving`}
+            {results.monthsReduced > 0 && <span className="block text-sm font-normal mt-1">Loan closes {formatMonths(results.monthsReduced)} earlier</span>}
           </Verdict>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <StatCard
-              label="Interest Saved"
-              value={formatLakhs(results.interestSaved)}
-              valueColor="text-positive"
-            />
-            <StatCard
-              label="Penalty Amount"
-              value={formatINR(results.penaltyAmount)}
-              valueColor="text-negative"
-            />
-            <StatCard
-              label="Net Saving"
-              value={
-                (results.netSaving >= 0 ? "+" : "") +
-                formatINR(results.netSaving)
-              }
-              valueColor={
-                results.netSaving >= 0 ? "text-positive" : "text-negative"
-              }
-            />
-            <StatCard
-              label="Months Reduced"
-              value={
-                results.monthsReduced > 0
-                  ? formatMonths(results.monthsReduced)
-                  : "0"
-              }
-              valueColor="text-primary"
-            />
+            <StatCard label="Interest Saved" value={formatLakhs(results.interestSaved)} valueColor="text-positive" />
+            <StatCard label="Total Penalty" value={formatINR(results.totalPenalty)} valueColor="text-negative" />
+            <StatCard label="Net Saving" value={(results.netSaving >= 0 ? "+" : "") + formatINR(results.netSaving)} valueColor={results.netSaving >= 0 ? "text-positive" : "text-negative"} />
+            <StatCard label="Months Reduced" value={results.monthsReduced > 0 ? formatMonths(results.monthsReduced) : "0"} valueColor="text-primary" />
           </div>
 
-          <TableCard title="Prepayment Comparison">
+          <TableCard title="Before vs After Prepayment">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-muted/50">
                   <th className="text-left px-4 py-3 font-medium">Metric</th>
-                  <th className="text-right px-4 py-3 font-medium">
-                    Without Prepayment
-                  </th>
-                  <th className="text-right px-4 py-3 font-medium">
-                    With Prepayment
-                  </th>
+                  <th className="text-right px-4 py-3 font-medium">Without</th>
+                  <th className="text-right px-4 py-3 font-medium">With Prepayment</th>
                 </tr>
               </thead>
-              <tbody className="divide-y">
+              <tbody className="divide-y divide-border">
                 <tr>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    Months Remaining
-                  </td>
-                  <td className="px-4 py-3 text-right font-medium">
-                    {formatMonths(results.without.months)}
-                  </td>
-                  <td className="px-4 py-3 text-right font-medium text-positive">
-                    {formatMonths(results.withPrepay.months)}
-                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">Loan Duration</td>
+                  <td className="px-4 py-3 text-right font-medium">{formatMonths(results.without.rows.length)}</td>
+                  <td className="px-4 py-3 text-right font-medium text-positive">{formatMonths(results.withPP.rows.length)}</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    Total Interest
-                  </td>
-                  <td className="px-4 py-3 text-right font-medium">
-                    {formatLakhs(results.without.totalInterest)}
-                  </td>
-                  <td className="px-4 py-3 text-right font-medium text-positive">
-                    {formatLakhs(results.withPrepay.totalInterest)}
-                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">Total Interest</td>
+                  <td className="px-4 py-3 text-right font-medium">{formatLakhs(results.without.totalInterest)}</td>
+                  <td className="px-4 py-3 text-right font-medium text-positive">{formatLakhs(results.withPP.totalInterest)}</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    Total Paid (EMI + Prepayment)
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    {formatLakhs(results.without.totalPaid)}
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    {formatLakhs(
-                      results.withPrepay.totalPaid +
-                        results.prepay +
-                        results.penaltyAmount
-                    )}
-                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">Total Prepaid</td>
+                  <td className="px-4 py-3 text-right text-muted-foreground">—</td>
+                  <td className="px-4 py-3 text-right font-medium">{formatINR(results.totalPrepaid)}</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    Prepayment Penalty
-                  </td>
-                  <td className="px-4 py-3 text-right text-muted-foreground">
-                    &mdash;
-                  </td>
-                  <td className="px-4 py-3 text-right text-negative">
-                    {formatINR(results.penaltyAmount)}
+                  <td className="px-4 py-3 text-muted-foreground">Penalty Paid</td>
+                  <td className="px-4 py-3 text-right text-muted-foreground">—</td>
+                  <td className="px-4 py-3 text-right text-negative">{formatINR(results.totalPenalty)}</td>
+                </tr>
+                <tr className="bg-muted/30">
+                  <td className="px-4 py-3 font-medium">Net Saving</td>
+                  <td className="px-4 py-3 text-right text-muted-foreground">—</td>
+                  <td className={cn("px-4 py-3 text-right font-semibold", results.netSaving >= 0 ? "text-positive" : "text-negative")}>
+                    {results.netSaving >= 0 ? "+" : ""}{formatINR(results.netSaving)}
                   </td>
                 </tr>
               </tbody>
             </table>
           </TableCard>
 
-          {results.lockIn > 0 && (
-            <Callout type="warning">
-              Your car loan has {results.lockIn} months of lock-in remaining.
-              Prepayment may not be allowed yet. Check your loan agreement or
-              contact your lender before making the payment.
-            </Callout>
-          )}
-
-          <Callout type="info">
-            Car loans are fixed-rate in India, so the RBI zero-penalty rule for
-            floating-rate loans does <strong>not</strong> apply. Most banks
-            charge 2-5% of the prepaid amount. Always confirm the exact penalty
-            clause with your lender before paying.
+          <Callout type="warning">
+            Car loans are <strong>NOT</strong> protected by RBI prepayment rules.
+            Banks can charge 2–5% foreclosure penalty. Unlike home loans, there
+            is no zero-penalty mandate for floating rate car loans.
           </Callout>
         </div>
       )}

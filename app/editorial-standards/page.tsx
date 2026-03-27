@@ -6,6 +6,9 @@ export const metadata = buildMetadata({
   description:
     "LastEMI's editorial standards: how we verify calculations, cite RBI rules, and ensure every number in our articles is accurate.",
   path: "/editorial-standards",
+  keywords: [
+    "LastEMI editorial standards",
+  ],
 });
 
 export default function EditorialStandardsPage() {

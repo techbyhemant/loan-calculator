@@ -164,22 +164,38 @@ export function Header() {
 
         {/* Mobile Nav */}
         {menuOpen && (
-          <nav className="md:hidden mt-2 pt-2 border-t border-border flex flex-col max-h-[70vh] overflow-y-auto">
+          <nav className="md:hidden mt-3 pt-3 border-t border-border space-y-1 max-h-[70vh] overflow-y-auto pb-2">
             {CALC_CATEGORIES.map((cat) => (
-              <div key={cat.label}>
-                <p className="px-3 py-1.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{cat.label}</p>
+              <div key={cat.label} className="mb-2">
+                <p className="px-3 py-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                  {cat.label}
+                </p>
                 {cat.links.map((link) => (
-                  <Link key={link.href} href={link.href} onClick={() => setMenuOpen(false)}
-                    className={`px-3 py-2 text-sm font-medium rounded-lg ${pathname === link.href ? "text-primary bg-accent" : "text-muted-foreground hover:bg-accent"}`}>
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`block w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${
+                      pathname === link.href
+                        ? "text-primary bg-accent"
+                        : "text-foreground hover:bg-accent"
+                    }`}
+                  >
                     {link.label}
                   </Link>
                 ))}
               </div>
             ))}
-            <div className="border-t border-border mt-1 pt-1">
-              <Link href="/rbi-rates" onClick={() => setMenuOpen(false)} className={`block px-3 py-2 text-sm font-medium rounded-lg ${pathname === "/rbi-rates" ? "text-primary bg-accent" : "text-muted-foreground hover:bg-accent"}`}>RBI Rates</Link>
-              <Link href="/blog" onClick={() => setMenuOpen(false)} className={`block px-3 py-2 text-sm font-medium rounded-lg ${pathname.startsWith("/blog") ? "text-primary bg-accent" : "text-muted-foreground hover:bg-accent"}`}>Blog</Link>
-              <Link href="/pricing" onClick={() => setMenuOpen(false)} className={`block px-3 py-2 text-sm font-medium rounded-lg ${pathname === "/pricing" ? "text-primary bg-accent" : "text-muted-foreground hover:bg-accent"}`}>Pricing</Link>
+            <div className="border-t border-border pt-2 mt-2 space-y-0.5">
+              <Link href="/rbi-rates" onClick={() => setMenuOpen(false)} className={`block w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${pathname === "/rbi-rates" ? "text-primary bg-accent" : "text-foreground hover:bg-accent"}`}>
+                RBI Rates
+              </Link>
+              <Link href="/blog" onClick={() => setMenuOpen(false)} className={`block w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${pathname.startsWith("/blog") ? "text-primary bg-accent" : "text-foreground hover:bg-accent"}`}>
+                Blog
+              </Link>
+              <Link href="/pricing" onClick={() => setMenuOpen(false)} className={`block w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${pathname === "/pricing" ? "text-primary bg-accent" : "text-foreground hover:bg-accent"}`}>
+                Pricing
+              </Link>
             </div>
           </nav>
         )}

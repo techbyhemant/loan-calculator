@@ -6,6 +6,7 @@ import { formatINR, formatDate } from "@/lib/utils/formatters";
 import { trpcReact } from "@/lib/trpc/hooks";
 import { LOAN_TYPE_DISPLAY } from "@/lib/calculations/loanTypeConfig";
 import type { LoanType } from "@/lib/calculations/loanTypeConfig";
+import { LoanTypeIcon } from "@/components/ui/LoanTypeIcon";
 
 function LoanRow({ loan }: { loan: Loan }) {
   const display = LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other;
@@ -18,12 +19,12 @@ function LoanRow({ loan }: { loan: Loan }) {
       href={`/dashboard/loans/${loan._id}`}
       className="flex items-center gap-4 bg-card border border-border rounded-xl shadow-sm p-4 hover:border-primary/20 transition-colors"
     >
-      <span className="text-2xl">{display.icon}</span>
+      <LoanTypeIcon icon={display.icon} size="lg" />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p className="text-sm font-semibold text-foreground truncate">{loan.name}</p>
           <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full shrink-0">
-            {display.icon} {display.shortLabel}
+            <LoanTypeIcon icon={display.icon} size="sm" className="mr-1 inline-block align-middle" /> {display.shortLabel}
           </span>
         </div>
         <p className="text-xs text-muted-foreground">

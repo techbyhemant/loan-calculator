@@ -1,13 +1,14 @@
-import { Metadata } from "next";
 import Link from "next/link";
 import TaxBenefitCalc from "@/components/calculators/TaxBenefitCalc";
 import { getFAQSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
+import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "Home Loan Tax Benefit Calculator — Section 80C & 24(b) | LastEMI",
+export const metadata = buildMetadata({
+  title: "Home Loan Tax Benefit Calculator — Section 80C & 24(b)",
   description:
     "Calculate your home loan tax benefits under Section 80C and 24(b). Compare old vs new regime savings and find which tax regime saves you more money.",
+  path: "/calculators/tax-benefit",
   keywords: [
     "home loan tax benefit calculator",
     "section 80C home loan",
@@ -15,16 +16,7 @@ export const metadata: Metadata = {
     "home loan tax saving",
     "old vs new regime home loan",
   ],
-  alternates: { canonical: "/calculators/tax-benefit" },
-  openGraph: {
-    title: "Home Loan Tax Benefit Calculator — Section 80C & 24(b)",
-    url: "/calculators/tax-benefit",
-    siteName: "LastEMI",
-    locale: "en_IN",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
-};
+});
 
 const faqs = [
   {

@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import CarLoanPrepaymentCalc from "@/components/calculators/CarLoanPrepaymentCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
@@ -21,6 +21,19 @@ export const metadata = buildMetadata({
     "car loan prepayment penalty",
   ],
 });
+
+const faqs = [
+  {
+    question: "Does RBI\u2019s zero prepayment penalty rule apply to car loans?",
+    answer:
+      "No. The RBI rule only covers floating rate HOME loans and LAP. Car loan banks can legally charge 2-5% prepayment penalty.",
+  },
+  {
+    question: "Is it worth prepaying a car loan?",
+    answer:
+      "Usually yes \u2014 car loans have no tax benefit, so every rupee of interest is pure cost. Even with a 3% penalty, prepaying in the first 2 years typically saves more than the penalty costs.",
+  },
+];
 
 export default function CarLoanPrepaymentPage() {
   const calcSchema = getCalculatorSchema({
@@ -42,6 +55,8 @@ export default function CarLoanPrepaymentPage() {
     },
   ]);
 
+  const faqSchema = getFAQSchema(faqs);
+
   return (
     <div className="bg-background min-h-screen">
       <script
@@ -51,6 +66,10 @@ export default function CarLoanPrepaymentPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
@@ -124,6 +143,18 @@ export default function CarLoanPrepaymentPage() {
             loan payments, unless the home loan has a significantly higher
             interest rate.
           </p>
+
+          <h2 className="text-xl font-semibold text-foreground">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-muted-foreground">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
             <p className="text-primary font-medium">

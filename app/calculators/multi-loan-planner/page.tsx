@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getCalculatorSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/schema";
 
 import MultiLoanPlannerCalc from "@/components/calculators/MultiLoanPlannerCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
@@ -22,6 +22,19 @@ export const metadata = buildMetadata({
   ],
 });
 
+const faqs = [
+  {
+    question: "Which loan should I pay off first in India?",
+    answer:
+      "Credit cards first (42% PA), then personal loans (14-18%), then car loans (9-14%), then home loans last (8-10%). Home loans go last because Section 24(b) tax benefit reduces the effective rate.",
+  },
+  {
+    question: "Should I prepay my home loan or personal loan first?",
+    answer:
+      "Personal loan first \u2014 always. It has no tax benefit and costs 14-18% actual. Your home loan at 8.5% costs only ~6.3% after Section 24(b) tax benefit in the 30% bracket.",
+  },
+];
+
 export default function MultiLoanPlannerPage() {
   const calcSchema = getCalculatorSchema({
     name: "Multi-Loan Payoff Planner",
@@ -36,6 +49,8 @@ export default function MultiLoanPlannerPage() {
     { name: "Multi-Loan Planner", url: "https://lastemi.com/calculators/multi-loan-planner" },
   ]);
 
+  const faqSchema = getFAQSchema(faqs);
+
   return (
     <div className="bg-background min-h-screen">
       <script
@@ -45,6 +60,10 @@ export default function MultiLoanPlannerPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
@@ -116,6 +135,18 @@ export default function MultiLoanPlannerPage() {
             often cheaper than home loans for borrowers with large education loan balances.
             Always factor this in before rushing to prepay an education loan.
           </p>
+
+          <h2 className="text-xl font-semibold text-foreground">
+            Frequently Asked Questions
+          </h2>
+          <dl className="space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-semibold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-muted-foreground">{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
 
           <div className="bg-accent border border-primary/20 rounded-lg p-4 mt-6">
             <p className="text-primary font-medium">

@@ -13,6 +13,7 @@ import { trpcReact } from "@/lib/trpc/hooks";
 import { PartPaymentLogger, PartPaymentHistory } from "@/components/dashboard/PartPaymentLogger";
 import { LOAN_TYPE_DISPLAY, LOAN_TYPE_FINANCIALS, isRBIZeroPenaltyApplicable } from "@/lib/calculations/loanTypeConfig";
 import type { LoanType } from "@/lib/calculations/loanTypeConfig";
+import { LoanTypeIcon } from "@/components/ui/LoanTypeIcon";
 
 function SkeletonBlock() {
   return (
@@ -99,14 +100,12 @@ export default function LoanDetailPage() {
           &larr;
         </Link>
         <div className="flex items-center gap-2.5">
-          <span className="text-2xl">
-            {(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).icon}
-          </span>
+          <LoanTypeIcon icon={(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).icon} size="lg" />
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-semibold text-foreground">{loan.name}</h1>
               <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                {(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).icon}{" "}
+                <LoanTypeIcon icon={(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).icon} size="sm" className="mr-1 inline-block align-middle" />
                 {(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).shortLabel}
               </span>
             </div>
