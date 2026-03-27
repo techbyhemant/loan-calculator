@@ -25,10 +25,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getPostBySlug(slug);
   if (!post) return { title: "Post Not Found" };
 
+  const imageUrl = post.image
+    ? `https://lastemi.com${post.image}`
+    : `https://lastemi.com/blog/${post.slug}/opengraph-image`;
+
   return {
     title: `${post.title} | LastEMI Blog`,
     description: post.description,
     keywords: post.tags,
+    metadataBase: new URL("https://lastemi.com"),
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       title: post.title,
@@ -38,9 +43,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale: "en_IN",
       type: "article",
       publishedTime: post.publishedAt,
-      ...(post.image
-        ? { images: [{ url: post.image, width: 1200, height: 630 }] }
-        : {}),
+      images: [{ url: imageUrl, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: [imageUrl],
+      creator: "@lastemi",
+      site: "@lastemi",
     },
     robots: { index: true, follow: true },
   };
