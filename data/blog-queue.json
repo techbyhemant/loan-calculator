@@ -1,1 +1,287 @@
-[]
+[
+  {
+    "slug": "rbi-repo-rate-impact-on-emi",
+    "title": "RBI Repo Rate at 5.25%: How It Affects Your ₹50 Lakh Home Loan EMI",
+    "description": "Understand the impact of RBI's repo rate on your home loan EMI and plan your finances accordingly. Use our EMI calculator to find out how much you can save.",
+    "seoKeyword": "RBI repo rate impact",
+    "searchVolume": 2500,
+    "category": "Home Loans",
+    "tags": [
+      "RBI",
+      "repo rate",
+      "home loan"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/emi-part-payment",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "tax-saving-investments-for-loan-borrowers",
+    "title": "5 Tax-Saving Investments for Loan Borrowers to Reduce EMI Burden",
+    "description": "Discover the best tax-saving investments for loan borrowers and reduce your EMI burden. Learn how to save up to ₹1.5 lakhs in taxes.",
+    "seoKeyword": "tax saving investments",
+    "searchVolume": 1800,
+    "category": "Tax Optimization",
+    "tags": [
+      "tax saving",
+      "investments",
+      "loan borrowers"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/tax-benefit",
+    "imagePrompt": "",
+    "imageMetaphor": "GROWTH",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "credit-card-debt-consolidation-strategies",
+    "title": "Pay Off ₹2 Lakh Credit Card Debt in 6 Months: Consolidation Strategies",
+    "description": "Learn how to consolidate your credit card debt and pay it off quickly. Use our credit card payoff calculator to find the best strategy.",
+    "seoKeyword": "credit card debt consolidation",
+    "searchVolume": 1200,
+    "category": "Credit Cards",
+    "tags": [
+      "credit card debt",
+      "consolidation",
+      "strategies"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/credit-card-payoff",
+    "imagePrompt": "",
+    "imageMetaphor": "DECLINE",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "personal-loan-prepayment-penalty-2026",
+    "title": "Personal Loan Prepayment Penalty in 2026: How to Save ₹20,000",
+    "description": "Understand the personal loan prepayment penalty in 2026 and learn how to save up to ₹20,000. Use our prepayment calculator to plan your finances.",
+    "seoKeyword": "personal loan prepayment penalty",
+    "searchVolume": 1500,
+    "category": "Personal Loans",
+    "tags": [
+      "personal loan",
+      "prepayment penalty",
+      "2026"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/sip-vs-prepayment",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "car-loan-balance-transfer-benefits",
+    "title": "Save ₹15,000 on Your Car Loan: Balance Transfer Benefits Explained",
+    "description": "Discover the benefits of car loan balance transfer and save up to ₹15,000. Learn how to use our balance transfer calculator to find the best option.",
+    "seoKeyword": "car loan balance transfer",
+    "searchVolume": 1000,
+    "category": "Car Loans",
+    "tags": [
+      "car loan",
+      "balance transfer",
+      "benefits"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/balance-transfer",
+    "imagePrompt": "",
+    "imageMetaphor": "COMPARISON",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "education-loan-interest-rate-comparison",
+    "title": "Compare Education Loan Interest Rates: Save ₹10,000 on Your ₹5 Lakh Loan",
+    "description": "Compare education loan interest rates from top banks and save up to ₹10,000 on your ₹5 lakh loan. Use our education loan calculator to find the best option.",
+    "seoKeyword": "education loan interest rate comparison",
+    "searchVolume": 800,
+    "category": "Education Loans",
+    "tags": [
+      "education loan",
+      "interest rate comparison",
+      "savings"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/education-loan-80e",
+    "imagePrompt": "",
+    "imageMetaphor": "COMPARISON",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "consumer-emi-hidden-costs-exposed",
+    "title": "The Hidden Costs of Consumer EMI: How to Save ₹5,000 on Your Purchase",
+    "description": "Discover the hidden costs of consumer EMI and learn how to save up to ₹5,000 on your purchase. Use our consumer EMI calculator to find the best option.",
+    "seoKeyword": "consumer emi hidden costs",
+    "searchVolume": 600,
+    "category": "Consumer EMI",
+    "tags": [
+      "consumer emi",
+      "hidden costs",
+      "savings"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/consumer-emi-true-cost",
+    "imagePrompt": "",
+    "imageMetaphor": "WARNING",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "cibil-score-impact-on-loan-eligibility",
+    "title": "How CIBIL Score Affects Your Loan Eligibility: Tips to Improve Your Score",
+    "description": "Understand the impact of CIBIL score on your loan eligibility and learn tips to improve your score. Use our CIBIL score calculator to check your eligibility.",
+    "seoKeyword": "cibil score loan eligibility",
+    "searchVolume": 500,
+    "category": "CIBIL Score",
+    "tags": [
+      "cibil score",
+      "loan eligibility",
+      "improvement tips"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/salary-to-emi",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "home-loan-rent-vs-buy-decision",
+    "title": "Rent vs Buy: Should You Take a ₹50 Lakh Home Loan or Rent for ₹25,000/month?",
+    "description": "Decide whether to take a ₹50 lakh home loan or rent for ₹25,000/month. Use our rent vs buy calculator to make an informed decision.",
+    "seoKeyword": "rent vs buy decision",
+    "searchVolume": 400,
+    "category": "Home Loans",
+    "tags": [
+      "rent vs buy",
+      "home loan",
+      "decision making"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/rent-vs-buy",
+    "imagePrompt": "",
+    "imageMetaphor": "FORK",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "rbi-mpc-meeting-impact-on-loan-rates",
+    "title": "RBI MPC Meeting: How the Latest Rate Change Affects Your Loan Rates",
+    "description": "Understand the impact of the RBI MPC meeting on your loan rates and plan your finances accordingly. Use our loan rate calculator to find the best option.",
+    "seoKeyword": "rbi mpc meeting impact",
+    "searchVolume": 300,
+    "category": "RBI Policy",
+    "tags": [
+      "rbi mpc meeting",
+      "loan rates",
+      "impact"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/emi-part-payment",
+    "imagePrompt": "",
+    "imageMetaphor": "TIMELINE",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "credit-card-minimum-due-trap-explained",
+    "title": "The Credit Card Minimum Due Trap: How to Avoid Paying ₹10,000 in Interest",
+    "description": "Understand the credit card minimum due trap and learn how to avoid paying ₹10,000 in interest. Use our minimum due trap calculator to find the best strategy.",
+    "seoKeyword": "credit card minimum due trap",
+    "searchVolume": 250,
+    "category": "Credit Cards",
+    "tags": [
+      "credit card",
+      "minimum due trap",
+      "avoidance strategy"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/minimum-due-trap",
+    "imagePrompt": "",
+    "imageMetaphor": "WARNING",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "loan-debt-payoff-strategy-for-salary-earners",
+    "title": "Loan Debt Payoff Strategy for Salary Earners: Pay Off ₹5 Lakh in 3 Years",
+    "description": "Learn a loan debt payoff strategy for salary earners and pay off ₹5 lakh in 3 years. Use our debt payoff calculator to find the best strategy.",
+    "seoKeyword": "loan debt payoff strategy",
+    "searchVolume": 200,
+    "category": "Debt Payoff",
+    "tags": [
+      "loan debt payoff",
+      "salary earners",
+      "strategy"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/multi-loan-planner",
+    "imagePrompt": "",
+    "imageMetaphor": "DECLINE",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "multi-card-payoff-strategy-for-credit-card-debt",
+    "title": "Multi-Card Payoff Strategy: Pay Off ₹2 Lakh Credit Card Debt in 12 Months",
+    "description": "Learn a multi-card payoff strategy to pay off ₹2 lakh credit card debt in 12 months. Use our multi-card payoff calculator to find the best strategy.",
+    "seoKeyword": "multi card payoff strategy",
+    "searchVolume": 150,
+    "category": "Credit Cards",
+    "tags": [
+      "multi card payoff",
+      "credit card debt",
+      "strategy"
+    ],
+    "tier": 3,
+    "relatedCalculator": "/calculators/multi-card-payoff",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "personal-loan-consolidation-benefits-explained",
+    "title": "Personal Loan Consolidation Benefits: Save ₹10,000 on Your ₹2 Lakh Loan",
+    "description": "Understand the benefits of personal loan consolidation and save ₹10,000 on your ₹2 lakh loan. Use our personal loan consolidation calculator to find the best option.",
+    "seoKeyword": "personal loan consolidation benefits",
+    "searchVolume": 100,
+    "category": "Personal Loans",
+    "tags": [
+      "personal loan consolidation",
+      "benefits",
+      "savings"
+    ],
+    "tier": 3,
+    "relatedCalculator": "/calculators/sip-vs-prepayment",
+    "imagePrompt": "",
+    "imageMetaphor": "COMPARISON",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "home-loan-eligibility-criteria-explained",
+    "title": "Home Loan Eligibility Criteria: How to Get Approved for a ₹50 Lakh Loan",
+    "description": "Understand the home loan eligibility criteria and learn how to get approved for a ₹50 lakh loan. Use our home loan eligibility calculator to check your eligibility.",
+    "seoKeyword": "home loan eligibility criteria",
+    "searchVolume": 50,
+    "category": "Home Loans",
+    "tags": [
+      "home loan eligibility",
+      "criteria",
+      "approval"
+    ],
+    "tier": 3,
+    "relatedCalculator": "/calculators/home-loan-eligibility",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-03-28T02:03:43.842Z",
+    "source": "discovered"
+  }
+]

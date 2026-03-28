@@ -53,7 +53,7 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
 
   const completion = await groq.chat.completions.create({
     model: 'llama-3.3-70b-versatile',
-    max_tokens: 5000,
+    max_tokens: 8000,
     temperature: 0.7,
     messages: [
       {
@@ -67,11 +67,34 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
     ],
   })
 
-  const articleContent = completion.choices[0]?.message?.content
+  let articleContent = completion.choices[0]?.message?.content
   if (!articleContent) throw new Error('Groq returned empty content')
 
+  let wordCount = articleContent.split(/\s+/).length
   console.log(`   ✅ Article written in ${((Date.now() - startText) / 1000).toFixed(1)}s`)
-  console.log(`   📝 Word count: ~${articleContent.split(' ').length} words`)
+  console.log(`   📝 Word count: ~${wordCount} words`)
+
+  // Retry if too short — Llama sometimes produces short outputs
+  if (wordCount < 1200) {
+    console.log(`   ⚠️  Too short (${wordCount} < 1200). Retrying with stronger instruction...`)
+    const retry = await groq.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
+      max_tokens: 8000,
+      temperature: 0.7,
+      messages: [
+        { role: 'system', content: BLOG_SYSTEM_PROMPT },
+        { role: 'user', content: buildArticleUserPrompt(post) },
+        { role: 'assistant', content: articleContent },
+        { role: 'user', content: 'This article is TOO SHORT. It has only ' + wordCount + ' words but needs MINIMUM 1,500 words. Please EXPAND every section with more detail, more numerical examples, more step-by-step calculations, and more comparison data. Add sections you may have skipped. Output the COMPLETE expanded article from the beginning.' },
+      ],
+    })
+    const retryContent = retry.choices[0]?.message?.content
+    if (retryContent && retryContent.split(/\s+/).length > wordCount) {
+      articleContent = retryContent
+      wordCount = articleContent.split(/\s+/).length
+      console.log(`   ✅ Retry produced ${wordCount} words`)
+    }
+  }
 
   // 4. Generate image via Replicate (Flux Schnell) — optional, graceful failure
   console.log('\n🎨 Generating featured image via Replicate (Flux Schnell)...')
@@ -173,9 +196,15 @@ function buildArticleUserPrompt(post: PostSpec | QueuedPost): string {
     3: 'This is a Tier 3 post — broader topic for topical authority building. Depth and internal linking matter more than sharp keyword focus here. This builds the topic cluster that helps Tier 1 and 2 posts rank.',
   }
 
-  return `Write a COMPLETE, COMPREHENSIVE blog post for LastEMI (lastemi.com).
+  return `Write a COMPLETE, COMPREHENSIVE, LONG blog post for LastEMI (lastemi.com).
 
-CRITICAL: The article MUST be between 1,500-1,800 words. Articles under 1,400 words are AUTOMATICALLY REJECTED. Write in-depth with detailed examples, calculations, and analysis. Do NOT write a summary — write a full guide.
+ABSOLUTE MINIMUM: 1,500 WORDS. TARGET: 1,800 WORDS.
+This is NON-NEGOTIABLE. If your output is under 1,500 words it is AUTOMATICALLY DELETED.
+You MUST write at least 7 substantial sections with 200+ words each.
+Include at least 3 detailed numerical examples with step-by-step ₹ calculations.
+Include at least 2 comparison tables.
+Include detailed explanations — this is a GUIDE, not a summary.
+DO NOT be brief. DO NOT skip sections. Write EVERYTHING the system prompt requires.
 
 TITLE: ${post.title}
 TARGET KEYWORD: "${post.seoKeyword}"
@@ -257,16 +286,19 @@ function promptUser(question: string): Promise<string> {
   })
 }
 
-// Run
-const slug = process.argv[2]
-if (!slug) {
-  console.log('Usage: npx tsx scripts/blog/generate-post.ts [slug]')
-  console.log('\nAvailable posts:')
-  POSTS.forEach(p => console.log(`  [T${p.tier} W${p.publishWeek}] ${p.slug} (${p.searchVolume}/mo)`))
-  process.exit(0)
-}
+// CLI runner — only runs when this file is executed directly (not imported)
+const isDirectRun = process.argv[1]?.includes('generate-post')
+if (isDirectRun) {
+  const slug = process.argv[2]
+  if (!slug) {
+    console.log('Usage: npx tsx scripts/blog/generate-post.ts [slug]')
+    console.log('\nAvailable posts:')
+    POSTS.forEach(p => console.log(`  [T${p.tier} W${p.publishWeek}] ${p.slug} (${p.searchVolume}/mo)`))
+    process.exit(0)
+  }
 
-generateBlogPost(slug).catch(err => {
-  console.error('❌ Generation failed:', err)
-  process.exit(1)
-})
+  generateBlogPost(slug).catch(err => {
+    console.error('❌ Generation failed:', err)
+    process.exit(1)
+  })
+}

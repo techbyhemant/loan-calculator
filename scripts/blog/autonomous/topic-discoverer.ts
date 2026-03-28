@@ -169,8 +169,11 @@ Return ONLY valid JSON.`
       ],
     })
 
-    const responseText = completion.choices[0]?.message?.content
+    let responseText = completion.choices[0]?.message?.content
     if (!responseText) throw new Error('Empty response from Groq')
+
+    // Strip markdown code fences if Groq wraps the JSON
+    responseText = responseText.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```$/i, '').trim()
 
     const parsed = JSON.parse(responseText) as { topics: DiscoveredTopic[] }
     const topics = parsed.topics || []
