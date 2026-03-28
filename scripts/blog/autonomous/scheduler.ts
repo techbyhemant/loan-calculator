@@ -301,14 +301,34 @@ async function run(): Promise<void> {
   // ─── Step 3: Decide what to do today ─────────────────
   if (isSprintPhase) {
     // SPRINT MODE: 1 new post per day + 1 update if high-priority stale found
-    console.log('\n--- Step 3: SPRINT Mode ---')
+    console.log('\n--- Step 3: SPRINT Mode (1 post/day) ---')
 
     // 3a. Generate 1 new post (if not already done today)
     if (alreadyPublishedToday === 0) {
-      const nextPost = dequeueNext()
+      // Try queue first, then discover a fresh topic
+      let nextPost = dequeueNext()
+
+      if (!nextPost) {
+        console.log('   Queue empty — discovering a fresh topic via AI...')
+        const discovered = await discoverNewTopics(3)
+        if (discovered.length > 0) {
+          nextPost = discovered[0]
+          // Queue the rest for tomorrow
+          if (discovered.length > 1) {
+            enqueue(discovered.slice(1))
+          }
+          logCost({
+            date: new Date().toISOString(),
+            action: 'discover',
+            slug: 'on-demand-discovery',
+            tokensUsed: 4000,
+          })
+        }
+      }
+
       if (nextPost) {
         console.log(`\n   NEW POST: "${nextPost.title}"`)
-        console.log(`   Keyword: ${nextPost.seoKeyword} | Tier: ${nextPost.tier} | Source: ${nextPost.source}`)
+        console.log(`   Keyword: ${nextPost.seoKeyword} | Tier: ${nextPost.tier} | Source: ${nextPost.source ?? 'queue'}`)
 
         const result = await generateNewPost(nextPost)
         logCost({
@@ -318,7 +338,7 @@ async function run(): Promise<void> {
           tokensUsed: result.tokensUsed,
         })
       } else {
-        console.log('   Queue is empty — cannot generate a new post today.')
+        console.log('   Could not find or discover a topic — skipping today.')
       }
     } else {
       console.log(`   Already published ${alreadyPublishedToday} post(s) today — skipping generation.`)
@@ -348,10 +368,18 @@ async function run(): Promise<void> {
     // 3a. Generate 1 new post every 3 days
     const shouldGenerateNew = daysSinceLastPost >= 3 && alreadyPublishedToday === 0
     if (shouldGenerateNew) {
-      const nextPost = dequeueNext()
+      let nextPost = dequeueNext()
+      if (!nextPost) {
+        console.log('   Queue empty — discovering a fresh topic via AI...')
+        const discovered = await discoverNewTopics(3)
+        if (discovered.length > 0) {
+          nextPost = discovered[0]
+          if (discovered.length > 1) enqueue(discovered.slice(1))
+        }
+      }
       if (nextPost) {
         console.log(`\n   NEW POST (maintenance): "${nextPost.title}"`)
-        console.log(`   Keyword: ${nextPost.seoKeyword} | Tier: ${nextPost.tier} | Source: ${nextPost.source}`)
+        console.log(`   Keyword: ${nextPost.seoKeyword} | Tier: ${nextPost.tier} | Source: ${nextPost.source ?? 'discovered'}`)
 
         const result = await generateNewPost(nextPost)
         logCost({

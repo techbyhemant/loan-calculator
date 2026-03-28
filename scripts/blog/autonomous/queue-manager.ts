@@ -61,8 +61,25 @@ export function saveQueue(queue: QueuedPost[]): void {
 export function dequeueNext(): QueuedPost | null {
   const queue = loadQueue()
   if (queue.length === 0) return null
-  const next = queue[0]
-  saveQueue(queue.slice(1))
+
+  // Skip posts that already have MDX files (already published)
+  const blogDir = path.join(process.cwd(), 'content', 'blog')
+  let nextIndex = 0
+  while (nextIndex < queue.length) {
+    const mdxPath = path.join(blogDir, `${queue[nextIndex].slug}.mdx`)
+    if (!fs.existsSync(mdxPath)) break // Found an unpublished post
+    console.log(`   Skipping "${queue[nextIndex].slug}" — already published`)
+    nextIndex++
+  }
+
+  if (nextIndex >= queue.length) {
+    // All posts in queue are already published — clear and return null
+    saveQueue([])
+    return null
+  }
+
+  const next = queue[nextIndex]
+  saveQueue([...queue.slice(0, nextIndex), ...queue.slice(nextIndex + 1)])
   return next
 }
 

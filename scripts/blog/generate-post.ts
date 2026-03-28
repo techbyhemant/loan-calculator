@@ -34,11 +34,16 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
   // 2. Check if already exists
   const mdxPath = path.join(BLOG_DIR, `${post.slug}.mdx`)
   if (fs.existsSync(mdxPath)) {
+    // In CI (non-interactive), skip existing files
+    if (!process.stdin.isTTY || process.env.CI) {
+      console.log(`⚠️  File already exists: ${mdxPath} — skipping (CI mode)`)
+      return
+    }
     console.log(`⚠️  File already exists: ${mdxPath}`)
     const answer = await promptUser('Overwrite? (y/N): ')
     if (answer.toLowerCase() !== 'y') {
       console.log('Skipped.')
-      process.exit(0)
+      return
     }
   }
 
