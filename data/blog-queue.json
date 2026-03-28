@@ -1,1 +1,268 @@
-[]
+[
+  {
+    "slug": "car-loan-prepayment-benefits",
+    "title": "Prepaying Your Car Loan: How You Can Save ₹50,000 in Interest",
+    "description": "Discover the benefits of prepaying your car loan and calculate your savings using our car loan prepayment calculator.",
+    "seoKeyword": "car loan prepayment benefits",
+    "searchVolume": 900,
+    "category": "Car Loans",
+    "tags": [
+      "car loan",
+      "prepayment",
+      "interest savings"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/car-loan-prepayment",
+    "imagePrompt": "",
+    "imageMetaphor": "DECLINE",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "education-loan-tax-benefits",
+    "title": "Claiming ₹1.5 Lakh Tax Deduction on Education Loan Interest",
+    "description": "Learn how to claim tax benefits on your education loan interest and calculate your tax savings using our education loan tax benefit calculator.",
+    "seoKeyword": "education loan tax benefits",
+    "searchVolume": 1000,
+    "category": "Education Loans",
+    "tags": [
+      "education loan",
+      "tax benefits",
+      "interest deduction"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/education-loan-80e",
+    "imagePrompt": "",
+    "imageMetaphor": "GROWTH",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "personal-loan-consolidation-strategies",
+    "title": "Consolidating Multiple Personal Loans: A Step-by-Step Guide to Saving ₹20,000",
+    "description": "Discover how to consolidate multiple personal loans and calculate your savings using our personal loan payoff calculator.",
+    "seoKeyword": "personal loan consolidation strategies",
+    "searchVolume": 800,
+    "category": "Personal Loans",
+    "tags": [
+      "personal loan",
+      "consolidation",
+      "debt repayment"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/personal-loan-payoff",
+    "imagePrompt": "",
+    "imageMetaphor": "FORK",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "home-loan-balance-transfer-savings",
+    "title": "Transferring Your Home Loan: How to Save ₹2 Lakh in Interest",
+    "description": "Learn how to transfer your home loan and calculate your interest savings using our home loan balance transfer calculator.",
+    "seoKeyword": "home loan balance transfer savings",
+    "searchVolume": 1500,
+    "category": "Home Loans",
+    "tags": [
+      "home loan",
+      "balance transfer",
+      "interest savings"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/balance-transfer",
+    "imagePrompt": "",
+    "imageMetaphor": "DECLINE",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "credit-card-minimum-due-trap",
+    "title": "The Hidden Credit Card Minimum Due Trap: How to Avoid Paying ₹10,000 in Interest",
+    "description": "Discover the credit card minimum due trap and learn how to avoid it using our credit card payoff calculator.",
+    "seoKeyword": "credit card minimum due trap",
+    "searchVolume": 1100,
+    "category": "Credit Cards",
+    "tags": [
+      "credit card",
+      "minimum due",
+      "interest trap"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/minimum-due-trap",
+    "imagePrompt": "",
+    "imageMetaphor": "WARNING",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "consumer-emi-hidden-costs",
+    "title": "The Hidden Costs of Consumer EMI: How to Avoid Paying ₹5,000 Extra",
+    "description": "Learn about the hidden costs of consumer EMI and calculate your true cost using our consumer EMI calculator.",
+    "seoKeyword": "consumer emi hidden costs",
+    "searchVolume": 900,
+    "category": "Consumer EMI",
+    "tags": [
+      "consumer emi",
+      "hidden costs",
+      "true cost"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/consumer-emi-true-cost",
+    "imagePrompt": "",
+    "imageMetaphor": "WARNING",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "tax-optimization-for-borrowers",
+    "title": "Tax Optimization for Borrowers: How to Save ₹30,000 in Taxes",
+    "description": "Discover tax optimization strategies for borrowers and calculate your tax savings using our tax benefit calculator.",
+    "seoKeyword": "tax optimization for borrowers",
+    "searchVolume": 1200,
+    "category": "Tax Optimization",
+    "tags": [
+      "tax optimization",
+      "borrowers",
+      "tax savings"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/tax-benefit",
+    "imagePrompt": "",
+    "imageMetaphor": "GROWTH",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "multi-loan-payoff-strategy",
+    "title": "Paying Off Multiple Loans: A Step-by-Step Guide to Saving ₹50,000",
+    "description": "Learn how to pay off multiple loans and calculate your savings using our multi-loan planner calculator.",
+    "seoKeyword": "multi loan payoff strategy",
+    "searchVolume": 1000,
+    "category": "Debt Repayment",
+    "tags": [
+      "multi loan",
+      "payoff strategy",
+      "debt repayment"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/multi-loan-planner",
+    "imagePrompt": "",
+    "imageMetaphor": "FORK",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "cibil-score-impact-on-loan-eligibility",
+    "title": "How Your CIBIL Score Affects Your Loan Eligibility: A ₹50,000 Difference",
+    "description": "Learn how your CIBIL score impacts your loan eligibility and calculate your loan eligibility using our home loan eligibility calculator.",
+    "seoKeyword": "cibil score impact on loan eligibility",
+    "searchVolume": 800,
+    "category": "Credit Score",
+    "tags": [
+      "cibil score",
+      "loan eligibility",
+      "credit score"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/home-loan-eligibility",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "rent-vs-buy-decision",
+    "title": "Rent vs Buy: How to Decide and Save ₹2 Lakh in 5 Years",
+    "description": "Discover the factors to consider when deciding between rent and buy and calculate your savings using our rent vs buy calculator.",
+    "seoKeyword": "rent vs buy decision",
+    "searchVolume": 1500,
+    "category": "Home Financing",
+    "tags": [
+      "rent vs buy",
+      "home financing",
+      "savings"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/rent-vs-buy",
+    "imagePrompt": "",
+    "imageMetaphor": "COMPARISON",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "salary-to-emi-ratio",
+    "title": "The Ideal Salary to EMI Ratio: How to Avoid Debt Traps and Save ₹10,000",
+    "description": "Learn about the ideal salary to EMI ratio and calculate your affordable EMI using our salary to EMI calculator.",
+    "seoKeyword": "salary to emi ratio",
+    "searchVolume": 1000,
+    "category": "Debt Management",
+    "tags": [
+      "salary to emi",
+      "debt management",
+      "affordable emi"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/salary-to-emi",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "car-loan-emergency-fund",
+    "title": "Building an Emergency Fund for Your Car Loan: A ₹20,000 Safety Net",
+    "description": "Discover the importance of building an emergency fund for your car loan and calculate your required fund using our car loan prepayment calculator.",
+    "seoKeyword": "car loan emergency fund",
+    "searchVolume": 800,
+    "category": "Car Loans",
+    "tags": [
+      "car loan",
+      "emergency fund",
+      "safety net"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/car-loan-prepayment",
+    "imagePrompt": "",
+    "imageMetaphor": "GROWTH",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "credit-card-payoff-strategy",
+    "title": "Paying Off Your Credit Card Debt: A Step-by-Step Guide to Saving ₹5,000",
+    "description": "Learn how to pay off your credit card debt and calculate your savings using our credit card payoff calculator.",
+    "seoKeyword": "credit card payoff strategy",
+    "searchVolume": 1200,
+    "category": "Credit Cards",
+    "tags": [
+      "credit card",
+      "payoff strategy",
+      "debt repayment"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/credit-card-payoff",
+    "imagePrompt": "",
+    "imageMetaphor": "FORK",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "education-loan-prepayment-benefits",
+    "title": "Prepaying Your Education Loan: How to Save ₹15,000 in Interest",
+    "description": "Discover the benefits of prepaying your education loan and calculate your savings using our education loan prepayment calculator.",
+    "seoKeyword": "education loan prepayment benefits",
+    "searchVolume": 900,
+    "category": "Education Loans",
+    "tags": [
+      "education loan",
+      "prepayment",
+      "interest savings"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/education-loan-80e",
+    "imagePrompt": "",
+    "imageMetaphor": "DECLINE",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  }
+]
