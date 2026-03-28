@@ -75,14 +75,13 @@ export default function LoanCalculator() {
               <div className="w-1.5 h-1.5 rounded-full bg-primary" />
               Loan simulator — plan part payments and EMI changes on your actual calendar
             </div>
-            <h1 className="text-2xl font-semibold text-foreground tracking-tight">
-              Simulate your loan. Plan your{" "}
-              <span className="text-primary">debt-free date.</span>
+            <h1 className="text-2xl font-semibold text-foreground tracking-tight leading-snug">
+              EMI Calculator — Simulate Part Payments,{" "}
+              <span className="text-primary">Find Your Debt-Free Date</span>
             </h1>
             <p className="text-muted-foreground text-sm mt-1.5">
-              Enter your loan details, then add part payments or EMI increases to any
-              specific month. See exactly how much interest you save and when you&apos;ll
-              make your last EMI.
+              Home loan, personal loan, car loan. Add part payments to any specific month
+              and see exactly how much interest you save. Free — no phone number required.
             </p>
           </div>
 
