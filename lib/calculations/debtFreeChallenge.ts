@@ -95,32 +95,32 @@ function calculateWhatIfDebtFreeDate(
   // Simulate: apply extra to highest rate loan first (avalanche)
   const sorted = [...active].sort((a, b) => b.interestRate - a.interestRate);
   const balances = new Map<string, number>();
-  sorted.forEach((l) => balances.set(l._id, l.currentOutstanding));
+  sorted.forEach((l) => balances.set(l.id, l.currentOutstanding));
 
   let months = 0;
   const maxMonths = 600;
 
   while (months < maxMonths) {
-    const remaining = sorted.filter((l) => (balances.get(l._id) ?? 0) > 0.01);
+    const remaining = sorted.filter((l) => (balances.get(l.id) ?? 0) > 0.01);
     if (remaining.length === 0) break;
     months++;
 
     let extra = monthlyExtra;
 
     for (const loan of remaining) {
-      const bal = balances.get(loan._id) ?? 0;
+      const bal = balances.get(loan.id) ?? 0;
       const r = loan.interestRate / 12 / 100;
       const interest = bal * r;
       const principalPaid = Math.max(0, loan.emiAmount - interest);
-      balances.set(loan._id, Math.max(0, bal - principalPaid));
+      balances.set(loan.id, Math.max(0, bal - principalPaid));
     }
 
     for (const loan of sorted) {
       if (extra <= 0) break;
-      const bal = balances.get(loan._id) ?? 0;
+      const bal = balances.get(loan.id) ?? 0;
       if (bal <= 0.01) continue;
       const payment = Math.min(extra, bal);
-      balances.set(loan._id, Math.max(0, bal - payment));
+      balances.set(loan.id, Math.max(0, bal - payment));
       extra -= payment;
     }
   }

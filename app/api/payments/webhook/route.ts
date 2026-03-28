@@ -4,8 +4,9 @@
 
 import { NextRequest } from "next/server";
 import crypto from "crypto";
-import dbConnect from "@/lib/mongodb";
-import { UserModel } from "@/lib/models/User";
+import { db } from "@/lib/db";
+import { users } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
   const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
@@ -34,8 +35,6 @@ export async function POST(req: NextRequest) {
     const event = JSON.parse(body);
     const eventType = event.event as string;
 
-    await dbConnect();
-
     if (
       eventType === "subscription.activated" ||
       eventType === "subscription.charged"
@@ -45,12 +44,16 @@ export async function POST(req: NextRequest) {
         const expiry = new Date();
         expiry.setMonth(expiry.getMonth() + 1);
 
-        await UserModel.findByIdAndUpdate(userId, {
-          plan: "pro",
-          planExpiry: expiry,
-          razorpayCustomerId:
-            event.payload?.subscription?.entity?.customer_id ?? undefined,
-        });
+        await db
+          .update(users)
+          .set({
+            plan: "pro",
+            planExpiry: expiry,
+            razorpayCustomerId:
+              event.payload?.subscription?.entity?.customer_id ?? undefined,
+            updatedAt: new Date(),
+          })
+          .where(eq(users.id, userId));
       }
     }
 
@@ -60,9 +63,10 @@ export async function POST(req: NextRequest) {
     ) {
       const userId = event.payload?.subscription?.entity?.notes?.userId;
       if (userId) {
-        await UserModel.findByIdAndUpdate(userId, {
-          plan: "free",
-        });
+        await db
+          .update(users)
+          .set({ plan: "free", updatedAt: new Date() })
+          .where(eq(users.id, userId));
       }
     }
 

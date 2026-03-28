@@ -1,44 +1,64 @@
 import { z } from "zod";
 import { router, protectedProcedure } from "@/server/trpc";
 import { TRPCError } from "@trpc/server";
-import dbConnect from "@/lib/mongodb";
-import { PartPaymentModel } from "@/lib/models/PartPayment";
-import { LoanModel } from "@/lib/models/Loan";
+import { db } from "@/lib/db";
+import { loans, partPayments } from "@/lib/db/schema";
+import { eq, and, desc, sql } from "drizzle-orm";
 import { FREE_LIMITS } from "@/lib/utils/planGating";
 import { calculatePartPaymentImpact } from "@/lib/calculations/loanCalcs";
 import { PartPaymentInputSchema } from "@/lib/validators/loanSchema";
 import type { Loan, ReduceType } from "@/types";
 
+/** Convert Drizzle numeric string columns to numbers for client consumption. */
+function serializePartPayment(row: typeof partPayments.$inferSelect) {
+  return {
+    ...row,
+    amount: Number(row.amount),
+    interestSaved: Number(row.interestSaved),
+  };
+}
+
 export const partPaymentsRouter = router({
   getByLoan: protectedProcedure
     .input(z.object({ loanId: z.string().optional() }))
     .query(async ({ ctx, input }) => {
-      await dbConnect();
-      const filter: Record<string, string> = { userId: ctx.userId };
-      if (input.loanId) filter.loanId = input.loanId;
-      const partPayments = await PartPaymentModel.find(filter)
-        .sort({ date: -1 })
-        .lean();
-      return partPayments;
+      const conditions = [eq(partPayments.userId, ctx.userId)];
+      if (input.loanId) {
+        conditions.push(eq(partPayments.loanId, input.loanId));
+      }
+
+      const rows = await db
+        .select()
+        .from(partPayments)
+        .where(and(...conditions))
+        .orderBy(desc(partPayments.date));
+
+      return rows.map(serializePartPayment);
     }),
 
   create: protectedProcedure
     .input(PartPaymentInputSchema)
     .mutation(async ({ ctx, input }) => {
-      await dbConnect();
+      // Verify the loan exists and belongs to this user
+      const loanRows = await db
+        .select()
+        .from(loans)
+        .where(
+          and(
+            eq(loans.id, input.loanId),
+            eq(loans.userId, ctx.userId),
+            eq(loans.isActive, true),
+          ),
+        );
 
-      const loan = (await LoanModel.findOne({
-        _id: input.loanId,
-        userId: ctx.userId,
-        isActive: true,
-      }).lean()) as (Loan & { _id: string }) | null;
+      if (loanRows.length === 0) throw new TRPCError({ code: "NOT_FOUND" });
 
-      if (!loan) throw new TRPCError({ code: "NOT_FOUND" });
-
+      // Free plan limit check
       if (ctx.userPlan === "free") {
-        const count = await PartPaymentModel.countDocuments({
-          userId: ctx.userId,
-        });
+        const [{ count }] = await db
+          .select({ count: sql<number>`count(*)::int` })
+          .from(partPayments)
+          .where(eq(partPayments.userId, ctx.userId));
         if (count >= FREE_LIMITS.maxPartPaymentLogs) {
           throw new TRPCError({
             code: "FORBIDDEN",
@@ -47,25 +67,28 @@ export const partPaymentsRouter = router({
         }
       }
 
+      const dbLoan = loanRows[0];
+
+      // Build a Loan object for the calculation engine
       const loanData: Loan = {
-        _id: String(loan._id),
-        userId: String(loan.userId),
-        name: loan.name,
-        type: loan.type,
-        lender: loan.lender,
-        originalAmount: loan.originalAmount,
-        currentOutstanding: loan.currentOutstanding,
-        interestRate: loan.interestRate,
-        emiAmount: loan.emiAmount,
-        emiDate: loan.emiDate,
-        startDate: String(loan.startDate),
-        tenureMonths: loan.tenureMonths,
-        rateType: loan.rateType,
-        prepaymentPenalty: loan.prepaymentPenalty,
-        isActive: loan.isActive,
-        notes: loan.notes,
-        createdAt: String(loan.createdAt),
-        updatedAt: String(loan.updatedAt),
+        id: dbLoan.id,
+        userId: dbLoan.userId,
+        name: dbLoan.name,
+        type: dbLoan.type as Loan["type"],
+        lender: dbLoan.lender ?? "",
+        originalAmount: Number(dbLoan.originalAmount),
+        currentOutstanding: Number(dbLoan.currentOutstanding),
+        interestRate: Number(dbLoan.interestRate),
+        emiAmount: Number(dbLoan.emiAmount),
+        emiDate: dbLoan.emiDate ?? 1,
+        startDate: dbLoan.startDate,
+        tenureMonths: dbLoan.tenureMonths,
+        rateType: dbLoan.rateType ?? "floating",
+        prepaymentPenalty: Number(dbLoan.prepaymentPenalty),
+        isActive: dbLoan.isActive,
+        notes: dbLoan.notes ?? "",
+        createdAt: dbLoan.createdAt,
+        updatedAt: dbLoan.updatedAt,
       };
 
       const impact = calculatePartPaymentImpact(
@@ -74,33 +97,40 @@ export const partPaymentsRouter = router({
         input.reduceType as ReduceType,
       );
 
-      const partPayment = await PartPaymentModel.create({
-        userId: ctx.userId,
-        loanId: input.loanId,
-        amount: input.amount,
-        date: input.date,
-        reduceType: input.reduceType,
-        interestSaved: impact.interestSaved,
-        monthsReduced: impact.monthsReduced,
-        note: input.note || "",
-      });
+      const [newPartPayment] = await db
+        .insert(partPayments)
+        .values({
+          userId: ctx.userId,
+          loanId: input.loanId,
+          amount: String(input.amount),
+          date: new Date(input.date),
+          reduceType: input.reduceType,
+          interestSaved: String(impact.interestSaved),
+          monthsReduced: impact.monthsReduced,
+          note: input.note || "",
+        })
+        .returning();
 
-      return partPayment;
+      return serializePartPayment(newPartPayment);
     }),
 
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      await dbConnect();
+      // Verify ownership before deleting
+      const rows = await db
+        .select()
+        .from(partPayments)
+        .where(
+          and(
+            eq(partPayments.id, input.id),
+            eq(partPayments.userId, ctx.userId),
+          ),
+        );
 
-      const partPayment = await PartPaymentModel.findOne({
-        _id: input.id,
-        userId: ctx.userId,
-      });
+      if (rows.length === 0) throw new TRPCError({ code: "NOT_FOUND" });
 
-      if (!partPayment) throw new TRPCError({ code: "NOT_FOUND" });
-
-      await PartPaymentModel.findByIdAndDelete(input.id);
+      await db.delete(partPayments).where(eq(partPayments.id, input.id));
       return { success: true };
     }),
 });

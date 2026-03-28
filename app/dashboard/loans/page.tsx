@@ -16,7 +16,7 @@ function LoanRow({ loan }: { loan: Loan }) {
 
   return (
     <Link
-      href={`/dashboard/loans/${loan._id}`}
+      href={`/dashboard/loans/${loan.id}`}
       className="flex items-center gap-4 bg-card border border-border rounded-xl shadow-sm p-4 hover:border-primary/20 transition-colors"
     >
       <LoanTypeIcon icon={display.icon} size="lg" />
@@ -86,8 +86,8 @@ export default function LoansPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {loans.map((loan: Loan) => (
-            <LoanRow key={loan._id} loan={loan} />
+          {(loans as unknown as Loan[]).map((loan) => (
+            <LoanRow key={loan.id} loan={loan} />
           ))}
         </div>
       )}

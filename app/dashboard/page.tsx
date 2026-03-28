@@ -95,7 +95,7 @@ function LoanCard({ loan }: { loan: Loan }) {
           )}
         </div>
         <Link
-          href={`/dashboard/loans/${loan._id}`}
+          href={`/dashboard/loans/${loan.id}`}
           className="text-xs font-medium text-primary hover:text-primary"
         >
           View Details &rarr;
@@ -230,7 +230,7 @@ export default function DashboardPage() {
       ) : (
         <div className="space-y-4 mb-6">
           {loans.map((loan) => (
-            <LoanCard key={loan._id} loan={loan} />
+            <LoanCard key={loan.id} loan={loan} />
           ))}
         </div>
       )}

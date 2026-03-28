@@ -18,14 +18,14 @@ function simulatePayoff(
   order: Loan[],
 ): { totalInterest: number; months: number } {
   const balances = new Map<string, number>();
-  loans.forEach((l) => balances.set(l._id, l.currentOutstanding));
+  loans.forEach((l) => balances.set(l.id, l.currentOutstanding));
 
   let totalInterest = 0;
   let months = 0;
   const maxMonths = 600; // 50 year cap
 
   while (months < maxMonths) {
-    const activeLoans = loans.filter((l) => (balances.get(l._id) ?? 0) > 0.01);
+    const activeLoans = loans.filter((l) => (balances.get(l.id) ?? 0) > 0.01);
     if (activeLoans.length === 0) break;
 
     months++;
@@ -33,21 +33,21 @@ function simulatePayoff(
 
     // Pay regular EMIs on all active loans
     for (const loan of activeLoans) {
-      const balance = balances.get(loan._id) ?? 0;
+      const balance = balances.get(loan.id) ?? 0;
       const r = loan.interestRate / 12 / 100;
       const interest = balance * r;
       totalInterest += interest;
       const principalPaid = Math.min(loan.emiAmount - interest, balance);
-      balances.set(loan._id, Math.max(0, balance - principalPaid));
+      balances.set(loan.id, Math.max(0, balance - principalPaid));
     }
 
     // Apply extra payment in priority order
     for (const loan of order) {
       if (extraRemaining <= 0) break;
-      const balance = balances.get(loan._id) ?? 0;
+      const balance = balances.get(loan.id) ?? 0;
       if (balance <= 0.01) continue;
       const payment = Math.min(extraRemaining, balance);
-      balances.set(loan._id, Math.max(0, balance - payment));
+      balances.set(loan.id, Math.max(0, balance - payment));
       extraRemaining -= payment;
     }
   }
@@ -74,7 +74,7 @@ function calculateCurrentPayoff(loans: Loan[]): PayoffResult {
   debtFreeDate.setMonth(debtFreeDate.getMonth() + maxMonths);
 
   const attackOrder: AttackOrderItem[] = loans.map((l, i) => ({
-    loanId: l._id,
+    loanId: l.id,
     loanName: l.name,
     interestRate: l.interestRate,
     priority: i + 1,
@@ -120,7 +120,7 @@ function buildPayoffResult(
   debtFreeDate.setMonth(debtFreeDate.getMonth() + months);
 
   const attackOrder: AttackOrderItem[] = orderedLoans.map((l, i) => ({
-    loanId: l._id,
+    loanId: l.id,
     loanName: l.name,
     interestRate: l.interestRate,
     priority: i + 1,

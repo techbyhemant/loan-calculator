@@ -1,8 +1,9 @@
 import { z } from "zod";
 import { router, protectedProcedure, proProcedure } from "@/server/trpc";
 import { TRPCError } from "@trpc/server";
-import dbConnect from "@/lib/mongodb";
-import { CreditCardModel } from "@/lib/models/CreditCard";
+import { db } from "@/lib/db";
+import { creditCards } from "@/lib/db/schema";
+import { eq, and, desc, sql } from "drizzle-orm";
 import { FREE_LIMITS } from "@/lib/utils/planGating";
 import { CreditCardInputSchema } from "@/lib/validators/creditCardSchema";
 import {
@@ -12,40 +13,68 @@ import {
   CC_DEFAULTS,
 } from "@/lib/calculations/creditCardCalcs";
 
+/**
+ * Convert Drizzle numeric string columns to numbers for client consumption.
+ * Also maps Drizzle column names back to the API-facing field names.
+ */
+function serializeCard(row: typeof creditCards.$inferSelect) {
+  return {
+    _id: row.id,
+    id: row.id,
+    userId: row.userId,
+    name: row.name,
+    issuer: row.bank,
+    creditLimit: Number(row.creditLimit),
+    currentOutstanding: Number(row.outstanding),
+    monthlyRate: Number(row.monthlyInterestRate),
+    minimumDuePercent: Number(row.minimumDuePercent),
+    billingDate: row.billingDate,
+    dueDate: row.dueDate,
+    isActive: row.isActive,
+    notes: row.notes ?? "",
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+  };
+}
+
 export const creditCardsRouter = router({
   getAll: protectedProcedure.query(async ({ ctx }) => {
-    await dbConnect();
-    const cards = await CreditCardModel.find({
-      userId: ctx.userId,
-      isActive: true,
-    })
-      .sort({ currentOutstanding: -1 })
-      .lean();
-    return cards;
+    const rows = await db
+      .select()
+      .from(creditCards)
+      .where(
+        and(eq(creditCards.userId, ctx.userId), eq(creditCards.isActive, true)),
+      )
+      .orderBy(desc(creditCards.outstanding));
+    return rows.map(serializeCard);
   }),
 
   getById: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      await dbConnect();
-      const card = await CreditCardModel.findOne({
-        _id: input.id,
-        userId: ctx.userId,
-      }).lean();
-      if (!card) throw new TRPCError({ code: "NOT_FOUND" });
-      return card;
+      const rows = await db
+        .select()
+        .from(creditCards)
+        .where(
+          and(eq(creditCards.id, input.id), eq(creditCards.userId, ctx.userId)),
+        );
+      if (rows.length === 0) throw new TRPCError({ code: "NOT_FOUND" });
+      return serializeCard(rows[0]);
     }),
 
   create: protectedProcedure
     .input(CreditCardInputSchema)
     .mutation(async ({ ctx, input }) => {
-      await dbConnect();
-
       if (ctx.userPlan === "free") {
-        const count = await CreditCardModel.countDocuments({
-          userId: ctx.userId,
-          isActive: true,
-        });
+        const [{ count }] = await db
+          .select({ count: sql<number>`count(*)::int` })
+          .from(creditCards)
+          .where(
+            and(
+              eq(creditCards.userId, ctx.userId),
+              eq(creditCards.isActive, true),
+            ),
+          );
         if (count >= FREE_LIMITS.maxCreditCards) {
           throw new TRPCError({
             code: "FORBIDDEN",
@@ -54,11 +83,22 @@ export const creditCardsRouter = router({
         }
       }
 
-      const card = await CreditCardModel.create({
-        ...input,
-        userId: ctx.userId,
-      });
-      return card;
+      const [newCard] = await db
+        .insert(creditCards)
+        .values({
+          userId: ctx.userId,
+          name: input.name,
+          bank: input.issuer ?? "",
+          creditLimit: String(input.creditLimit),
+          outstanding: String(input.currentOutstanding),
+          monthlyInterestRate: String(input.monthlyRate),
+          minimumDuePercent: String(input.minimumDuePercent),
+          billingDate: input.billingDate,
+          dueDate: input.dueDate,
+          notes: input.notes ?? "",
+        })
+        .returning();
+      return serializeCard(newCard);
     }),
 
   update: protectedProcedure
@@ -66,65 +106,83 @@ export const creditCardsRouter = router({
       z.object({
         id: z.string(),
         data: CreditCardInputSchema.partial(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      await dbConnect();
-      const card = await CreditCardModel.findOneAndUpdate(
-        { _id: input.id, userId: ctx.userId },
-        { ...input.data, updatedAt: new Date() },
-        { new: true, runValidators: true }
-      ).lean();
-      if (!card) throw new TRPCError({ code: "NOT_FOUND" });
-      return card;
+      const setData: Record<string, unknown> = { updatedAt: new Date() };
+
+      if (input.data.name !== undefined) setData.name = input.data.name;
+      if (input.data.issuer !== undefined) setData.bank = input.data.issuer;
+      if (input.data.creditLimit !== undefined)
+        setData.creditLimit = String(input.data.creditLimit);
+      if (input.data.currentOutstanding !== undefined)
+        setData.outstanding = String(input.data.currentOutstanding);
+      if (input.data.monthlyRate !== undefined)
+        setData.monthlyInterestRate = String(input.data.monthlyRate);
+      if (input.data.minimumDuePercent !== undefined)
+        setData.minimumDuePercent = String(input.data.minimumDuePercent);
+      if (input.data.billingDate !== undefined)
+        setData.billingDate = input.data.billingDate;
+      if (input.data.dueDate !== undefined)
+        setData.dueDate = input.data.dueDate;
+      if (input.data.notes !== undefined) setData.notes = input.data.notes;
+
+      const rows = await db
+        .update(creditCards)
+        .set(setData)
+        .where(
+          and(eq(creditCards.id, input.id), eq(creditCards.userId, ctx.userId)),
+        )
+        .returning();
+
+      if (rows.length === 0) throw new TRPCError({ code: "NOT_FOUND" });
+      return serializeCard(rows[0]);
     }),
 
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      await dbConnect();
-      await CreditCardModel.findOneAndUpdate(
-        { _id: input.id, userId: ctx.userId },
-        { isActive: false }
-      );
+      await db
+        .update(creditCards)
+        .set({ isActive: false, updatedAt: new Date() })
+        .where(
+          and(eq(creditCards.id, input.id), eq(creditCards.userId, ctx.userId)),
+        );
       return { success: true };
     }),
 
   getStats: protectedProcedure.query(async ({ ctx }) => {
-    await dbConnect();
-    const cards = await CreditCardModel.find({
-      userId: ctx.userId,
-      isActive: true,
-    }).lean();
+    const rows = await db
+      .select()
+      .from(creditCards)
+      .where(
+        and(eq(creditCards.userId, ctx.userId), eq(creditCards.isActive, true)),
+      );
+
+    const cards = rows.map(serializeCard);
 
     const totalOutstanding = cards.reduce(
-      (sum, c) => sum + (c.currentOutstanding as number),
-      0
+      (sum, c) => sum + c.currentOutstanding,
+      0,
     );
-    const totalLimit = cards.reduce(
-      (sum, c) => sum + (c.creditLimit as number),
-      0
-    );
+    const totalLimit = cards.reduce((sum, c) => sum + c.creditLimit, 0);
     const totalMinDue = cards.reduce(
       (sum, c) =>
         sum +
         Math.max(
-          (c.currentOutstanding as number) *
-            (c.minimumDuePercent as number),
-          CC_DEFAULTS.minimumDueFloor
+          c.currentOutstanding * c.minimumDuePercent,
+          CC_DEFAULTS.minimumDueFloor,
         ),
-      0
+      0,
     );
     const totalMonthlyInterest = cards.reduce(
-      (sum, c) =>
-        sum +
-        (c.currentOutstanding as number) * (c.monthlyRate as number),
-      0
+      (sum, c) => sum + c.currentOutstanding * c.monthlyRate,
+      0,
     );
 
     const utilization = calculateCreditUtilization(
       totalOutstanding,
-      totalLimit
+      totalLimit,
     );
 
     return {
@@ -135,23 +193,19 @@ export const creditCardsRouter = router({
       totalMonthlyInterest,
       utilization,
       cards: cards.map((c) => ({
-        id: c._id,
+        id: c.id,
         name: c.name,
         issuer: c.issuer,
         outstanding: c.currentOutstanding,
         limit: c.creditLimit,
         utilizationPercent:
-          (c.creditLimit as number) > 0
-            ? ((c.currentOutstanding as number) /
-                (c.creditLimit as number)) *
-              100
+          c.creditLimit > 0
+            ? (c.currentOutstanding / c.creditLimit) * 100
             : 0,
-        monthlyInterest:
-          (c.currentOutstanding as number) * (c.monthlyRate as number),
+        monthlyInterest: c.currentOutstanding * c.monthlyRate,
         minDue: Math.max(
-          (c.currentOutstanding as number) *
-            (c.minimumDuePercent as number),
-          CC_DEFAULTS.minimumDueFloor
+          c.currentOutstanding * c.minimumDuePercent,
+          CC_DEFAULTS.minimumDueFloor,
         ),
       })),
     };
@@ -160,36 +214,46 @@ export const creditCardsRouter = router({
   calculatePayoff: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      await dbConnect();
-      const card = await CreditCardModel.findOne({
-        _id: input.id,
-        userId: ctx.userId,
-      }).lean();
-      if (!card) throw new TRPCError({ code: "NOT_FOUND" });
+      const rows = await db
+        .select()
+        .from(creditCards)
+        .where(
+          and(eq(creditCards.id, input.id), eq(creditCards.userId, ctx.userId)),
+        );
+      if (rows.length === 0) throw new TRPCError({ code: "NOT_FOUND" });
 
+      const card = serializeCard(rows[0]);
       return calculateCCScenarios({
-        outstanding: card.currentOutstanding as number,
-        monthlyRate: card.monthlyRate as number,
+        outstanding: card.currentOutstanding,
+        monthlyRate: card.monthlyRate,
       });
     }),
 
   getMultiCardPlan: proProcedure
     .input(z.object({ totalMonthlyBudget: z.number().positive() }))
     .query(async ({ ctx, input }) => {
-      await dbConnect();
-      const cards = await CreditCardModel.find({
-        userId: ctx.userId,
-        isActive: true,
-        currentOutstanding: { $gt: 0 },
-      }).lean();
+      const rows = await db
+        .select()
+        .from(creditCards)
+        .where(
+          and(
+            eq(creditCards.userId, ctx.userId),
+            eq(creditCards.isActive, true),
+          ),
+        );
+
+      // Filter to cards with outstanding > 0
+      const cardsWithBalance = rows.filter(
+        (r) => Number(r.outstanding) > 0,
+      );
 
       return calculateMultiCardPayoff(
-        cards.map((c) => ({
-          name: c.name as string,
-          outstanding: c.currentOutstanding as number,
-          monthlyRate: c.monthlyRate as number,
+        cardsWithBalance.map((c) => ({
+          name: c.name,
+          outstanding: Number(c.outstanding),
+          monthlyRate: Number(c.monthlyInterestRate),
         })),
-        input.totalMonthlyBudget
+        input.totalMonthlyBudget,
       );
     }),
 });

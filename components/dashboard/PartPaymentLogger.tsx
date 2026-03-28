@@ -177,10 +177,10 @@ export function PartPaymentHistory({ loanId }: PartPaymentHistoryProps) {
     );
   }
 
-  const items = (partPayments ?? []) as Array<{
-    _id: string;
+  const items = (partPayments ?? []) as unknown as Array<{
+    id: string;
     amount: number;
-    date: string;
+    date: Date | string;
     reduceType: string;
     interestSaved: number;
     monthsReduced: number;
@@ -206,7 +206,7 @@ export function PartPaymentHistory({ loanId }: PartPaymentHistoryProps) {
       </div>
       <div className="divide-y divide-border">
         {items.map((pp) => (
-          <div key={pp._id} className="px-4 py-3 flex items-center justify-between">
+          <div key={pp.id} className="px-4 py-3 flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold text-foreground">
@@ -238,7 +238,7 @@ export function PartPaymentHistory({ loanId }: PartPaymentHistoryProps) {
               </div>
             </div>
             <button
-              onClick={() => deletePartPayment.mutate({ id: pp._id })}
+              onClick={() => deletePartPayment.mutate({ id: pp.id })}
               disabled={deletePartPayment.isPending}
               className="text-xs text-negative hover:text-negative transition-colors"
               title="Delete"

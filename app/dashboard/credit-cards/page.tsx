@@ -119,8 +119,8 @@ export default function CreditCardsPage() {
 
             return (
               <Link
-                key={card._id}
-                href={`/dashboard/credit-cards/${card._id}`}
+                key={card.id}
+                href={`/dashboard/credit-cards/${card.id}`}
                 className="block bg-card rounded-xl shadow-sm p-4 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-center justify-between mb-2">

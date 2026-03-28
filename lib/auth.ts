@@ -1,17 +1,24 @@
-// Auth.js v5 config — follows official docs
-// https://authjs.dev/getting-started/installation?framework=next.js
-// https://authjs.dev/getting-started/adapters/mongodb
-
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import Resend from "next-auth/providers/resend";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import client from "@/lib/auth-client";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { db } from "@/lib/db";
+import {
+  users,
+  accounts,
+  sessions,
+  verificationTokens,
+} from "@/lib/db/schema";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: process.env.NODE_ENV === "development",
   trustHost: true,
-  adapter: MongoDBAdapter(client),
+  adapter: DrizzleAdapter(db, {
+    usersTable: users,
+    accountsTable: accounts,
+    sessionsTable: sessions,
+    verificationTokensTable: verificationTokens,
+  }),
   session: { strategy: "jwt" },
   providers: [
     Google({

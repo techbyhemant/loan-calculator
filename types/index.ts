@@ -12,41 +12,41 @@ export type ConsolidationVerdict =
   | "NOT_RECOMMENDED";
 
 export interface Loan {
-  _id: string;
+  id: string;
   userId: string;
   name: string;
   type: LoanType;
-  lender: string;
+  lender: string | null;
   originalAmount: number;
   currentOutstanding: number;
   interestRate: number; // annual %
   emiAmount: number;
-  emiDate: number; // 1–31
-  startDate: string; // ISO date string
+  emiDate: number | null; // 1–31
+  startDate: Date;
   tenureMonths: number;
-  rateType: RateType;
+  rateType: string | null;
   prepaymentPenalty: number; // % — ALWAYS 0 for floating home/LAP (RBI mandated)
-  moratoriumEndDate?: string; // ISO date — when EMIs start (education loans)
+  moratoriumEndDate?: Date | null;
   isActive: boolean;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
+  notes: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 // LoanInput derived from Zod schema — single source of truth
 export type { LoanInput } from "@/lib/validators/loanSchema";
 
 export interface PartPayment {
-  _id: string;
+  id: string;
   userId: string;
   loanId: string;
   amount: number;
-  date: string;
-  reduceType: ReduceType;
+  date: Date;
+  reduceType: string;
   interestSaved: number;
-  monthsReduced: number;
-  note?: string;
-  createdAt: string;
+  monthsReduced: number | null;
+  note: string | null;
+  createdAt: Date;
 }
 
 // PartPaymentInput derived from Zod schema — single source of truth

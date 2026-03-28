@@ -67,10 +67,10 @@ export function analyzeConsolidation(
   // Which loans benefit from consolidation (rate > proposed rate)
   const loansToConsolidate = active
     .filter((l) => l.interestRate > proposedRate)
-    .map((l) => l._id);
+    .map((l) => l.id);
   const loansToKeep = active
     .filter((l) => l.interestRate <= proposedRate)
-    .map((l) => l._id);
+    .map((l) => l.id);
 
   // Break-even: months until savings exceed fees
   const monthlyCurrentEMI = active.reduce((s, l) => s + l.emiAmount, 0);
