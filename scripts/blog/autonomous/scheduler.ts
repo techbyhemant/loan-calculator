@@ -34,6 +34,7 @@ import { checkPostQuality } from '../check-quality'
 // ─── Constants ─────────────────────────────────────────
 const SPRINT_POST_THRESHOLD = 90
 const MIN_QUEUE_DEPTH = 10
+const FORCE_MODE = process.argv.includes('--force')
 const COST_LOG_FILE = path.join(process.cwd(), 'data', 'blog-cost-log.json')
 
 // ─── Cost tracking ─────────────────────────────────────
@@ -303,8 +304,8 @@ async function run(): Promise<void> {
     // SPRINT MODE: 1 new post per day + 1 update if high-priority stale found
     console.log('\n--- Step 3: SPRINT Mode (1 post/day) ---')
 
-    // 3a. Generate 1 new post (if not already done today)
-    if (alreadyPublishedToday === 0) {
+    // 3a. Generate 1 new post every run
+    {
       // Try queue first, then discover a fresh topic
       let nextPost = dequeueNext()
 
@@ -340,8 +341,6 @@ async function run(): Promise<void> {
       } else {
         console.log('   Could not find or discover a topic — skipping today.')
       }
-    } else {
-      console.log(`   Already published ${alreadyPublishedToday} post(s) today — skipping generation.`)
     }
 
     // 3b. Run freshness scanner and update 1 stale post if high-priority
