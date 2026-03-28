@@ -3,17 +3,18 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LayoutDashboard, Landmark, CreditCard, Target, ArrowLeftRight, Receipt, Trophy, Menu } from "lucide-react";
 
 import { TRPCProvider } from "@/lib/trpc/provider";
 
 const NAV_ITEMS = [
-  { href: "/dashboard", label: "Overview", icon: "\u{1F4CA}" },
-  { href: "/dashboard/loans", label: "My Loans", icon: "\u{1F4B3}" },
-  { href: "/dashboard/credit-cards", label: "Credit Cards", icon: "\u{1F4B8}" },
-  { href: "/dashboard/planner", label: "Payoff Planner", icon: "\u{1F3AF}", pro: true },
-  { href: "/dashboard/consolidation", label: "Consolidation", icon: "\u{1F504}", pro: true },
-  { href: "/dashboard/tax", label: "Tax Benefits", icon: "\u{1F4B0}", pro: true },
-  { href: "/dashboard/challenge", label: "Debt-Free Challenge", icon: "\u{1F3C6}" },
+  { href: "/dashboard", label: "Overview", Icon: LayoutDashboard },
+  { href: "/dashboard/loans", label: "My Loans", Icon: Landmark },
+  { href: "/dashboard/credit-cards", label: "Credit Cards", Icon: CreditCard },
+  { href: "/dashboard/planner", label: "Payoff Planner", Icon: Target, pro: true },
+  { href: "/dashboard/consolidation", label: "Consolidation", Icon: ArrowLeftRight, pro: true },
+  { href: "/dashboard/tax", label: "Tax Benefits", Icon: Receipt, pro: true },
+  { href: "/dashboard/challenge", label: "Debt-Free Challenge", Icon: Trophy },
 ];
 
 interface DashboardShellProps {
@@ -68,7 +69,7 @@ export function DashboardShell({
               isActive(item.href) ? "bg-primary/10 text-primary" : "text-foreground hover:bg-accent"
             }`}
           >
-            <span className="text-base">{item.icon}</span>
+            <item.Icon className="w-4 h-4 flex-shrink-0" />
             {item.label}
             {item.pro && (
               <span className="ml-auto text-[10px] font-semibold bg-pro-subtle text-primary px-1.5 py-0.5 rounded-full">
@@ -96,9 +97,7 @@ export function DashboardShell({
           className="lg:hidden fixed bottom-4 left-4 z-40 w-12 h-12 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary/90 transition-colors"
           aria-label="Open menu"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+          <Menu className="w-5 h-5" />
         </button>
 
         {/* Mobile sidebar overlay */}
