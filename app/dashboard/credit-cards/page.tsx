@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { trpcReact } from "@/lib/trpc/hooks";
 import { formatINR } from "@/lib/utils/formatters";
+import { CreditCard } from "lucide-react";
 
 export default function CreditCardsPage() {
   const { data: cards, isLoading } = trpcReact.creditCards.getAll.useQuery();
@@ -98,7 +99,7 @@ export default function CreditCardsPage() {
       {/* Card List */}
       {(!cards || cards.length === 0) ? (
         <div className="bg-card rounded-xl shadow-sm p-8 text-center">
-          <p className="text-3xl mb-3">💳</p>
+          <CreditCard className="w-8 h-8 text-muted-foreground mb-3 mx-auto" />
           <h3 className="font-semibold text-foreground mb-1">No credit cards added</h3>
           <p className="text-sm text-muted-foreground mb-4">Add your credit cards to track utilization and plan payoff</p>
           <Link

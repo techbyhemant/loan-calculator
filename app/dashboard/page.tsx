@@ -11,6 +11,7 @@ import { trpcReact } from "@/lib/trpc/hooks";
 import { LOAN_TYPE_DISPLAY, sortByPayoffPriority } from "@/lib/calculations/loanTypeConfig";
 import type { LoanType } from "@/lib/calculations/loanTypeConfig";
 import { LoanTypeIcon } from "@/components/ui/LoanTypeIcon";
+import { Lightbulb, Wallet } from "lucide-react";
 
 function StatCard({
   label,
@@ -192,7 +193,7 @@ export default function DashboardPage() {
         const topDisplay = LOAN_TYPE_DISPLAY[top.type] ?? LOAN_TYPE_DISPLAY.other;
         return (
           <div className="flex items-start gap-3 p-4 rounded-lg bg-primary/5 border border-primary/20 mb-6">
-            <span className="text-primary text-lg">💡</span>
+            <Lightbulb className="w-5 h-5 text-primary" />
             <div className="text-sm">
               <p className="font-medium text-foreground">
                 Pay your {topDisplay.label} first
@@ -212,7 +213,7 @@ export default function DashboardPage() {
         </div>
       ) : loans.length === 0 ? (
         <div className="bg-card border border-border rounded-xl shadow-sm p-8 text-center">
-          <p className="text-3xl mb-3">&#x1F4B0;</p>
+          <Wallet className="w-8 h-8 text-muted-foreground mb-3 mx-auto" />
           <h2 className="text-lg font-semibold text-foreground mb-2">
             Add your first loan
           </h2>

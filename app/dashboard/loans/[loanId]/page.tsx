@@ -9,6 +9,7 @@ import type { Loan } from "@/types";
 import { calculateAmortization } from "@/lib/calculations/loanCalcs";
 import { formatINR, formatLakhs, formatDate, formatMonths } from "@/lib/utils/formatters";
 import { trpcReact } from "@/lib/trpc/hooks";
+import { AlertTriangle, Info, ShieldCheck } from "lucide-react";
 
 import { PartPaymentLogger, PartPaymentHistory } from "@/components/dashboard/PartPaymentLogger";
 import { LOAN_TYPE_DISPLAY, LOAN_TYPE_FINANCIALS, isRBIZeroPenaltyApplicable } from "@/lib/calculations/loanTypeConfig";
@@ -184,7 +185,7 @@ export default function LoanDetailPage() {
         if (rbiProtected) {
           return (
             <div className="flex items-start gap-3 p-4 rounded-lg bg-positive/10 border border-positive/20 mb-6">
-              <span className="text-lg">✅</span>
+              <ShieldCheck className="w-5 h-5 text-positive" />
               <div className="text-sm">
                 <p className="font-medium text-positive">RBI Rule: Zero prepayment penalty</p>
                 <p className="text-muted-foreground mt-0.5">
@@ -198,7 +199,7 @@ export default function LoanDetailPage() {
         if (config.hasPrepaymentPenalty) {
           return (
             <div className="flex items-start gap-3 p-4 rounded-lg bg-warning/10 border border-warning/20 mb-6">
-              <span className="text-lg">⚠️</span>
+              <AlertTriangle className="w-5 h-5 text-warning" />
               <div className="text-sm">
                 <p className="font-medium text-warning">Prepayment penalty may apply</p>
                 <p className="text-muted-foreground mt-0.5">
@@ -214,7 +215,7 @@ export default function LoanDetailPage() {
 
         return (
           <div className="flex items-start gap-3 p-4 rounded-lg bg-primary/5 border border-primary/20 mb-6">
-            <span className="text-lg">ℹ️</span>
+            <Info className="w-5 h-5 text-primary" />
             <div className="text-sm">
               <p className="font-medium text-primary">No prepayment penalty</p>
               <p className="text-muted-foreground mt-0.5">

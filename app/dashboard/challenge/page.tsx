@@ -9,6 +9,33 @@ import { formatDate, formatINR } from "@/lib/utils/formatters";
 import { trpcReact } from "@/lib/trpc/hooks";
 
 import NumericInput from "@/components/ui/NumericInput";
+import {
+  ClipboardList,
+  Zap,
+  Sprout,
+  Leaf,
+  Trophy,
+  Flame,
+  PiggyBank,
+  Gem,
+  Rocket,
+  Star,
+  Crown,
+} from "lucide-react";
+
+const MILESTONE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  "clipboard-list": ClipboardList,
+  "zap": Zap,
+  "sprout": Sprout,
+  "leaf": Leaf,
+  "trophy": Trophy,
+  "flame": Flame,
+  "piggy-bank": PiggyBank,
+  "gem": Gem,
+  "rocket": Rocket,
+  "star": Star,
+  "crown": Crown,
+};
 
 function SkeletonBlock() {
   return (
@@ -108,7 +135,12 @@ export default function ChallengePage() {
                 : "bg-background border-border opacity-50"
             }`}
           >
-            <p className="text-2xl mb-1">{m.icon}</p>
+            <div className="mb-1 flex justify-center">
+              {(() => {
+                const IconComp = MILESTONE_ICONS[m.icon];
+                return IconComp ? <IconComp className="w-6 h-6 text-primary" /> : null;
+              })()}
+            </div>
             <p
               className={`text-xs font-semibold ${m.earned ? "text-foreground" : "text-muted-foreground"}`}
             >

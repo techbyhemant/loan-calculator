@@ -7,6 +7,7 @@ import { trpcReact } from "@/lib/trpc/hooks";
 import { LOAN_TYPE_DISPLAY } from "@/lib/calculations/loanTypeConfig";
 import type { LoanType } from "@/lib/calculations/loanTypeConfig";
 import { LoanTypeIcon } from "@/components/ui/LoanTypeIcon";
+import { FileText } from "lucide-react";
 
 function LoanRow({ loan }: { loan: Loan }) {
   const display = LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other;
@@ -72,7 +73,7 @@ export default function LoansPage() {
         </div>
       ) : !loans?.length ? (
         <div className="bg-card border border-border rounded-xl shadow-sm p-8 text-center">
-          <p className="text-3xl mb-3">📋</p>
+          <FileText className="w-8 h-8 text-muted-foreground mb-3 mx-auto" />
           <h3 className="text-base font-semibold text-foreground mb-1">No loans yet</h3>
           <p className="text-sm text-muted-foreground mb-4">
             Add your first loan to start tracking your debt-free journey.
