@@ -1,24 +1,5 @@
 [
   {
-    "slug": "car-loan-prepayment-benefits",
-    "title": "Prepaying Your Car Loan: How You Can Save ₹50,000 in Interest",
-    "description": "Discover the benefits of prepaying your car loan and calculate your savings using our car loan prepayment calculator.",
-    "seoKeyword": "car loan prepayment benefits",
-    "searchVolume": 900,
-    "category": "Car Loans",
-    "tags": [
-      "car loan",
-      "prepayment",
-      "interest savings"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/car-loan-prepayment",
-    "imagePrompt": "",
-    "imageMetaphor": "DECLINE",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
     "slug": "education-loan-tax-benefits",
     "title": "Claiming ₹1.5 Lakh Tax Deduction on Education Loan Interest",
     "description": "Learn how to claim tax benefits on your education loan interest and calculate your tax savings using our education loan tax benefit calculator.",

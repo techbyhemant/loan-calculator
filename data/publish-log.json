@@ -11,5 +11,11 @@
     "qualityScore": 0,
     "published": false,
     "error": "Error: 429 {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97637, Requested 7614. Please try again in 1h15m36.864s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+  },
+  {
+    "slug": "car-loan-prepayment-benefits",
+    "generatedAt": "2026-03-29T05:45:03.040Z",
+    "qualityScore": 10,
+    "published": true
   }
 ]
