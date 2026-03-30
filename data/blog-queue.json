@@ -1,24 +1,5 @@
 [
   {
-    "slug": "education-loan-tax-benefits",
-    "title": "Claiming ₹1.5 Lakh Tax Deduction on Education Loan Interest",
-    "description": "Learn how to claim tax benefits on your education loan interest and calculate your tax savings using our education loan tax benefit calculator.",
-    "seoKeyword": "education loan tax benefits",
-    "searchVolume": 1000,
-    "category": "Education Loans",
-    "tags": [
-      "education loan",
-      "tax benefits",
-      "interest deduction"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/education-loan-80e",
-    "imagePrompt": "",
-    "imageMetaphor": "GROWTH",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
     "slug": "personal-loan-consolidation-strategies",
     "title": "Consolidating Multiple Personal Loans: A Step-by-Step Guide to Saving ₹20,000",
     "description": "Discover how to consolidate multiple personal loans and calculate your savings using our personal loan payoff calculator.",
