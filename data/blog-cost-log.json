@@ -28,5 +28,11 @@
     "action": "generate",
     "slug": "education-loan-tax-benefits",
     "tokensUsed": 3500
+  },
+  {
+    "date": "2026-03-30T06:00:55.672Z",
+    "action": "generate",
+    "slug": "personal-loan-consolidation-strategies",
+    "tokensUsed": 3500
   }
 ]

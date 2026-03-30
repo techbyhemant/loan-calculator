@@ -1,24 +1,5 @@
 [
   {
-    "slug": "personal-loan-consolidation-strategies",
-    "title": "Consolidating Multiple Personal Loans: A Step-by-Step Guide to Saving ₹20,000",
-    "description": "Discover how to consolidate multiple personal loans and calculate your savings using our personal loan payoff calculator.",
-    "seoKeyword": "personal loan consolidation strategies",
-    "searchVolume": 800,
-    "category": "Personal Loans",
-    "tags": [
-      "personal loan",
-      "consolidation",
-      "debt repayment"
-    ],
-    "tier": 2,
-    "relatedCalculator": "/calculators/personal-loan-payoff",
-    "imagePrompt": "",
-    "imageMetaphor": "FORK",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
     "slug": "home-loan-balance-transfer-savings",
     "title": "Transferring Your Home Loan: How to Save ₹2 Lakh in Interest",
     "description": "Learn how to transfer your home loan and calculate your interest savings using our home loan balance transfer calculator.",
