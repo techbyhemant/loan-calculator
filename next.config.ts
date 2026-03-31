@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Enforce no trailing slash — consistent canonical URLs
+  trailingSlash: false,
+
   async headers() {
     return [
       {

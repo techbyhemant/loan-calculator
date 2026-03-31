@@ -41,9 +41,6 @@ export const metadata = {
       "car loan prepayment calculator",
     ],
   }),
-  verification: {
-    google: "placeholder-google-verification-code",
-  },
 };
 
 export const viewport = "width=device-width, initial-scale=1";
