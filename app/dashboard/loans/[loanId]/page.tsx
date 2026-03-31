@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
-import { useParams } from "next/navigation";
+import { useMemo, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
 import type { Loan } from "@/types";
@@ -9,7 +9,8 @@ import type { Loan } from "@/types";
 import { calculateAmortization } from "@/lib/calculations/loanCalcs";
 import { formatINR, formatLakhs, formatDate, formatMonths } from "@/lib/utils/formatters";
 import { trpcReact } from "@/lib/trpc/hooks";
-import { AlertTriangle, Info, ShieldCheck } from "lucide-react";
+import { AlertTriangle, Info, ShieldCheck, Pencil, Trash2 } from "lucide-react";
+import NumericInput from "@/components/ui/NumericInput";
 
 import { PartPaymentLogger, PartPaymentHistory } from "@/components/dashboard/PartPaymentLogger";
 import { LOAN_TYPE_DISPLAY, LOAN_TYPE_FINANCIALS, isRBIZeroPenaltyApplicable } from "@/lib/calculations/loanTypeConfig";
@@ -37,16 +38,103 @@ export default function LoanDetailPage() {
   );
 
   const loan = loanRaw as unknown as Loan | undefined;
+  const router = useRouter();
+  const utils = trpcReact.useUtils();
+
+  const [editing, setEditing] = useState(false);
+  const [editOutstanding, setEditOutstanding] = useState<number | "">(0);
+  const [editRate, setEditRate] = useState<number | "">(0);
+  const [editEmi, setEditEmi] = useState<number | "">(0);
+  const [editName, setEditName] = useState("");
+
+  const updateLoan = trpcReact.loans.update.useMutation({
+    onSuccess: () => {
+      utils.loans.getById.invalidate({ id: loanId });
+      setEditing(false);
+    },
+  });
+
+  const deleteLoan = trpcReact.loans.delete.useMutation({
+    onSuccess: () => {
+      router.push("/dashboard/loans");
+    },
+  });
+
+  const startEditing = () => {
+    if (!loan) return;
+    setEditName(loan.name);
+    setEditOutstanding(loan.currentOutstanding);
+    setEditRate(loan.interestRate);
+    setEditEmi(loan.emiAmount);
+    setEditing(true);
+  };
+
+  const handleSave = () => {
+    if (!loan) return;
+    updateLoan.mutate({
+      id: loanId,
+      data: {
+        name: editName,
+        currentOutstanding: editOutstanding as number,
+        interestRate: editRate as number,
+        emiAmount: editEmi as number,
+      },
+    });
+  };
+
+  const handleDelete = () => {
+    if (confirm("Are you sure you want to delete this loan? This cannot be undone.")) {
+      deleteLoan.mutate({ id: loanId });
+    }
+  };
+
+  // Calculate EMIs already paid and remaining tenure
+  const { emisPaid, remainingMonths, amortizationStartDate } = useMemo(() => {
+    if (!loan) return { emisPaid: 0, remainingMonths: 0, amortizationStartDate: new Date() };
+    const start = new Date(loan.startDate);
+    const now = new Date();
+    let paid = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+    // If this month's EMI due date has passed, count it
+    const dueDay = loan.emiDate ?? 5;
+    if (now.getDate() >= dueDay) paid += 1;
+    paid = Math.max(0, Math.min(paid, loan.tenureMonths));
+
+    const remaining = Math.max(1, loan.tenureMonths - paid);
+
+    // Amortization starts from current month
+    const amortStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    return { emisPaid: paid, remainingMonths: remaining, amortizationStartDate: amortStart };
+  }, [loan]);
 
   const amortization = useMemo(() => {
     if (!loan) return [];
-    return calculateAmortization(
-      loan.currentOutstanding,
-      loan.interestRate,
-      loan.tenureMonths,
-      new Date(loan.startDate),
-    );
-  }, [loan]);
+    // Use current outstanding with remaining tenure and actual EMI
+    const monthlyRate = loan.interestRate / 12 / 100;
+    const emi = loan.emiAmount;
+    const rows: { month: number; date: Date; emi: number; principal: number; interest: number; outstanding: number }[] = [];
+    let balance = loan.currentOutstanding;
+    const startDate = amortizationStartDate;
+
+    for (let m = 1; m <= remainingMonths && balance > 0.01; m++) {
+      const d = new Date(startDate);
+      d.setMonth(d.getMonth() + m - 1);
+
+      const interest = balance * monthlyRate;
+      const principalPaid = Math.min(emi - interest, balance);
+      balance = Math.max(0, balance - principalPaid);
+
+      rows.push({
+        month: m,
+        date: d,
+        emi: Math.min(emi, principalPaid + interest),
+        principal: principalPaid,
+        interest,
+        outstanding: balance,
+      });
+    }
+    return rows;
+  }, [loan, remainingMonths, amortizationStartDate]);
 
   const totalInterest = useMemo(
     () => amortization.reduce((sum, row) => sum + row.interest, 0),
@@ -93,29 +181,103 @@ export default function LoanDetailPage() {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <Link
-          href="/dashboard"
-          className="text-muted-foreground hover:text-muted-foreground transition-colors"
-        >
-          &larr;
-        </Link>
-        <div className="flex items-center gap-2.5">
-          <LoanTypeIcon icon={(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).icon} size="lg" />
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-semibold text-foreground">{loan.name}</h1>
-              <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                <LoanTypeIcon icon={(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).icon} size="sm" className="mr-1 inline-block align-middle" />
-                {(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).shortLabel}
-              </span>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/dashboard"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            &larr;
+          </Link>
+          <div className="flex items-center gap-2.5">
+            <LoanTypeIcon icon={(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).icon} size="lg" />
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-semibold text-foreground">{loan.name}</h1>
+                <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                  <LoanTypeIcon icon={(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).icon} size="sm" className="mr-1 inline-block align-middle" />
+                  {(LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other).shortLabel}
+                </span>
+              </div>
+              {loan.lender && (
+                <p className="text-sm text-muted-foreground">{loan.lender}</p>
+              )}
             </div>
-            {loan.lender && (
-              <p className="text-sm text-muted-foreground">{loan.lender}</p>
-            )}
           </div>
         </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={startEditing}
+            className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground bg-muted hover:bg-accent px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <Pencil className="w-3.5 h-3.5" /> Edit
+          </button>
+          <button
+            onClick={handleDelete}
+            className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-negative hover:bg-negative/10 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <Trash2 className="w-3.5 h-3.5" /> Delete
+          </button>
+        </div>
       </div>
+
+      {/* Edit Panel */}
+      {editing && (
+        <div className="bg-card border border-border rounded-xl shadow-sm p-5 mb-6">
+          <h2 className="text-sm font-semibold text-foreground mb-4">Edit Loan Details</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Loan Name</label>
+              <input
+                type="text"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Current Outstanding (₹)</label>
+              <NumericInput
+                value={editOutstanding}
+                onChange={setEditOutstanding}
+                className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Interest Rate (% p.a.)</label>
+              <NumericInput
+                value={editRate}
+                onChange={setEditRate}
+                step={0.01}
+                className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Monthly EMI (₹)</label>
+              <NumericInput
+                value={editEmi}
+                onChange={setEditEmi}
+                className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-2 mt-4">
+            <button
+              onClick={handleSave}
+              disabled={updateLoan.isPending}
+              className="bg-primary text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
+            >
+              {updateLoan.isPending ? "Saving..." : "Save Changes"}
+            </button>
+            <button
+              onClick={() => setEditing(false)}
+              className="text-sm text-muted-foreground hover:text-foreground px-4 py-2 transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Loan Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -143,7 +305,10 @@ export default function LoanDetailPage() {
         <div className="bg-card border border-border rounded-xl shadow-sm p-4">
           <p className="text-sm text-muted-foreground mb-1">Remaining Tenure</p>
           <p className="text-lg font-bold text-foreground">
-            {formatMonths(loan.tenureMonths)}
+            {formatMonths(remainingMonths)}
+          </p>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            {emisPaid} of {loan.tenureMonths} EMIs paid
           </p>
         </div>
       </div>

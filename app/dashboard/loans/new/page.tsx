@@ -45,7 +45,8 @@ export default function NewLoanPage() {
   const [name, setName] = useState("");
   const [lender, setLender] = useState("");
   const [originalAmount, setOriginalAmount] = useState<number | "">(5000000);
-  const [outstanding, setOutstanding] = useState<number | "">(5000000);
+  const [outstanding, setOutstanding] = useState<number | "">("" as unknown as number | "");
+  const [outstandingManuallySet, setOutstandingManuallySet] = useState(false);
   const [rate, setRate] = useState<number | "">(8.5);
   const [emi, setEmi] = useState<number | "">("" as unknown as number | "");
   const [emiDate, setEmiDate] = useState<number | "">(5);
@@ -87,13 +88,42 @@ export default function NewLoanPage() {
 
   const effectiveEMI = emi || Math.round(calculatedEMI);
 
+  // Auto-compute outstanding from original amount if not manually set
+  const computedOutstanding = (() => {
+    if (!originalAmount || !rate || !startDate || totalTenureMonths <= 0) return originalAmount || "";
+    const monthlyRate = (rate as number) / 100 / 12;
+    const emiVal = calculatedEMI;
+    if (emiVal <= 0) return originalAmount;
+
+    // Calculate EMIs paid since first EMI date
+    // startDate = first EMI date, not loan disbursement
+    const start = new Date(startDate);
+    const now = new Date();
+    let emisPaid = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+    // If current month's EMI due date has passed, count it as paid
+    const dueDay = (emiDate as number) || 5;
+    if (now.getDate() >= dueDay) emisPaid += 1;
+    emisPaid = Math.max(0, emisPaid);
+
+    if (emisPaid === 0) return originalAmount;
+
+    let balance = originalAmount as number;
+    for (let m = 0; m < emisPaid && balance > 0; m++) {
+      const interest = balance * monthlyRate;
+      balance = Math.max(0, balance - (emiVal - interest));
+    }
+    return Math.round(balance);
+  })();
+
+  const effectiveOutstanding = outstandingManuallySet ? (outstanding as number) : (computedOutstanding as number);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
       setError("Loan name is required");
       return;
     }
-    if (!originalAmount || !outstanding || !rate || totalTenureMonths <= 0) {
+    if (!originalAmount || !rate || totalTenureMonths <= 0) {
       setError("Please fill all required fields");
       return;
     }
@@ -106,7 +136,7 @@ export default function NewLoanPage() {
       type: loanType,
       lender: lender.trim(),
       originalAmount: originalAmount as number,
-      currentOutstanding: outstanding as number,
+      currentOutstanding: effectiveOutstanding,
       interestRate: rate as number,
       emiAmount: effectiveEMI,
       emiDate: (emiDate as number) || 1,
@@ -225,15 +255,24 @@ export default function NewLoanPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">
-              Current Outstanding (₹) *
+              Current Outstanding (₹) <span className="text-muted-foreground font-normal">— optional</span>
             </label>
             <NumericInput
-              value={outstanding}
-              onChange={setOutstanding}
-              placeholder="45,00,000"
+              value={outstandingManuallySet ? outstanding : ""}
+              onChange={(val) => {
+                setOutstanding(val);
+                setOutstandingManuallySet(val !== "" && val !== 0);
+              }}
+              placeholder={computedOutstanding ? `Auto: ₹${Number(computedOutstanding).toLocaleString("en-IN")}` : "Same as original"}
               min={0}
               className={inputClass}
             />
+            {!outstandingManuallySet && computedOutstanding && (
+              <p className="text-xs text-muted-foreground mt-1">
+                Auto-calculated: ₹{Number(computedOutstanding).toLocaleString("en-IN")}
+                {computedOutstanding !== originalAmount && " (based on EMIs paid since start date)"}
+              </p>
+            )}
           </div>
         </div>
 
@@ -303,7 +342,7 @@ export default function NewLoanPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">
-              Loan Start Date
+              First EMI Date
             </label>
             <input
               type="date"

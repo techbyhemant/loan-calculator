@@ -12,6 +12,7 @@ import {
 import { Header } from "@/components/ui/Header";
 import { Footer } from "@/components/ui/Footer";
 import { AuthProvider } from "@/components/AuthProvider";
+import { auth } from "@/lib/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,11 +48,12 @@ export const metadata = {
 
 export const viewport = "width=device-width, initial-scale=1";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
   return (
     <html lang="en-IN" suppressHydrationWarning>
       <head>
@@ -96,7 +98,7 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <Analytics />
         </Suspense>
-        <AuthProvider>
+        <AuthProvider session={session}>
           <Header />
           <main className="flex-1 flex flex-col">{children}</main>
           <Footer />

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack --port 3005",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 3005",
     "lint": "next lint",
     "blog:generate": "npx tsx scripts/blog/generate-post.ts",
     "blog:generate-all": "npx tsx scripts/blog/generate-all.ts",
