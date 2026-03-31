@@ -34,5 +34,17 @@
     "action": "generate",
     "slug": "personal-loan-consolidation-strategies",
     "tokensUsed": 3500
+  },
+  {
+    "date": "2026-03-31T05:45:59.495Z",
+    "action": "generate",
+    "slug": "home-loan-balance-transfer-savings",
+    "tokensUsed": 3500
+  },
+  {
+    "date": "2026-03-31T05:46:18.126Z",
+    "action": "update",
+    "slug": "home-loan-balance-transfer-savings",
+    "tokensUsed": 4839
   }
 ]

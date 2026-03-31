@@ -1,24 +1,5 @@
 [
   {
-    "slug": "home-loan-balance-transfer-savings",
-    "title": "Transferring Your Home Loan: How to Save ₹2 Lakh in Interest",
-    "description": "Learn how to transfer your home loan and calculate your interest savings using our home loan balance transfer calculator.",
-    "seoKeyword": "home loan balance transfer savings",
-    "searchVolume": 1500,
-    "category": "Home Loans",
-    "tags": [
-      "home loan",
-      "balance transfer",
-      "interest savings"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/balance-transfer",
-    "imagePrompt": "",
-    "imageMetaphor": "DECLINE",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
     "slug": "credit-card-minimum-due-trap",
     "title": "The Hidden Credit Card Minimum Due Trap: How to Avoid Paying ₹10,000 in Interest",
     "description": "Discover the credit card minimum due trap and learn how to avoid it using our credit card payoff calculator.",
