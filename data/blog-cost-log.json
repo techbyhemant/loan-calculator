@@ -46,5 +46,11 @@
     "action": "update",
     "slug": "home-loan-balance-transfer-savings",
     "tokensUsed": 4839
+  },
+  {
+    "date": "2026-04-01T05:57:37.104Z",
+    "action": "generate",
+    "slug": "home-loan-strategy-fy-2026-27",
+    "tokensUsed": 1000
   }
 ]
