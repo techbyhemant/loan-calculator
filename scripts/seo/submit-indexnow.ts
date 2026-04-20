@@ -76,30 +76,13 @@ async function submitToIndexNow() {
     }
   }
 
-  // Also ping Google sitemap
-  console.log("\n📤 Pinging Google sitemap...");
-  try {
-    const googleRes = await fetch(
-      `https://www.google.com/ping?sitemap=https://${HOST}/sitemap.xml`
-    );
-    console.log(`✅ Google sitemap ping: ${googleRes.status}`);
-  } catch (err) {
-    console.error("❌ Google ping failed:", (err as Error).message);
-  }
+  // Google deprecated /ping in June 2023 and Bing removed its sitemap ping too —
+  // neither endpoint does anything useful today. Rely on:
+  //   - IndexNow (above) for Bing, Yandex, DuckDuckGo, ChatGPT Search
+  //   - Google Search Console (verify once, it auto-fetches sitemap.xml)
 
-  // Ping Bing sitemap
-  console.log("📤 Pinging Bing sitemap...");
-  try {
-    const bingRes = await fetch(
-      `https://www.bing.com/ping?sitemap=https://${HOST}/sitemap.xml`
-    );
-    console.log(`✅ Bing sitemap ping: ${bingRes.status}`);
-  } catch (err) {
-    console.error("❌ Bing ping failed:", (err as Error).message);
-  }
-
-  console.log("\n🎉 Done! URLs should appear in Bing within minutes.");
-  console.log("   Google typically takes 2-7 days after sitemap ping.\n");
+  console.log("\n🎉 Done! URLs submitted via IndexNow (Bing/Yandex/DDG).");
+  console.log("   For Google: ensure sitemap is registered in Search Console.\n");
 }
 
 submitToIndexNow();

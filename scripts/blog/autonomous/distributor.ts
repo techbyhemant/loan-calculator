@@ -1,9 +1,7 @@
 import fs from "fs";
 import path from "path";
-import Groq from "groq-sdk";
 import type { QueuedPost } from "./queue-manager";
-
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+import { chatComplete } from "../lib/llm";
 const DIST_DIR = path.join(process.cwd(), "data/distribution");
 
 export async function generateDistributionContent(
@@ -42,14 +40,14 @@ Rules:
 - No emojis in LinkedIn content`;
 
   try {
-    const completion = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      max_tokens: 1500,
+    const { text } = await chatComplete({
+      maxTokens: 1500,
       temperature: 0.7,
+      responseFormat: "json",
       messages: [{ role: "user", content: prompt }],
     });
 
-    const responseText = completion.choices[0]?.message?.content ?? "{}";
+    const responseText = (text ?? "{}").replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/i, "").trim();
     let content;
     try {
       content = JSON.parse(responseText);

@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Loan } from "@/types";
 import { formatINR, formatDate } from "@/lib/utils/formatters";
 import { trpcReact } from "@/lib/trpc/hooks";
+import { calculateActualOutstanding } from "@/lib/calculations/loanCalcs";
 import { LOAN_TYPE_DISPLAY } from "@/lib/calculations/loanTypeConfig";
 import type { LoanType } from "@/lib/calculations/loanTypeConfig";
 import { LoanTypeIcon } from "@/components/ui/LoanTypeIcon";
@@ -11,8 +12,9 @@ import { FileText } from "lucide-react";
 
 function LoanRow({ loan }: { loan: Loan }) {
   const display = LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other;
+  const { actualOutstanding, computedEmi } = calculateActualOutstanding(loan);
   const paidPercent = loan.originalAmount > 0
-    ? Math.round(((loan.originalAmount - loan.currentOutstanding) / loan.originalAmount) * 100)
+    ? Math.round(((loan.originalAmount - actualOutstanding) / loan.originalAmount) * 100)
     : 0;
 
   return (
@@ -40,8 +42,8 @@ function LoanRow({ loan }: { loan: Loan }) {
         <p className="text-xs text-muted-foreground mt-1">{paidPercent}% paid</p>
       </div>
       <div className="text-right shrink-0">
-        <p className="text-sm font-semibold text-foreground">{formatINR(loan.currentOutstanding)}</p>
-        <p className="text-xs text-muted-foreground">EMI {formatINR(loan.emiAmount)}</p>
+        <p className="text-sm font-semibold text-foreground">{formatINR(actualOutstanding)}</p>
+        <p className="text-xs text-muted-foreground">EMI {formatINR(computedEmi)}</p>
       </div>
     </Link>
   );

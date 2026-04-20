@@ -37,19 +37,22 @@ jobs:
 
       - name: Run intelligent blog scheduler
         env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
         run: npx tsx scripts/blog/autonomous/scheduler.ts ${{ inputs.force == true && '--force' || '' }}
 
-      - name: Check for new content
+      - name: Check for new blog post
         id: check
+        # Only treat as "has changes" if a new MDX file was actually written.
+        # Prior behaviour committed metadata-only updates (queue, cost log)
+        # as empty "daily-update" commits when generation silently failed.
         run: |
-          if [[ -n $(git status --porcelain content/ public/images/blog/ data/) ]]; then
+          if [[ -n $(git status --porcelain content/blog/) ]]; then
             echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "New blog content generated"
+            echo "New blog post generated"
           else
             echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "No new content this run"
+            echo "No new blog post this run"
           fi
 
       - name: Commit and push

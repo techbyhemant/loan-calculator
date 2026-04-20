@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import type { Loan } from "@/types";
 
-import { calculateAmortization } from "@/lib/calculations/loanCalcs";
+import { calculateActualOutstanding } from "@/lib/calculations/loanCalcs";
 import { formatINR, formatLakhs, formatDate, formatMonths } from "@/lib/utils/formatters";
 import { trpcReact } from "@/lib/trpc/hooks";
 import { AlertTriangle, Info, ShieldCheck, Pencil, Trash2 } from "lucide-react";
@@ -88,32 +88,24 @@ export default function LoanDetailPage() {
     }
   };
 
-  // Calculate EMIs already paid and remaining tenure
-  const { emisPaid, remainingMonths, amortizationStartDate } = useMemo(() => {
-    if (!loan) return { emisPaid: 0, remainingMonths: 0, amortizationStartDate: new Date() };
-    const start = new Date(loan.startDate);
+  // Compute actual outstanding, EMI, and elapsed months from original loan terms
+  // (matches the homepage calculator's approach — simulates from originalAmount)
+  const { emisPaid, remainingMonths, actualOutstanding, computedEmi, amortizationStartDate } = useMemo(() => {
+    if (!loan) return { emisPaid: 0, remainingMonths: 0, actualOutstanding: 0, computedEmi: 0, amortizationStartDate: new Date() };
+    const snapshot = calculateActualOutstanding(loan);
     const now = new Date();
-    let paid = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
-    // If this month's EMI due date has passed, count it
-    const dueDay = loan.emiDate ?? 5;
-    if (now.getDate() >= dueDay) paid += 1;
-    paid = Math.max(0, Math.min(paid, loan.tenureMonths));
-
-    const remaining = Math.max(1, loan.tenureMonths - paid);
-
-    // Amortization starts from current month
-    const amortStart = new Date(now.getFullYear(), now.getMonth(), 1);
-
-    return { emisPaid: paid, remainingMonths: remaining, amortizationStartDate: amortStart };
+    return {
+      ...snapshot,
+      amortizationStartDate: new Date(now.getFullYear(), now.getMonth(), 1),
+    };
   }, [loan]);
 
   const amortization = useMemo(() => {
     if (!loan) return [];
-    // Use current outstanding with remaining tenure and actual EMI
     const monthlyRate = loan.interestRate / 12 / 100;
-    const emi = loan.emiAmount;
+    const emi = computedEmi;
     const rows: { month: number; date: Date; emi: number; principal: number; interest: number; outstanding: number }[] = [];
-    let balance = loan.currentOutstanding;
+    let balance = actualOutstanding;
     const startDate = amortizationStartDate;
 
     for (let m = 1; m <= remainingMonths && balance > 0.01; m++) {
@@ -134,7 +126,7 @@ export default function LoanDetailPage() {
       });
     }
     return rows;
-  }, [loan, remainingMonths, amortizationStartDate]);
+  }, [loan, computedEmi, actualOutstanding, remainingMonths, amortizationStartDate]);
 
   const totalInterest = useMemo(
     () => amortization.reduce((sum, row) => sum + row.interest, 0),
@@ -146,7 +138,7 @@ export default function LoanDetailPage() {
         100,
         Math.max(
           0,
-          ((loan.originalAmount - loan.currentOutstanding) /
+          ((loan.originalAmount - actualOutstanding) /
             loan.originalAmount) *
             100,
         ),
@@ -284,13 +276,13 @@ export default function LoanDetailPage() {
         <div className="bg-card border border-border rounded-xl shadow-sm p-4">
           <p className="text-sm text-muted-foreground mb-1">Outstanding</p>
           <p className="text-lg font-bold text-foreground">
-            {formatLakhs(loan.currentOutstanding)}
+            {formatLakhs(actualOutstanding)}
           </p>
         </div>
         <div className="bg-card border border-border rounded-xl shadow-sm p-4">
           <p className="text-sm text-muted-foreground mb-1">Monthly EMI</p>
           <p className="text-lg font-bold text-foreground">
-            {formatINR(loan.emiAmount)}
+            {formatINR(computedEmi)}
           </p>
         </div>
         <div className="bg-card border border-border rounded-xl shadow-sm p-4">
@@ -318,7 +310,7 @@ export default function LoanDetailPage() {
         <div className="flex justify-between text-sm text-muted-foreground mb-2">
           <span>{paidPercent.toFixed(0)}% paid off</span>
           <span>
-            {formatLakhs(loan.originalAmount - loan.currentOutstanding)} of{" "}
+            {formatLakhs(loan.originalAmount - actualOutstanding)} of{" "}
             {formatLakhs(loan.originalAmount)}
           </span>
         </div>

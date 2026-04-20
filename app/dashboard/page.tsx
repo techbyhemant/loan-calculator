@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import type { Loan } from "@/types";
 
-import { calculateDashboardStats } from "@/lib/calculations/loanCalcs";
+import { calculateDashboardStats, calculateActualOutstanding, calculateEMI } from "@/lib/calculations/loanCalcs";
 import { formatINR, formatLakhs, formatDate } from "@/lib/utils/formatters";
 import { trpcReact } from "@/lib/trpc/hooks";
 import { LOAN_TYPE_DISPLAY, sortByPayoffPriority } from "@/lib/calculations/loanTypeConfig";
@@ -33,11 +33,12 @@ function StatCard({
 
 function LoanCard({ loan }: { loan: Loan }) {
   const display = LOAN_TYPE_DISPLAY[loan.type as LoanType] ?? LOAN_TYPE_DISPLAY.other;
+  const { actualOutstanding, computedEmi } = calculateActualOutstanding(loan);
   const paidPercent = Math.min(
     100,
     Math.max(
       0,
-      ((loan.originalAmount - loan.currentOutstanding) / loan.originalAmount) *
+      ((loan.originalAmount - actualOutstanding) / loan.originalAmount) *
         100,
     ),
   );
@@ -60,7 +61,7 @@ function LoanCard({ loan }: { loan: Loan }) {
           </div>
         </div>
         <p className="text-sm font-semibold text-foreground">
-          {formatLakhs(loan.currentOutstanding)}
+          {formatLakhs(actualOutstanding)}
         </p>
       </div>
 
@@ -80,7 +81,7 @@ function LoanCard({ loan }: { loan: Loan }) {
 
       <div className="flex items-center justify-between">
         <div className="text-xs text-muted-foreground">
-          <span className="font-medium">{formatINR(loan.emiAmount)}</span>/mo
+          <span className="font-medium">{formatINR(computedEmi)}</span>/mo
           {loan.emiDate && (
             <span className="text-muted-foreground">
               {" "}
@@ -186,7 +187,7 @@ export default function DashboardPage() {
           loans.map((l) => ({
             type: l.type as LoanType,
             ratePA: l.interestRate / 100,
-            outstanding: l.currentOutstanding,
+            outstanding: calculateActualOutstanding(l).actualOutstanding,
           }))
         );
         const top = sorted[0];

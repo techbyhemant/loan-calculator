@@ -14,13 +14,11 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import Groq from 'groq-sdk';
 import { getFactBlock } from './fact-injector';
+import { chatComplete } from '../lib/llm';
 import type { StalePost } from './freshness-scanner';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content', 'blog');
-
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export interface UpdateResult {
   success: boolean;
@@ -47,8 +45,9 @@ export async function updatePost(stalePost: StalePost): Promise<UpdateResult> {
   const updatePrompt = buildUpdatePrompt(stalePost, content, factBlock);
 
   try {
-    const response = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+    const { text: updatedContent, tokensUsed } = await chatComplete({
+      temperature: 0.3,
+      maxTokens: 4000,
       messages: [
         {
           role: 'system',
@@ -65,22 +64,13 @@ RULES:
 - Use Indian number format: ₹50,00,000 not ₹5,000,000
 - Output ONLY the updated article body (no frontmatter)`,
         },
-        {
-          role: 'user',
-          content: updatePrompt,
-        },
+        { role: 'user', content: updatePrompt },
       ],
-      temperature: 0.3, // Low temperature for factual accuracy
-      max_tokens: 4000,
     });
 
-    const updatedContent = response.choices[0]?.message?.content;
     if (!updatedContent) {
-      return { success: false, slug: stalePost.slug, changes: [], error: 'Empty response from Groq' };
+      return { success: false, slug: stalePost.slug, changes: [], error: 'Empty response from Gemini' };
     }
-
-    // Track token usage
-    const tokensUsed = (response.usage?.prompt_tokens ?? 0) + (response.usage?.completion_tokens ?? 0);
 
     // Update frontmatter
     const today = new Date().toISOString().split('T')[0];

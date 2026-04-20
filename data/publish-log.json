@@ -1,179 +1,92 @@
 [
   {
-    "slug": "home-loan-tax-filing-2026",
-    "generatedAt": "2026-03-28T02:08:25.252Z",
+    "slug": "car-loan-balance-transfer-benefits",
+    "generatedAt": "2026-03-28T00:00:00.000Z",
     "qualityScore": 10,
     "published": true
   },
   {
-    "slug": "credit-card-interest-rate-hike",
-    "generatedAt": "2026-03-28T05:23:02.237Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 429 {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97637, Requested 7614. Please try again in 1h15m36.864s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    "slug": "credit-card-debt-consolidation-strategies",
+    "generatedAt": "2026-03-28T00:00:00.000Z",
+    "qualityScore": 10,
+    "published": true
+  },
+  {
+    "slug": "home-loan-tax-filing-2026",
+    "generatedAt": "2026-03-28T00:00:00.000Z",
+    "qualityScore": 10,
+    "published": true
+  },
+  {
+    "slug": "personal-loan-prepayment-penalty-2026",
+    "generatedAt": "2026-03-28T00:00:00.000Z",
+    "qualityScore": 10,
+    "published": true
+  },
+  {
+    "slug": "rbi-repo-rate-impact-on-emi",
+    "generatedAt": "2026-03-28T00:00:00.000Z",
+    "qualityScore": 10,
+    "published": true
+  },
+  {
+    "slug": "reduce-emi-or-tenure-after-part-payment",
+    "generatedAt": "2026-03-28T00:00:00.000Z",
+    "qualityScore": 10,
+    "published": true
+  },
+  {
+    "slug": "tax-saving-investments-for-loan-borrowers",
+    "generatedAt": "2026-03-28T00:00:00.000Z",
+    "qualityScore": 10,
+    "published": true
   },
   {
     "slug": "car-loan-prepayment-benefits",
-    "generatedAt": "2026-03-29T05:45:03.040Z",
+    "generatedAt": "2026-03-29T00:00:00.000Z",
     "qualityScore": 10,
     "published": true
   },
   {
     "slug": "education-loan-tax-benefits",
-    "generatedAt": "2026-03-30T05:03:39.941Z",
+    "generatedAt": "2026-03-30T00:00:00.000Z",
     "qualityScore": 10,
     "published": true
   },
   {
     "slug": "personal-loan-consolidation-strategies",
-    "generatedAt": "2026-03-30T06:00:55.672Z",
-    "qualityScore": 11,
+    "generatedAt": "2026-03-30T00:00:00.000Z",
+    "qualityScore": 10,
     "published": true
   },
   {
     "slug": "home-loan-balance-transfer-savings",
-    "generatedAt": "2026-03-31T05:45:59.494Z",
-    "qualityScore": 11,
+    "generatedAt": "2026-03-31T00:00:00.000Z",
+    "qualityScore": 10,
     "published": true
   },
   {
     "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-01T05:57:37.095Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 13109, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    "generatedAt": "2026-04-20T00:00:00.000Z",
+    "qualityScore": 10,
+    "published": true
   },
   {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-02T05:43:40.209Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 12978, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    "slug": "rbi-monetary-policy-2026-april-emi-impact",
+    "generatedAt": "2026-04-20T23:38:31.234Z",
+    "qualityScore": 11,
+    "published": true
   },
   {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-03T05:44:05.234Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 12968, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    "slug": "credit-card-minimum-due-trap",
+    "generatedAt": "2026-04-20T23:39:46.973Z",
+    "qualityScore": 10,
+    "published": true
   },
   {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-04T05:23:11.951Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 13016, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-05T05:46:34.195Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 13069, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-06T06:01:20.057Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 13053, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-07T05:48:58.073Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 12899, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-08T05:49:34.596Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 13241, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-09T05:50:36.829Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 12904, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-10T06:00:17.018Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 13041, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-11T05:26:21.349Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 12921, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-12T05:56:21.839Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 13241, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-13T06:18:07.181Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 12988, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-14T06:02:34.554Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 13009, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-15T06:02:30.638Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 13080, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-16T06:04:24.766Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 12997, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-17T06:05:58.706Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 13081, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-18T05:43:12.956Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 13040, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-19T06:00:44.730Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 12873, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
-  },
-  {
-    "slug": "home-loan-strategy-fy-2026-27",
-    "generatedAt": "2026-04-20T06:19:04.908Z",
-    "qualityScore": 0,
-    "published": false,
-    "error": "Error: 413 {\"error\":{\"message\":\"Request too large for model `llama-3.3-70b-versatile` in organization `org_01kmcqw64bf6x9p0kv9sebbjh5` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 13103, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    "slug": "consumer-emi-hidden-costs",
+    "generatedAt": "2026-04-20T23:40:56.608Z",
+    "qualityScore": 11,
+    "published": true
   }
 ]

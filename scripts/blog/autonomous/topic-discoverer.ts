@@ -1,8 +1,6 @@
-import Groq from 'groq-sdk'
 import { loadPublishedTopics, loadQueue, type QueuedPost } from './queue-manager'
 import { GROQ_IMAGE_METAPHOR_INSTRUCTIONS } from '../prompts/image-prompts'
-
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+import { chatComplete } from '../lib/llm'
 
 function getSeasonalContext(month: string): string {
   const m = month.toLowerCase()
@@ -159,21 +157,20 @@ Discover ${count} new blog post topics that:
 Return ONLY valid JSON.`
 
   try {
-    const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      max_tokens: 4000,
+    const { text } = await chatComplete({
+      maxTokens: 4000,
       temperature: 0.8,
+      responseFormat: 'json',
       messages: [
         { role: 'system', content: TOPIC_DISCOVERY_PROMPT },
         { role: 'user', content: userPrompt },
       ],
     })
 
-    let responseText = completion.choices[0]?.message?.content
-    if (!responseText) throw new Error('Empty response from Groq')
+    if (!text) throw new Error('Empty response from Gemini')
 
-    // Strip markdown code fences if Groq wraps the JSON
-    responseText = responseText.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```$/i, '').trim()
+    // Strip markdown code fences defensively (responseMimeType should prevent these, but be safe)
+    const responseText = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```$/i, '').trim()
 
     const parsed = JSON.parse(responseText) as { topics: DiscoveredTopic[] }
     const topics = parsed.topics || []

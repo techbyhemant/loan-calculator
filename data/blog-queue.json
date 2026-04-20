@@ -1,101 +1,5 @@
 [
   {
-    "slug": "rbi-mpc-april-2026-rate-decision-emi",
-    "title": "RBI MPC April 2026: Rate Decision and Your EMI — What to Expect",
-    "description": "Pre-MPC analysis: what a rate cut, hold, or hike means for your floating rate EMI. Calculated for ₹30L, ₹50L, and ₹75L home loans.",
-    "seoKeyword": "RBI MPC April 2026",
-    "searchVolume": 10000,
-    "category": "RBI Policy",
-    "tags": [
-      "rbi policy",
-      "rbi",
-      "emi"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/rbi-rates",
-    "imagePrompt": "",
-    "imageMetaphor": "TIMELINE",
-    "discoveredAt": "2026-04-07T05:48:54.126Z",
-    "source": "seasonal"
-  },
-  {
-    "slug": "rbi-monetary-policy-2026-april-emi-impact",
-    "title": "RBI Policy April 2026: How It Affects Your Home Loan EMI",
-    "description": "The RBI Monetary Policy Committee met this month. Here is exactly what the decision means for floating rate home loan borrowers and what to do next.",
-    "seoKeyword": "RBI policy April 2026 home loan EMI",
-    "searchVolume": 15000,
-    "category": "EMI Management",
-    "tags": [
-      "RBI",
-      "monetary policy",
-      "repo rate",
-      "EMI",
-      "home loan"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/rbi-rates",
-    "imagePrompt": "RBI Reserve Bank of India building with policy decision concept, rate announcement visual, Indian central bank aesthetic, saffron and blue, no text, professional financial news illustration",
-    "discoveredAt": "2026-04-01T05:57:32.267Z",
-    "source": "seasonal"
-  },
-  {
-    "slug": "new-financial-year-loan-strategy-fy-2026-27",
-    "title": "New Financial Year Loan Strategy: What to Do With Your EMIs in FY 2026-27",
-    "description": "April reset: review your loan portfolio, recalculate tax benefits under new regime, and plan part payments for maximum interest savings.",
-    "seoKeyword": "new financial year loan strategy",
-    "searchVolume": 10000,
-    "category": "Debt Strategy",
-    "tags": [
-      "debt strategy",
-      "rbi",
-      "emi"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/multi-loan-planner",
-    "imagePrompt": "",
-    "imageMetaphor": "TIMELINE",
-    "discoveredAt": "2026-04-01T05:57:32.266Z",
-    "source": "seasonal"
-  },
-  {
-    "slug": "credit-card-minimum-due-trap",
-    "title": "The Hidden Credit Card Minimum Due Trap: How to Avoid Paying ₹10,000 in Interest",
-    "description": "Discover the credit card minimum due trap and learn how to avoid it using our credit card payoff calculator.",
-    "seoKeyword": "credit card minimum due trap",
-    "searchVolume": 1100,
-    "category": "Credit Cards",
-    "tags": [
-      "credit card",
-      "minimum due",
-      "interest trap"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/minimum-due-trap",
-    "imagePrompt": "",
-    "imageMetaphor": "WARNING",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "consumer-emi-hidden-costs",
-    "title": "The Hidden Costs of Consumer EMI: How to Avoid Paying ₹5,000 Extra",
-    "description": "Learn about the hidden costs of consumer EMI and calculate your true cost using our consumer EMI calculator.",
-    "seoKeyword": "consumer emi hidden costs",
-    "searchVolume": 900,
-    "category": "Consumer EMI",
-    "tags": [
-      "consumer emi",
-      "hidden costs",
-      "true cost"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/consumer-emi-true-cost",
-    "imagePrompt": "",
-    "imageMetaphor": "WARNING",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
     "slug": "tax-optimization-for-borrowers",
     "title": "Tax Optimization for Borrowers: How to Save ₹30,000 in Taxes",
     "description": "Discover tax optimization strategies for borrowers and calculate your tax savings using our tax benefit calculator.",
@@ -245,6 +149,196 @@
     "imagePrompt": "",
     "imageMetaphor": "DECLINE",
     "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "sip-vs-home-loan-prepayment-math-2026",
+    "title": "SIP vs Home Loan Prepayment: Why ₹10,000 Extra Monthly Saves ₹42 Lakhs at 8.75%",
+    "description": "Stop guessing between mutual funds and debt freedom. We run the math on current 8.75% home loan rates vs expected 12% SIP returns, accounting for the 18% LTCG tax.",
+    "seoKeyword": "sip vs home loan prepayment",
+    "searchVolume": 12500,
+    "category": "Home loan strategies",
+    "tags": [
+      "prepayment",
+      "investing vs debt",
+      "home loan savings"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/sip-vs-prepayment",
+    "imagePrompt": "",
+    "imageMetaphor": "FORK",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "credit-card-gst-interest-hidden-cost",
+    "title": "The 18% GST Trap: Why Your Credit Card Interest is Actually 51% per Year",
+    "description": "Most banks quote 3.5% monthly, but after 18% GST on interest and compounding, the effective rate is staggering. See the exact ₹ amount you lose to tax alone.",
+    "seoKeyword": "credit card interest gst india",
+    "searchVolume": 4500,
+    "category": "Credit card debt",
+    "tags": [
+      "credit card interest",
+      "gst on loans",
+      "debt trap"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/credit-card-payoff",
+    "imagePrompt": "",
+    "imageMetaphor": "WARNING",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "education-loan-80e-tax-strategy-8-years",
+    "title": "Section 80E Strategy: Why You Must Close Education Loans Within Exactly 96 Months",
+    "description": "The tax benefit for education loan interest vanishes after 8 years. Learn why aggressive prepayment in year 7 can save you ₹1.2 Lakhs more than standard EMI.",
+    "seoKeyword": "section 80e tax benefit limit",
+    "searchVolume": 8200,
+    "category": "Education loan planning",
+    "tags": [
+      "80E",
+      "tax savings",
+      "education loan"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/education-loan-80e",
+    "imagePrompt": "",
+    "imageMetaphor": "TIMELINE",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "consumer-emi-processing-fees-hidden-math",
+    "title": "Is 0% EMI Really Zero? The ₹4,500 Hidden Cost on Your New iPhone 17",
+    "description": "Between processing fees and lost upfront discounts, 'No Cost' EMIs often hide an effective interest rate of 15%+. We break down the invoice math.",
+    "seoKeyword": "no cost emi hidden charges",
+    "searchVolume": 15000,
+    "category": "Consumer EMI",
+    "tags": [
+      "0% emi",
+      "gadget loan",
+      "hidden costs"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/consumer-emi-true-cost",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "home-loan-balance-transfer-fee-analysis",
+    "title": "Balance Transfer Math: Does a 0.40% Rate Drop Justify ₹25,000 in Processing Fees?",
+    "description": "Don't switch for a headline rate. If your remaining tenure is under 10 years, the transfer costs might outweigh the savings. Calculate your 'Break-Even' month.",
+    "seoKeyword": "home loan balance transfer calculator",
+    "searchVolume": 22000,
+    "category": "Home loan strategies",
+    "tags": [
+      "balance transfer",
+      "refinancing",
+      "interest rates"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/balance-transfer",
+    "imagePrompt": "",
+    "imageMetaphor": "COMPARISON",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "credit-card-vs-personal-loan-consolidation",
+    "title": "Credit Card vs Personal Loan: Saving ₹85,000 by Switching to a 13% Interest Rate",
+    "description": "If you are carrying a ₹3 Lakh balance at 42%, a personal loan is 3x cheaper. We show the math including processing fees and GST differences.",
+    "seoKeyword": "convert credit card to personal loan",
+    "searchVolume": 9800,
+    "category": "Debt payoff strategy",
+    "tags": [
+      "debt consolidation",
+      "personal loan",
+      "interest reduction"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/cc-vs-personal-loan",
+    "imagePrompt": "",
+    "imageMetaphor": "DECLINE",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "car-loan-prepayment-depreciation-math",
+    "title": "The Car Loan Trap: Why Paying Extra EMIs is Better Than a 7% Fixed Deposit",
+    "description": "Car loans are usually 9.5%+. Paying ₹50,000 extra today reduces your total interest by ₹18,000 and helps you beat vehicle depreciation.",
+    "seoKeyword": "car loan part payment benefits",
+    "searchVolume": 5400,
+    "category": "Car/two-wheeler loan strategies",
+    "tags": [
+      "car loan",
+      "prepayment",
+      "interest savings"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/car-loan-prepayment",
+    "imagePrompt": "",
+    "imageMetaphor": "GROWTH",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "multi-loan-snowball-vs-avalanche-india",
+    "title": "Debt Avalanche vs Snowball: How to Clear 4 Loans 18 Months Faster",
+    "description": "Comparing the math of paying your 18% Personal Loan vs your 42% Credit Card first. We prove why the 'Avalanche' method saves more cash in the Indian tax context.",
+    "seoKeyword": "debt payoff strategy india",
+    "searchVolume": 3200,
+    "category": "Debt payoff strategy",
+    "tags": [
+      "debt snowball",
+      "debt avalanche",
+      "financial freedom"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/multi-loan-planner",
+    "imagePrompt": "",
+    "imageMetaphor": "FREEDOM",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "salary-to-emi-ratio-lifestyle-inflation",
+    "title": "The 40% Rule: Why Your EMIs Shouldn't Cross ₹60,000 on a ₹1.5 Lakh Salary",
+    "description": "Banks will approve 55% FOIR, but your lifestyle will suffer. We calculate the 'Safety Margin' you need for emergency funds and future goals.",
+    "seoKeyword": "ideal emi to salary ratio",
+    "searchVolume": 6700,
+    "category": "Income-based loan planning",
+    "tags": [
+      "financial planning",
+      "emi calculator",
+      "salary"
+    ],
+    "tier": 3,
+    "relatedCalculator": "/calculators/salary-to-emi",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "home-loan-prepayment-on-day-one",
+    "title": "Day 1 Prepayment: How ₹1 Lakh Paid in Month 1 Saves More Than ₹5 Lakhs in Year 10",
+    "description": "The power of compounding works against you in a loan. Learn why early part-payments are 4x more effective than late-stage prepayments.",
+    "seoKeyword": "best time to prepay home loan",
+    "searchVolume": 11000,
+    "category": "Home loan strategies",
+    "tags": [
+      "home loan tips",
+      "prepayment timing",
+      "emi math"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/",
+    "imagePrompt": "",
+    "imageMetaphor": "TIMELINE",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
     "source": "discovered"
   }
 ]

@@ -3,15 +3,14 @@
 
 import fs from 'fs'
 import path from 'path'
-import Groq from 'groq-sdk'
 import Replicate from 'replicate'
 import { POSTS, type PostSpec } from './post-list'
 import { BLOG_SYSTEM_PROMPT } from './prompts/system-prompt'
 import { POST_PROMPTS, METAPHORS, buildPrompt } from './prompts/image-prompts'
 import { insertExternalLinks } from './intelligence/external-links'
+import { chatComplete } from './lib/llm'
 import type { QueuedPost } from './autonomous/queue-manager'
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 const replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN })
 
 const BLOG_DIR = path.join(process.cwd(), 'content/blog')
@@ -47,52 +46,53 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
     }
   }
 
-  // 3. Generate text content via Groq
-  console.log('✍️  Writing article via Groq (Llama 3.3 70B)...')
+  // 3. Generate text content via Gemini
+  console.log('✍️  Writing article via Gemini 2.0 Flash...')
   const startText = Date.now()
 
-  const completion = await groq.chat.completions.create({
-    model: 'llama-3.3-70b-versatile',
-    max_tokens: 8000,
+  const { text: initialContent } = await chatComplete({
+    maxTokens: 8000,
     temperature: 0.7,
     messages: [
-      {
-        role: 'system',
-        content: BLOG_SYSTEM_PROMPT,
-      },
-      {
-        role: 'user',
-        content: buildArticleUserPrompt(post),
-      },
+      { role: 'system', content: BLOG_SYSTEM_PROMPT },
+      { role: 'user', content: buildArticleUserPrompt(post) },
     ],
   })
 
-  let articleContent = completion.choices[0]?.message?.content
-  if (!articleContent) throw new Error('Groq returned empty content')
+  let articleContent = initialContent
+  if (!articleContent) throw new Error('Gemini returned empty content')
 
   let wordCount = articleContent.split(/\s+/).length
   console.log(`   ✅ Article written in ${((Date.now() - startText) / 1000).toFixed(1)}s`)
   console.log(`   📝 Word count: ~${wordCount} words`)
 
-  // Retry if too short — Llama sometimes produces short outputs
+  // If too short, ask Gemini to *extend* the existing draft instead of rewriting.
+  // (The old code retried with a growing prompt that tipped over rate limits.)
   if (wordCount < 1200) {
-    console.log(`   ⚠️  Too short (${wordCount} < 1200). Retrying with stronger instruction...`)
-    const retry = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      max_tokens: 8000,
-      temperature: 0.7,
-      messages: [
-        { role: 'system', content: BLOG_SYSTEM_PROMPT },
-        { role: 'user', content: buildArticleUserPrompt(post) },
-        { role: 'assistant', content: articleContent },
-        { role: 'user', content: 'This article is TOO SHORT. It has only ' + wordCount + ' words but needs MINIMUM 1,500 words. Please EXPAND every section with more detail, more numerical examples, more step-by-step calculations, and more comparison data. Add sections you may have skipped. Output the COMPLETE expanded article from the beginning.' },
-      ],
-    })
-    const retryContent = retry.choices[0]?.message?.content
-    if (retryContent && retryContent.split(/\s+/).length > wordCount) {
-      articleContent = retryContent
-      wordCount = articleContent.split(/\s+/).length
-      console.log(`   ✅ Retry produced ${wordCount} words`)
+    console.log(`   ⚠️  Too short (${wordCount} < 1200). Requesting an extension...`)
+    try {
+      const { text: extensionText } = await chatComplete({
+        maxTokens: 4000,
+        temperature: 0.7,
+        messages: [
+          {
+            role: 'system',
+            content:
+              'You extend existing blog articles by adding new sections. You never rewrite existing content — you only append additional sections at the end.',
+          },
+          {
+            role: 'user',
+            content: `The following article about "${post.title}" is ${wordCount} words but needs to reach at least 1500 words. Write 2-3 NEW sections (with ## headings) that naturally extend this article. Each section must have 150-250 words, at least one numerical example with ₹ amounts, and original insight. Do NOT repeat anything in the existing article. Output ONLY the new sections — no preamble, no reprint of existing content.\n\nEXISTING ARTICLE:\n\n${articleContent.slice(-3000)}`,
+          },
+        ],
+      })
+      if (extensionText && extensionText.trim()) {
+        articleContent = articleContent.trim() + '\n\n' + extensionText.trim()
+        wordCount = articleContent.split(/\s+/).length
+        console.log(`   ✅ Extension added — now ${wordCount} words`)
+      }
+    } catch (err) {
+      console.log(`   ⚠️  Extension failed (${err instanceof Error ? err.message.slice(0, 80) : 'unknown'}); keeping original ${wordCount}-word draft`)
     }
   }
 

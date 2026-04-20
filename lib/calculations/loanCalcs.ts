@@ -51,14 +51,65 @@ export function calculateAmortization(
   return rows;
 }
 
-export function calculateRemainingInterest(loan: Loan): number {
-  const rows = calculateAmortization(
-    loan.currentOutstanding,
+/**
+ * Calculate EMIs paid so far and the actual current outstanding for a loan.
+ * Simulates amortization from originalAmount forward to today's date,
+ * matching the homepage calculator's approach.
+ */
+export function calculateActualOutstanding(loan: Loan): {
+  emisPaid: number;
+  remainingMonths: number;
+  actualOutstanding: number;
+  computedEmi: number;
+} {
+  const start = new Date(loan.startDate);
+  const now = new Date();
+  let paid =
+    (now.getFullYear() - start.getFullYear()) * 12 +
+    (now.getMonth() - start.getMonth());
+  const dueDay = loan.emiDate ?? 5;
+  if (now.getDate() >= dueDay) paid += 1;
+  paid = Math.max(0, Math.min(paid, loan.tenureMonths));
+
+  const remaining = Math.max(0, loan.tenureMonths - paid);
+  const emi = calculateEMI(
+    loan.originalAmount,
     loan.interestRate,
     loan.tenureMonths,
-    new Date(loan.startDate),
   );
-  return rows.reduce((sum, row) => sum + row.interest, 0);
+  const r = loan.interestRate / 12 / 100;
+
+  let balance = loan.originalAmount;
+  for (let i = 0; i < paid; i++) {
+    const interest = balance * r;
+    const principal = Math.min(emi - interest, balance);
+    balance = Math.max(0, balance - principal);
+  }
+
+  return {
+    emisPaid: paid,
+    remainingMonths: remaining,
+    actualOutstanding: balance,
+    computedEmi: emi,
+  };
+}
+
+export function calculateRemainingInterest(loan: Loan): number {
+  const { actualOutstanding, remainingMonths, computedEmi } =
+    calculateActualOutstanding(loan);
+  if (remainingMonths === 0) return 0;
+  const r = loan.interestRate / 12 / 100;
+  let balance = actualOutstanding;
+  let totalInterest = 0;
+
+  for (let m = 0; m < remainingMonths && balance > 0.01; m++) {
+    const interest = balance * r;
+    const principal = Math.min(computedEmi - interest, balance);
+    totalInterest += interest;
+    balance = Math.max(0, balance - principal);
+  }
+
+  return totalInterest;
 }
 
 export function calculateDebtFreeDate(loans: Loan[]): Date | null {
@@ -66,31 +117,43 @@ export function calculateDebtFreeDate(loans: Loan[]): Date | null {
   if (!active.length) return null;
   return active
     .map((l) => {
+      const { actualOutstanding, remainingMonths, computedEmi } =
+        calculateActualOutstanding(l);
+      if (remainingMonths === 0) return new Date();
       const rows = calculateAmortization(
-        l.currentOutstanding,
+        actualOutstanding,
         l.interestRate,
-        l.tenureMonths,
-        new Date(l.startDate),
+        remainingMonths,
+        new Date(),
       );
-      return rows[rows.length - 1].date;
+      return rows.length > 0 ? rows[rows.length - 1].date : new Date();
     })
     .reduce((latest, d) => (d > latest ? d : latest));
 }
 
 export function calculateWeightedAverageRate(loans: Loan[]): number {
-  const total = loans.reduce((s, l) => s + l.currentOutstanding, 0);
+  const withOutstanding = loans.map((l) => ({
+    rate: l.interestRate,
+    outstanding: calculateActualOutstanding(l).actualOutstanding,
+  }));
+  const total = withOutstanding.reduce((s, l) => s + l.outstanding, 0);
   if (total === 0) return 0;
-  return loans.reduce(
-    (w, l) => w + (l.interestRate * l.currentOutstanding) / total,
+  return withOutstanding.reduce(
+    (w, l) => w + (l.rate * l.outstanding) / total,
     0,
   );
 }
 
 export function calculateDashboardStats(loans: Loan[]): DashboardStats {
   const active = loans.filter((l) => l.isActive);
+  const loanSnapshots = active.map((l) => ({
+    loan: l,
+    ...calculateActualOutstanding(l),
+  }));
+
   return {
-    totalDebt: active.reduce((s, l) => s + l.currentOutstanding, 0),
-    monthlyEmiTotal: active.reduce((s, l) => s + l.emiAmount, 0),
+    totalDebt: loanSnapshots.reduce((s, l) => s + l.actualOutstanding, 0),
+    monthlyEmiTotal: loanSnapshots.reduce((s, l) => s + l.computedEmi, 0),
     totalInterestRemaining: active.reduce(
       (s, l) => s + calculateRemainingInterest(l),
       0,

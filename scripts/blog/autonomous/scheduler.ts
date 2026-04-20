@@ -223,7 +223,9 @@ async function refreshStalePost(): Promise<UpdateResult | null> {
 
 // ─── Main scheduler ────────────────────────────────────
 
-async function run(): Promise<void> {
+async function run(): Promise<{ generationAttempted: boolean; generationSucceeded: boolean }> {
+  let generationAttempted = false
+  let generationSucceeded = false
   console.log('\n' + '='.repeat(60))
   console.log('LASTEMI AUTONOMOUS BLOG ENGINE')
   console.log(`Date: ${new Date().toISOString()}`)
@@ -331,7 +333,9 @@ async function run(): Promise<void> {
         console.log(`\n   NEW POST: "${nextPost.title}"`)
         console.log(`   Keyword: ${nextPost.seoKeyword} | Tier: ${nextPost.tier} | Source: ${nextPost.source ?? 'queue'}`)
 
+        generationAttempted = true
         const result = await generateNewPost(nextPost)
+        generationSucceeded = result.success
         logCost({
           date: new Date().toISOString(),
           action: 'generate',
@@ -380,7 +384,9 @@ async function run(): Promise<void> {
         console.log(`\n   NEW POST (maintenance): "${nextPost.title}"`)
         console.log(`   Keyword: ${nextPost.seoKeyword} | Tier: ${nextPost.tier} | Source: ${nextPost.source ?? 'discovered'}`)
 
+        generationAttempted = true
         const result = await generateNewPost(nextPost)
+        generationSucceeded = result.success
         logCost({
           date: new Date().toISOString(),
           action: 'generate',
@@ -429,15 +435,24 @@ async function run(): Promise<void> {
   // ─── Step 4: Cost summary ────────────────────────────
   const todayCost = getTodaysCostTotal()
   console.log('\n--- Cost Summary ---')
-  console.log(`   Tokens used today: ${todayCost}`)
-  console.log(`   Estimated cost: $${(todayCost * 0.0000003).toFixed(4)} (Groq Llama 3.3 70B)`)
+  console.log(`   Tokens used today: ${todayCost} (Gemini free tier — no cost)`)
 
   console.log('\n' + '='.repeat(60))
   console.log('SCHEDULER RUN COMPLETE')
   console.log('='.repeat(60))
+
+  return { generationAttempted, generationSucceeded }
 }
 
-run().catch(err => {
+run().then(result => {
+  // Fail the workflow if we tried to generate a new post but didn't produce one.
+  // This surfaces API errors, quality failures, etc. as red X's in GitHub Actions
+  // instead of silently committing empty "daily-update" markers.
+  if (result.generationAttempted && !result.generationSucceeded) {
+    console.error('\n❌ Generation attempted but failed — exiting 1 to fail CI.')
+    process.exit(1)
+  }
+}).catch(err => {
   console.error('Fatal error in scheduler:', err)
   process.exit(1)
 })
