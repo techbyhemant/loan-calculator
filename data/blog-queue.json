@@ -1,62 +1,5 @@
 [
   {
-    "slug": "rent-vs-buy-decision",
-    "title": "Rent vs Buy: How to Decide and Save ₹2 Lakh in 5 Years",
-    "description": "Discover the factors to consider when deciding between rent and buy and calculate your savings using our rent vs buy calculator.",
-    "seoKeyword": "rent vs buy decision",
-    "searchVolume": 1500,
-    "category": "Home Financing",
-    "tags": [
-      "rent vs buy",
-      "home financing",
-      "savings"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/rent-vs-buy",
-    "imagePrompt": "",
-    "imageMetaphor": "COMPARISON",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "salary-to-emi-ratio",
-    "title": "The Ideal Salary to EMI Ratio: How to Avoid Debt Traps and Save ₹10,000",
-    "description": "Learn about the ideal salary to EMI ratio and calculate your affordable EMI using our salary to EMI calculator.",
-    "seoKeyword": "salary to emi ratio",
-    "searchVolume": 1000,
-    "category": "Debt Management",
-    "tags": [
-      "salary to emi",
-      "debt management",
-      "affordable emi"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/salary-to-emi",
-    "imagePrompt": "",
-    "imageMetaphor": "CALCULATION",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "car-loan-emergency-fund",
-    "title": "Building an Emergency Fund for Your Car Loan: A ₹20,000 Safety Net",
-    "description": "Discover the importance of building an emergency fund for your car loan and calculate your required fund using our car loan prepayment calculator.",
-    "seoKeyword": "car loan emergency fund",
-    "searchVolume": 800,
-    "category": "Car Loans",
-    "tags": [
-      "car loan",
-      "emergency fund",
-      "safety net"
-    ],
-    "tier": 2,
-    "relatedCalculator": "/calculators/car-loan-prepayment",
-    "imagePrompt": "",
-    "imageMetaphor": "GROWTH",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
     "slug": "credit-card-payoff-strategy",
     "title": "Paying Off Your Credit Card Debt: A Step-by-Step Guide to Saving ₹5,000",
     "description": "Learn how to pay off your credit card debt and calculate your savings using our credit card payoff calculator.",
@@ -319,6 +262,44 @@
     "relatedCalculator": "/calculators/home-loan-eligibility",
     "imagePrompt": "",
     "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "salary-to-emi-ratio",
+    "title": "The Ideal Salary to EMI Ratio: How to Avoid Debt Traps and Save ₹10,000",
+    "description": "Learn about the ideal salary to EMI ratio and calculate your affordable EMI using our salary to EMI calculator.",
+    "seoKeyword": "salary to emi ratio",
+    "searchVolume": 1000,
+    "category": "Debt Management",
+    "tags": [
+      "salary to emi",
+      "debt management",
+      "affordable emi"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/salary-to-emi",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "car-loan-emergency-fund",
+    "title": "Building an Emergency Fund for Your Car Loan: A ₹20,000 Safety Net",
+    "description": "Discover the importance of building an emergency fund for your car loan and calculate your required fund using our car loan prepayment calculator.",
+    "seoKeyword": "car loan emergency fund",
+    "searchVolume": 800,
+    "category": "Car Loans",
+    "tags": [
+      "car loan",
+      "emergency fund",
+      "safety net"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/car-loan-prepayment",
+    "imagePrompt": "",
+    "imageMetaphor": "GROWTH",
     "discoveredAt": "2026-03-28T05:22:57.267Z",
     "source": "discovered"
   }

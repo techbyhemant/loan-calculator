@@ -88,5 +88,11 @@
     "action": "generate",
     "slug": "tax-optimization-for-borrowers",
     "tokensUsed": 3500
+  },
+  {
+    "date": "2026-04-21T00:31:20.133Z",
+    "action": "generate",
+    "slug": "rent-vs-buy-decision",
+    "tokensUsed": 3500
   }
 ]
