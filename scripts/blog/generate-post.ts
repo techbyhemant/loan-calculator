@@ -3,10 +3,11 @@
 
 import fs from 'fs'
 import path from 'path'
+import crypto from 'crypto'
 import Replicate from 'replicate'
 import { POSTS, type PostSpec } from './post-list'
 import { BLOG_SYSTEM_PROMPT } from './prompts/system-prompt'
-import { POST_PROMPTS, METAPHORS, buildPrompt } from './prompts/image-prompts'
+import { POST_PROMPTS, METAPHORS, buildPrompt, inferMetaphor } from './prompts/image-prompts'
 import { insertExternalLinks } from './intelligence/external-links'
 import { chatComplete } from './lib/llm'
 import type { QueuedPost } from './autonomous/queue-manager'
@@ -97,26 +98,26 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
   }
 
   // 4. Generate image via Replicate (Flux Schnell) — optional, graceful failure
-  console.log('\n🎨 Generating featured image via Replicate (Flux Schnell)...')
+  console.log('\n🎨 Generating featured image via Replicate (Flux Dev)...')
   const startImage = Date.now()
 
+  // Resolve prompt using the locked 3-variant system (rise / decline / pivot).
+  // No slug-specific concrete-object prompts — they cause style drift.
   const imagePrompt = (() => {
-    // 1. Canonical prompt for this slug
+    // 1. Canonical metaphor for this slug (curated mapping)
     if (POST_PROMPTS[post.slug]) return POST_PROMPTS[post.slug];
 
-    // 2. Metaphor template
+    // 2. Discoverer-provided metaphor key
     const metaphor = (post as unknown as Record<string, unknown>).imageMetaphor;
     if (metaphor) {
       const key = (metaphor as string).toLowerCase() as keyof typeof METAPHORS;
       if (METAPHORS[key]) return METAPHORS[key];
     }
 
-    // 3. Raw imagePrompt with suffix enforced
-    if (post.imagePrompt) return buildPrompt(post.imagePrompt);
-
-    // 4. Fallback
-    console.warn(`⚠️  No image prompt for ${post.slug} — using decline template`);
-    return METAPHORS.decline;
+    // 3. Infer from slug + keyword
+    const inferred = inferMetaphor(post.slug, post.seoKeyword);
+    console.log(`   (inferred metaphor: ${inferred})`);
+    return METAPHORS[inferred];
   })();
 
   console.log(`   Prompt: ${imagePrompt.slice(0, 100)}...`)
@@ -125,6 +126,9 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
     // Flux Dev: follows prompts better than Schnell (Schnell ignores "no text"
     // ~40% of the time and renders garbled glyphs). ~$0.025/image vs $0.003 —
     // a rounding error at 1-3 posts/day.
+    // Deterministic seed keeps the image stable if the same post is regenerated.
+    const seed = crypto.createHash('sha256').update(post.slug).digest().readUInt32BE(0)
+
     const imageOutput = await replicate.run(
       'black-forest-labs/flux-dev',
       {
@@ -136,6 +140,7 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
           output_quality: 90,
           num_inference_steps: 28,
           guidance: 3.5,
+          seed,
           disable_safety_checker: false,
         }
       }

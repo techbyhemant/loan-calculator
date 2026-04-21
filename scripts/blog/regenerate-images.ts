@@ -11,11 +11,20 @@
 import fs from 'fs'
 import path from 'path'
 import Replicate from 'replicate'
-import { POST_PROMPTS, METAPHORS, buildPrompt } from './prompts/image-prompts'
+import { POST_PROMPTS, METAPHORS, buildPrompt, inferMetaphor } from './prompts/image-prompts'
 import { POSTS } from './post-list'
+import crypto from 'crypto'
 
 const IMAGE_DIR = path.join(process.cwd(), 'public/images/blog')
-const RATE_LIMIT_MS = 1500 // 1.5s delay between Replicate calls
+const RATE_LIMIT_MS = 6000 // 6s delay — Replicate free tier caps at ~1 concurrent request
+const MAX_RETRIES = 3
+
+// Deterministic seed per slug so regenerations of the same post stay visually consistent.
+function seedForSlug(slug: string): number {
+  const hash = crypto.createHash('sha256').update(slug).digest()
+  // Flux expects a uint32
+  return hash.readUInt32BE(0)
+}
 
 const replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN })
 
@@ -33,38 +42,54 @@ function imageExists(slug: string): boolean {
   return fs.existsSync(getImagePath(slug))
 }
 
-function resolvePrompt(slug: string): string | null {
-  // 1. Canonical prompt for this slug
+function resolvePrompt(slug: string, keyword?: string): string | null {
+  // 1. Canonical metaphor for this slug (curated)
   if (POST_PROMPTS[slug]) return POST_PROMPTS[slug]
 
-  // 2. Check post-list for imagePrompt
-  const post = POSTS.find(p => p.slug === slug)
-  if (post?.imagePrompt) return buildPrompt(post.imagePrompt)
-
-  return null
+  // 2. Infer from slug — always yields a valid locked-style variant
+  const inferred = inferMetaphor(slug, keyword)
+  return METAPHORS[inferred]
 }
 
 // ─── Core: generate a single image ─────────────────────────
 
 async function generateImage(slug: string, prompt: string): Promise<boolean> {
-  try {
-    console.log(`\n   Generating: ${slug}`)
-    console.log(`   Prompt: ${prompt.slice(0, 100)}...`)
+  const seed = seedForSlug(slug)
+  console.log(`\n   Generating: ${slug} (seed: ${seed})`)
+  console.log(`   Prompt: ${prompt.slice(0, 100)}...`)
 
-    const imageOutput = await replicate.run(
-      'black-forest-labs/flux-dev',
-      {
-        input: {
-          prompt,
-          num_outputs: 1,
-          aspect_ratio: '16:9',
-          output_format: 'webp',
-          output_quality: 90,
-          num_inference_steps: 28,
-          guidance: 3.5,
+  let imageOutput: unknown
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      imageOutput = await replicate.run(
+        'black-forest-labs/flux-dev',
+        {
+          input: {
+            prompt,
+            num_outputs: 1,
+            aspect_ratio: '16:9',
+            output_format: 'webp',
+            output_quality: 90,
+            num_inference_steps: 28,
+            guidance: 3.5,
+            seed,
+          }
         }
+      )
+      break
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'unknown'
+      if (attempt === MAX_RETRIES) {
+        console.error(`   Failed after ${MAX_RETRIES} attempts: ${msg.slice(0, 150)}`)
+        return false
       }
-    )
+      const backoff = 5000 * attempt
+      console.log(`   Attempt ${attempt} failed (${msg.slice(0, 60)}), retrying in ${backoff / 1000}s...`)
+      await sleep(backoff)
+    }
+  }
+
+  try {
 
     const imageUrl = Array.isArray(imageOutput) ? imageOutput[0] : imageOutput
     const imageResponse = await fetch(imageUrl as string)
