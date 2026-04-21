@@ -1,62 +1,5 @@
 [
   {
-    "slug": "credit-card-payoff-strategy",
-    "title": "Paying Off Your Credit Card Debt: A Step-by-Step Guide to Saving ₹5,000",
-    "description": "Learn how to pay off your credit card debt and calculate your savings using our credit card payoff calculator.",
-    "seoKeyword": "credit card payoff strategy",
-    "searchVolume": 1200,
-    "category": "Credit Cards",
-    "tags": [
-      "credit card",
-      "payoff strategy",
-      "debt repayment"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/credit-card-payoff",
-    "imagePrompt": "",
-    "imageMetaphor": "FORK",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "education-loan-prepayment-benefits",
-    "title": "Prepaying Your Education Loan: How to Save ₹15,000 in Interest",
-    "description": "Discover the benefits of prepaying your education loan and calculate your savings using our education loan prepayment calculator.",
-    "seoKeyword": "education loan prepayment benefits",
-    "searchVolume": 900,
-    "category": "Education Loans",
-    "tags": [
-      "education loan",
-      "prepayment",
-      "interest savings"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/education-loan-80e",
-    "imagePrompt": "",
-    "imageMetaphor": "DECLINE",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "sip-vs-home-loan-prepayment-math-2026",
-    "title": "SIP vs Home Loan Prepayment: Why ₹10,000 Extra Monthly Saves ₹42 Lakhs at 8.75%",
-    "description": "Stop guessing between mutual funds and debt freedom. We run the math on current 8.75% home loan rates vs expected 12% SIP returns, accounting for the 18% LTCG tax.",
-    "seoKeyword": "sip vs home loan prepayment",
-    "searchVolume": 12500,
-    "category": "Home loan strategies",
-    "tags": [
-      "prepayment",
-      "investing vs debt",
-      "home loan savings"
-    ],
-    "tier": 2,
-    "relatedCalculator": "/calculators/sip-vs-prepayment",
-    "imagePrompt": "",
-    "imageMetaphor": "FORK",
-    "discoveredAt": "2026-04-20T23:40:13.667Z",
-    "source": "discovered"
-  },
-  {
     "slug": "credit-card-gst-interest-hidden-cost",
     "title": "The 18% GST Trap: Why Your Credit Card Interest is Actually 51% per Year",
     "description": "Most banks quote 3.5% monthly, but after 18% GST on interest and compounding, the effective rate is staggering. See the exact ₹ amount you lose to tax alone.",
@@ -301,6 +244,44 @@
     "imagePrompt": "",
     "imageMetaphor": "GROWTH",
     "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "education-loan-prepayment-benefits",
+    "title": "Prepaying Your Education Loan: How to Save ₹15,000 in Interest",
+    "description": "Discover the benefits of prepaying your education loan and calculate your savings using our education loan prepayment calculator.",
+    "seoKeyword": "education loan prepayment benefits",
+    "searchVolume": 900,
+    "category": "Education Loans",
+    "tags": [
+      "education loan",
+      "prepayment",
+      "interest savings"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/education-loan-80e",
+    "imagePrompt": "",
+    "imageMetaphor": "DECLINE",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "sip-vs-home-loan-prepayment-math-2026",
+    "title": "SIP vs Home Loan Prepayment: Why ₹10,000 Extra Monthly Saves ₹42 Lakhs at 8.75%",
+    "description": "Stop guessing between mutual funds and debt freedom. We run the math on current 8.75% home loan rates vs expected 12% SIP returns, accounting for the 18% LTCG tax.",
+    "seoKeyword": "sip vs home loan prepayment",
+    "searchVolume": 12500,
+    "category": "Home loan strategies",
+    "tags": [
+      "prepayment",
+      "investing vs debt",
+      "home loan savings"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/sip-vs-prepayment",
+    "imagePrompt": "",
+    "imageMetaphor": "FORK",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
     "source": "discovered"
   }
 ]
