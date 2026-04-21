@@ -2,6 +2,10 @@ import { loadPublishedTopics, loadQueue, type QueuedPost } from './queue-manager
 import { GROQ_IMAGE_METAPHOR_INSTRUCTIONS } from '../prompts/image-prompts'
 import { chatComplete } from '../lib/llm'
 import { fetchRecentNews, formatNewsForPrompt } from '../intelligence/news-feed'
+import {
+  getCurrentRepoRate,
+  getRateAsOfLabel,
+} from '../../../lib/data/rbi-rates'
 
 function getSeasonalContext(month: string): string {
   const m = month.toLowerCase()
@@ -153,7 +157,7 @@ export async function discoverNewTopics(count: number = 10): Promise<QueuedPost[
 CURRENT DATE CONTEXT:
 - Date: ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
 - Month: ${currentMonth} ${currentYear}
-- RBI repo rate: 5.25% (as of Feb 2026)
+- RBI repo rate: ${getCurrentRepoRate()}% (as of ${getRateAsOfLabel()})
 - Tax filing deadline: July 31 for individuals
 - Seasonal context: ${getSeasonalContext(currentMonth)}
 

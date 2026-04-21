@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { RbiEmiImpact } from "./RbiEmiImpact";
 import { buildMetadata } from "@/lib/seo/metadata";
+import { getLatestRateEntry, getRateHistory } from "@/lib/data/rbi-rates";
 
 export const metadata = buildMetadata({
   title: "RBI Repo Rate 2026 — Impact on Home Loan EMI",
@@ -16,17 +17,10 @@ export const metadata = buildMetadata({
   ],
 });
 
-const RATE_HISTORY = [
-  { date: "Feb 2025", rate: 6.25, change: -0.25 },
-  { date: "Apr 2025", rate: 6.00, change: -0.25 },
-  { date: "Jun 2025", rate: 5.75, change: -0.25 },
-  { date: "Aug 2025", rate: 5.50, change: -0.25 },
-  { date: "Oct 2025", rate: 5.50, change: 0 },
-  { date: "Dec 2025", rate: 5.50, change: 0 },
-  { date: "Feb 2026", rate: 5.25, change: -0.25 },
-];
-
-const CURRENT_RATE = RATE_HISTORY[RATE_HISTORY.length - 1];
+// Data pulled from data/rbi-rates.json via the shared loader so this page
+// stays in sync with blog prompts and homepage content automatically.
+const RATE_HISTORY = getRateHistory();
+const CURRENT_RATE = getLatestRateEntry();
 
 export default function RBIRatesPage() {
   const jsonLd = {

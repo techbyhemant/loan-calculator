@@ -1,0 +1,17 @@
+{
+  "$schema": "../lib/data/rbi-rates.schema.json",
+  "currentRate": 5.25,
+  "lastUpdated": "2026-04-08",
+  "nextMPCExpected": "2026-06-05",
+  "typicalHomeLoanSpread": 2.5,
+  "history": [
+    { "date": "Feb 2025", "rate": 6.25, "change": -0.25 },
+    { "date": "Apr 2025", "rate": 6.00, "change": -0.25 },
+    { "date": "Jun 2025", "rate": 5.50, "change": -0.50 },
+    { "date": "Aug 2025", "rate": 5.50, "change": 0 },
+    { "date": "Oct 2025", "rate": 5.50, "change": 0 },
+    { "date": "Dec 2025", "rate": 5.25, "change": -0.25 },
+    { "date": "Feb 2026", "rate": 5.25, "change": 0 },
+    { "date": "Apr 2026", "rate": 5.25, "change": 0 }
+  ]
+}

@@ -1,0 +1,112 @@
+name: RBI MPC — Auto check & PR
+
+# RBI's MPC meets bi-monthly (Feb, Apr, Jun, Aug, Oct, Dec).
+# This workflow runs on the 1st and 15th of those months:
+#
+#   1. Queries Gemini with Google Search grounding for the latest MPC decision
+#   2. Compares against data/rbi-rates.json
+#   3. If changed → opens a PR with the updated JSON + source links
+#   4. If no change → exits cleanly (no noisy issues)
+#
+# The PR is NEVER auto-merged. A human reviews the diff and sources before shipping.
+
+on:
+  schedule:
+    # 03:30 UTC (9:00 AM IST) on the 1st and 15th of Feb/Apr/Jun/Aug/Oct/Dec.
+    # Running twice per MPC month catches cases where the meeting lands
+    # before the 1st of the next month (e.g. Apr 6-8 decision before Apr 15).
+    - cron: '30 3 1,15 2,4,6,8,10,12 *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (log what would change, do not open PR)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write       # to push a branch
+  pull-requests: write  # to open a PR
+
+jobs:
+  check-and-pr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run MPC rate check
+        id: check
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set +e
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            npx tsx scripts/rbi/check-mpc-rate.ts --verbose 2>&1 | tee /tmp/check.log
+          else
+            npx tsx scripts/rbi/check-mpc-rate.ts --apply 2>&1 | tee /tmp/check.log
+          fi
+          RC=$?
+          echo "rc=$RC" >> "$GITHUB_OUTPUT"
+
+          # Script's stdout may include a GH_OUTPUT:needs_update=... line — parse it
+          NEEDS=$(grep -oE 'needs_update=(true|false)' /tmp/check.log | tail -1 | cut -d= -f2 || echo "false")
+          echo "needs_update=$NEEDS" >> "$GITHUB_OUTPUT"
+          exit $RC
+
+      - name: Open PR if JSON changed
+        if: steps.check.outputs.needs_update == 'true' && inputs.dry_run != true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Fail safe: make sure there actually is a diff
+          if git diff --quiet data/rbi-rates.json; then
+            echo "Script reported needs_update=true but no file diff — bailing."
+            exit 0
+          fi
+
+          # Use the label from the new JSON entry as the branch name and PR title
+          LAST_LABEL=$(jq -r '.history[-1].date' data/rbi-rates.json)
+          LAST_RATE=$(jq -r '.history[-1].rate' data/rbi-rates.json)
+          BRANCH="rbi-mpc/$(echo "$LAST_LABEL" | tr ' ' '-' | tr '[:upper:]' '[:lower:]')"
+
+          git config user.name "LastEMI MPC Bot"
+          git config user.email "bot@lastemi.com"
+          git checkout -b "$BRANCH"
+          git add data/rbi-rates.json
+          git commit -m "chore(rbi): update repo rate to ${LAST_RATE}% (${LAST_LABEL} MPC)
+
+          Automated update from Gemini grounded search.
+          Verify against https://www.rbi.org.in before merging."
+          git push -u origin "$BRANCH"
+
+          BODY_FILE=/tmp/rbi-mpc-pr-body.md
+          if [ ! -f "$BODY_FILE" ]; then
+            echo "## RBI rate update — $LAST_LABEL" > "$BODY_FILE"
+            echo "" >> "$BODY_FILE"
+            echo "Automated PR. Verify against [rbi.org.in](https://www.rbi.org.in) before merging." >> "$BODY_FILE"
+          fi
+
+          gh pr create \
+            --title "chore(rbi): update repo rate — ${LAST_LABEL} MPC" \
+            --body-file "$BODY_FILE" \
+            --label "automation" \
+            --label "review-required" \
+            --base main \
+            --head "$BRANCH"
+
+      - name: No changes notification
+        if: steps.check.outputs.needs_update != 'true'
+        run: |
+          echo "RBI MPC config already up to date. No PR needed."
+          tail -20 /tmp/check.log
