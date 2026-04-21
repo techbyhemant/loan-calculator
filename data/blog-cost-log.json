@@ -82,5 +82,11 @@
     "action": "generate",
     "slug": "consumer-emi-hidden-costs",
     "tokensUsed": 3500
+  },
+  {
+    "date": "2026-04-20T23:59:23.538Z",
+    "action": "generate",
+    "slug": "tax-optimization-for-borrowers",
+    "tokensUsed": 3500
   }
 ]

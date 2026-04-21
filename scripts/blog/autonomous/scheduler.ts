@@ -303,48 +303,88 @@ async function run(): Promise<{ generationAttempted: boolean; generationSucceede
 
   // ─── Step 3: Decide what to do today ─────────────────
   if (isSprintPhase) {
-    // SPRINT MODE: 1 new post per day + 1 update if high-priority stale found
-    console.log('\n--- Step 3: SPRINT Mode (1 post/day) ---')
+    // SPRINT MODE: 1 post/day default, up to 3 when news-driven topics exist.
+    // We pull from the queue, then add news-driven discoveries if needed.
+    console.log('\n--- Step 3: SPRINT Mode (news-aware) ---')
 
-    // 3a. Generate 1 new post every run
-    {
-      // Try queue first, then discover a fresh topic
-      let nextPost = dequeueNext()
+    // Pull up to 3 candidates from the queue — but only publish the news-driven ones
+    // beyond the first. This prevents mass-publishing evergreen content.
+    const candidates = [] as (ReturnType<typeof dequeueNext> & object)[]
+    for (let i = 0; i < 3; i++) {
+      const p = dequeueNext()
+      if (!p) break
+      candidates.push(p)
+    }
 
-      if (!nextPost) {
-        console.log('   Queue empty — discovering a fresh topic via AI...')
-        const discovered = await discoverNewTopics(3)
-        if (discovered.length > 0) {
-          nextPost = discovered[0]
-          // Queue the rest for tomorrow
-          if (discovered.length > 1) {
-            enqueue(discovered.slice(1))
-          }
-          logCost({
-            date: new Date().toISOString(),
-            action: 'discover',
-            slug: 'on-demand-discovery',
-            tokensUsed: 4000,
-          })
-        }
-      }
-
-      if (nextPost) {
-        console.log(`\n   NEW POST: "${nextPost.title}"`)
-        console.log(`   Keyword: ${nextPost.seoKeyword} | Tier: ${nextPost.tier} | Source: ${nextPost.source ?? 'queue'}`)
-
-        generationAttempted = true
-        const result = await generateNewPost(nextPost)
-        generationSucceeded = result.success
+    // If queue is empty OR we got only evergreen topics, discover news-driven ones.
+    // Any topic with newsRelevance >= 2 justifies an additional post today.
+    const hasHighNews = candidates.some(p => (p.newsRelevance ?? 0) >= 2)
+    if (candidates.length === 0 || !hasHighNews) {
+      console.log('   Checking for news-driven topics...')
+      const discovered = await discoverNewTopics(5)
+      if (discovered.length > 0) {
         logCost({
           date: new Date().toISOString(),
-          action: 'generate',
-          slug: nextPost.slug,
-          tokensUsed: result.tokensUsed,
+          action: 'discover',
+          slug: 'on-demand-discovery',
+          tokensUsed: 4000,
         })
-      } else {
-        console.log('   Could not find or discover a topic — skipping today.')
+        // Filter only news-driven (newsRelevance >= 2), queue the rest for later
+        const newsDriven = discovered.filter(d => (d.newsRelevance ?? 0) >= 2)
+        const evergreen = discovered.filter(d => (d.newsRelevance ?? 0) < 2)
+        if (evergreen.length > 0) enqueue(evergreen)
+
+        // If queue was empty, use first discovered (news-driven OR evergreen)
+        if (candidates.length === 0 && discovered.length > 0) {
+          candidates.push(discovered[0])
+          // Remove this one from further queueing consideration
+          if ((discovered[0].newsRelevance ?? 0) < 2 && evergreen.length > 0) {
+            // Already enqueued above, but the one we just popped shouldn't be re-added
+          }
+        }
+        // Add ALL news-driven topics as additional candidates
+        for (const nd of newsDriven) {
+          if (!candidates.find(c => c.slug === nd.slug)) candidates.push(nd)
+        }
       }
+    }
+
+    // Publish logic: always publish the first. Publish additional ONLY if newsRelevance >= 2.
+    // Hard cap at 3 per day.
+    const toPublish = [] as typeof candidates
+    for (const c of candidates) {
+      if (toPublish.length === 0) {
+        toPublish.push(c) // First post always goes
+      } else if ((c.newsRelevance ?? 0) >= 2 && toPublish.length < 3) {
+        toPublish.push(c) // Additional posts only if news-driven
+      } else {
+        // Put it back on the queue for a future run
+        enqueue([c])
+      }
+    }
+
+    console.log(`   Will publish ${toPublish.length} post(s) today` +
+      (toPublish.length > 1 ? ` (${toPublish.filter(p => (p.newsRelevance ?? 0) >= 2).length} news-driven)` : ''))
+
+    for (const nextPost of toPublish) {
+      const newsTag = (nextPost.newsRelevance ?? 0) >= 2 ? ' 📰' : ''
+      console.log(`\n   NEW POST${newsTag}: "${nextPost.title}"`)
+      console.log(`   Keyword: ${nextPost.seoKeyword} | Tier: ${nextPost.tier} | Source: ${nextPost.source ?? 'queue'}`)
+      if (nextPost.newsHook) console.log(`   Hook: ${nextPost.newsHook}`)
+
+      generationAttempted = true
+      const result = await generateNewPost(nextPost)
+      if (result.success) generationSucceeded = true
+      logCost({
+        date: new Date().toISOString(),
+        action: 'generate',
+        slug: nextPost.slug,
+        tokensUsed: result.tokensUsed,
+      })
+    }
+
+    if (toPublish.length === 0) {
+      console.log('   Could not find or discover a topic — skipping today.')
     }
 
     // 3b. Run freshness scanner and update 1 stale post if high-priority

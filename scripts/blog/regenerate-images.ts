@@ -52,7 +52,7 @@ async function generateImage(slug: string, prompt: string): Promise<boolean> {
     console.log(`   Prompt: ${prompt.slice(0, 100)}...`)
 
     const imageOutput = await replicate.run(
-      'black-forest-labs/flux-schnell',
+      'black-forest-labs/flux-dev',
       {
         input: {
           prompt,
@@ -60,7 +60,8 @@ async function generateImage(slug: string, prompt: string): Promise<boolean> {
           aspect_ratio: '16:9',
           output_format: 'webp',
           output_quality: 90,
-          go_fast: true,
+          num_inference_steps: 28,
+          guidance: 3.5,
         }
       }
     )

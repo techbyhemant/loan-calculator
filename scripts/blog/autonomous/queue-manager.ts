@@ -24,6 +24,10 @@ export interface QueuedPost {
   discoveredAt: string
   scheduledFor?: string
   source: 'predefined' | 'discovered' | 'seasonal'
+  /** 0 evergreen · 1 loosely current · 2 directly news-triggered (set by discoverer). */
+  newsRelevance?: 0 | 1 | 2
+  /** Human-readable hook from the headline that triggered this topic. */
+  newsHook?: string
 }
 
 export interface PublishedTopic {

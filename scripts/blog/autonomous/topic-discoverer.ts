@@ -1,6 +1,7 @@
 import { loadPublishedTopics, loadQueue, type QueuedPost } from './queue-manager'
 import { GROQ_IMAGE_METAPHOR_INSTRUCTIONS } from '../prompts/image-prompts'
 import { chatComplete } from '../lib/llm'
+import { fetchRecentNews, formatNewsForPrompt } from '../intelligence/news-feed'
 
 function getSeasonalContext(month: string): string {
   const m = month.toLowerCase()
@@ -71,10 +72,22 @@ OUTPUT FORMAT — Return ONLY valid JSON, no preamble, no explanation:
       "tier": 1,
       "relatedCalculator": "/calculators/credit-card-payoff",
       "imageMetaphor": "WARNING",
-      "rationale": "Why NOW — what competitor gap or trending event makes this timely"
+      "rationale": "Why NOW — what competitor gap or trending event makes this timely",
+      "newsRelevance": 0,
+      "newsHook": ""
     }
   ]
 }
+
+newsRelevance SCORING (CRITICAL — controls publish cadence):
+  0 = Evergreen topic, no news tie-in
+  1 = Loosely connected to a recent headline
+  2 = Directly triggered by a specific recent headline — timely, urgent, high ranking potential
+  Reserve "2" only for topics where a specific headline would go stale if not covered this week.
+
+newsHook (REQUIRED if newsRelevance >= 1):
+  One line quoting the specific headline that triggered this topic.
+  Example: "Triggered by: 'RBI allows NDF contracts to clients' (Economic Times, today)"
 
 Provide exactly 10 topics. Tier 1 = low competition, fast to rank. Tier 2 = medium competition. Tier 3 = authority building.
 70% should be Tier 1 or 2. Mix across at least 4 different categories. At least 2 should be non-home-loan topics.
@@ -103,6 +116,8 @@ interface DiscoveredTopic {
   imageMetaphor: string
   imagePrompt?: string   // legacy fallback
   rationale: string
+  newsRelevance?: 0 | 1 | 2
+  newsHook?: string
 }
 
 function buildCoverageContext(): string {
@@ -123,11 +138,15 @@ ${allCovered.map(kw => `- ${kw}`).join('\n')}`
 }
 
 export async function discoverNewTopics(count: number = 10): Promise<QueuedPost[]> {
-  console.log('   🔍 Discovering new topics via Groq AI...')
+  console.log('   🔍 Discovering new topics via Gemini...')
 
   const coverageContext = buildCoverageContext()
   const currentMonth = new Date().toLocaleString('default', { month: 'long' })
   const currentYear = new Date().getFullYear()
+
+  // Fetch real-time finance news to ground topic selection in actual events.
+  const news = await fetchRecentNews(20)
+  const newsBlock = formatNewsForPrompt(news)
 
   const userPrompt = `${coverageContext}
 
@@ -137,6 +156,13 @@ CURRENT DATE CONTEXT:
 - RBI repo rate: 5.25% (as of Feb 2026)
 - Tax filing deadline: July 31 for individuals
 - Seasonal context: ${getSeasonalContext(currentMonth)}
+
+RECENT INDIAN FINANCE NEWS (last 72 hours — use to find news-driven topics):
+${newsBlock}
+
+When a headline above directly affects Indian loan borrowers (RBI rate move, new tax rule,
+bank rate change, regulatory update), create a topic with newsRelevance: 2 and cite the
+headline in newsHook. These topics rank fast because they capture fresh intent.
 
 WHAT COMPETITORS ARE DOING RIGHT NOW:
 - BankBazaar/PaisaBazaar: Pushing loan product comparison pages (biased, commission-driven)
@@ -175,8 +201,12 @@ Return ONLY valid JSON.`
     const parsed = JSON.parse(responseText) as { topics: DiscoveredTopic[] }
     const topics = parsed.topics || []
 
-    console.log(`   ✅ Discovered ${topics.length} potential new topics`)
-    topics.forEach(t => console.log(`      - [Tier ${t.tier}] "${t.seoKeyword}" (~${t.searchVolume}/mo)`))
+    const newsDriven = topics.filter(t => (t.newsRelevance ?? 0) >= 2).length
+    console.log(`   ✅ Discovered ${topics.length} topics (${newsDriven} news-driven)`)
+    topics.forEach(t => {
+      const news = (t.newsRelevance ?? 0) >= 2 ? ' 📰' : ''
+      console.log(`      - [Tier ${t.tier}] "${t.seoKeyword}" (~${t.searchVolume}/mo)${news}`)
+    })
 
     return topics.map(t => ({
       slug: t.slug,
@@ -192,6 +222,8 @@ Return ONLY valid JSON.`
       imageMetaphor: t.imageMetaphor,
       discoveredAt: new Date().toISOString(),
       source: 'discovered' as const,
+      newsRelevance: t.newsRelevance ?? 0,
+      newsHook: t.newsHook ?? '',
     }))
   } catch (err) {
     console.error('   ❌ Topic discovery failed:', err)

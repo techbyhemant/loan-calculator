@@ -122,8 +122,11 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
   console.log(`   Prompt: ${imagePrompt.slice(0, 100)}...`)
 
   try {
+    // Flux Dev: follows prompts better than Schnell (Schnell ignores "no text"
+    // ~40% of the time and renders garbled glyphs). ~$0.025/image vs $0.003 —
+    // a rounding error at 1-3 posts/day.
     const imageOutput = await replicate.run(
-      'black-forest-labs/flux-schnell',
+      'black-forest-labs/flux-dev',
       {
         input: {
           prompt: imagePrompt,
@@ -131,7 +134,9 @@ export async function generateBlogPost(slug: string, postSpec?: QueuedPost): Pro
           aspect_ratio: '16:9',
           output_format: 'webp',
           output_quality: 90,
-          go_fast: true,
+          num_inference_steps: 28,
+          guidance: 3.5,
+          disable_safety_checker: false,
         }
       }
     )

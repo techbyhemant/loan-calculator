@@ -1,62 +1,5 @@
 [
   {
-    "slug": "tax-optimization-for-borrowers",
-    "title": "Tax Optimization for Borrowers: How to Save ₹30,000 in Taxes",
-    "description": "Discover tax optimization strategies for borrowers and calculate your tax savings using our tax benefit calculator.",
-    "seoKeyword": "tax optimization for borrowers",
-    "searchVolume": 1200,
-    "category": "Tax Optimization",
-    "tags": [
-      "tax optimization",
-      "borrowers",
-      "tax savings"
-    ],
-    "tier": 2,
-    "relatedCalculator": "/calculators/tax-benefit",
-    "imagePrompt": "",
-    "imageMetaphor": "GROWTH",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "multi-loan-payoff-strategy",
-    "title": "Paying Off Multiple Loans: A Step-by-Step Guide to Saving ₹50,000",
-    "description": "Learn how to pay off multiple loans and calculate your savings using our multi-loan planner calculator.",
-    "seoKeyword": "multi loan payoff strategy",
-    "searchVolume": 1000,
-    "category": "Debt Repayment",
-    "tags": [
-      "multi loan",
-      "payoff strategy",
-      "debt repayment"
-    ],
-    "tier": 2,
-    "relatedCalculator": "/calculators/multi-loan-planner",
-    "imagePrompt": "",
-    "imageMetaphor": "FORK",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "cibil-score-impact-on-loan-eligibility",
-    "title": "How Your CIBIL Score Affects Your Loan Eligibility: A ₹50,000 Difference",
-    "description": "Learn how your CIBIL score impacts your loan eligibility and calculate your loan eligibility using our home loan eligibility calculator.",
-    "seoKeyword": "cibil score impact on loan eligibility",
-    "searchVolume": 800,
-    "category": "Credit Score",
-    "tags": [
-      "cibil score",
-      "loan eligibility",
-      "credit score"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/home-loan-eligibility",
-    "imagePrompt": "",
-    "imageMetaphor": "CALCULATION",
-    "discoveredAt": "2026-03-28T05:22:57.267Z",
-    "source": "discovered"
-  },
-  {
     "slug": "rent-vs-buy-decision",
     "title": "Rent vs Buy: How to Decide and Save ₹2 Lakh in 5 Years",
     "description": "Discover the factors to consider when deciding between rent and buy and calculate your savings using our rent vs buy calculator.",
@@ -339,6 +282,44 @@
     "imagePrompt": "",
     "imageMetaphor": "TIMELINE",
     "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "multi-loan-payoff-strategy",
+    "title": "Paying Off Multiple Loans: A Step-by-Step Guide to Saving ₹50,000",
+    "description": "Learn how to pay off multiple loans and calculate your savings using our multi-loan planner calculator.",
+    "seoKeyword": "multi loan payoff strategy",
+    "searchVolume": 1000,
+    "category": "Debt Repayment",
+    "tags": [
+      "multi loan",
+      "payoff strategy",
+      "debt repayment"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/multi-loan-planner",
+    "imagePrompt": "",
+    "imageMetaphor": "FORK",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "cibil-score-impact-on-loan-eligibility",
+    "title": "How Your CIBIL Score Affects Your Loan Eligibility: A ₹50,000 Difference",
+    "description": "Learn how your CIBIL score impacts your loan eligibility and calculate your loan eligibility using our home loan eligibility calculator.",
+    "seoKeyword": "cibil score impact on loan eligibility",
+    "searchVolume": 800,
+    "category": "Credit Score",
+    "tags": [
+      "cibil score",
+      "loan eligibility",
+      "credit score"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/home-loan-eligibility",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-03-28T05:22:57.267Z",
     "source": "discovered"
   }
 ]

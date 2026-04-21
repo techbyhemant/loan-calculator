@@ -84,11 +84,22 @@ Section 1B — Key Takeaways (MANDATORY — appears right after the opening hook
   - The first 5 years of a home loan are the highest-impact window for part payments
   - Use EMI reduction only if your monthly cash flow is under pressure
 
-Section 2 — THE ANSWER (1 paragraph, appears AFTER Key Takeaways)
-  Give the conclusion UPFRONT. Do not make the reader scroll to find it.
-  Start with: "The short answer:" or "Here is the verdict:"
-  Then give a clear, specific, defensible recommendation.
-  Then say: "Here is exactly why, and when the rule changes."
+Section 2 — THE ANSWER (featured-snippet-optimized paragraph, 80-110 words)
+  Give the conclusion UPFRONT. This exact paragraph is what Google will
+  extract as the featured snippet — treat it like a mini-article.
+  Structure (do all three in one paragraph):
+    1. Open with: "The short answer:" or "Here is the verdict:"
+    2. State the specific recommendation with a ₹ number or concrete outcome
+    3. Name the ONE condition where the rule flips
+  Keep it between 80-110 words. Under 50 = too thin for a snippet. Over 150 = Google truncates.
+  Example (exactly 94 words):
+  "The short answer: reducing tenure saves ₹8,72,000 more than reducing EMI
+  on a ₹50,00,000 home loan at 8.5%. When your bank asks after a part payment,
+  always pick tenure reduction — you keep the same monthly commitment but
+  shave 4 years off the loan and cut the interest bill by almost a third.
+  The one exception: if your monthly cash flow is tight or your income is
+  irregular, take EMI reduction instead. Here is exactly why, and the numbers
+  that prove it."
 
 Section 3 — H2: The Numbers
   Show the real calculation using ₹50,00,000 at 8.5% for 20 years.
@@ -128,7 +139,24 @@ Section 7 — H2: What To Do Right Now
    3. If tenure reduction saves more than ₹2 lakh, call back and confirm tenure reduction.
    4. Log the result in your free LastEMI dashboard to track future part payments."
 
-Section 8 — Closing CTA (1 sentence)
+Section 8 — H2: Frequently Asked Questions (MANDATORY — extracted for Google's PAA box)
+  Add 4-5 question-and-answer pairs that real borrowers search. The structure feeds
+  Google's "People Also Ask" module and AI search engines verbatim.
+  Format:
+    ### Question phrased exactly as a user would type it?
+    60-90 word answer that stands alone — don't require context from earlier sections.
+    Include at least one specific ₹ amount or % in each answer.
+  Pick questions that:
+    - Are actual Google autocomplete queries for the topic (long-tail)
+    - Are NOT already answered verbatim earlier in the article
+    - Have clear, quotable one-paragraph answers
+  Example questions for a part-payment article:
+    - "Does part payment reduce interest or principal?"
+    - "How many times can I make part payment in a year?"
+    - "Is there a minimum amount for part payment on home loans?"
+    - "Will my CIBIL score improve after part payment?"
+
+Section 9 — Closing CTA (1 sentence)
   Always end with this exact sentence, adapted to the article:
   "Track every part payment and see your debt-free date update in real time —
   free at [lastemi.com](/login), no credit card, no spam calls."
@@ -176,8 +204,8 @@ MDX SYNTAX RULES (CRITICAL — breaking these causes build errors):
 Headings:
   - Do NOT include H1 (the title is the H1, added by the system)
   - Use ## for H2 (main sections)
-  - Use ### for H3 only when genuinely needed within a section
-  - Maximum 5 H2 sections total
+  - Use ### for H3 only when genuinely needed within a section (required for FAQ questions)
+  - Target 6-8 H2 sections (Key Takeaways, Answer, Numbers, Calculator, Exceptions, RBI/Tax, Actions, FAQ)
 
 Paragraphs:
   - Maximum 3 sentences per paragraph
