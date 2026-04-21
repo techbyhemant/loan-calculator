@@ -1,6 +1,7 @@
 import LoanCalculator from "@/features/loan-calculator/LoanCalculator";
+import { HomepageContent, HOMEPAGE_FAQS } from "@/components/home/HomepageContent";
 import { buildMetadata } from "@/lib/seo/metadata";
-import { getSpeakableSchema } from "@/lib/seo/schema";
+import { getFAQSchema, getSpeakableSchema } from "@/lib/seo/schema";
 
 export const metadata = buildMetadata({
   title: "EMI Calculator with Part Payment Simulator | Find Your Debt-Free Date",
@@ -38,6 +39,8 @@ const speakableSchema = getSpeakableSchema({
   cssSelectors: ["h1", "main > p:first-of-type"],
 });
 
+const faqSchema = getFAQSchema(HOMEPAGE_FAQS);
+
 export default function Home() {
   return (
     <>
@@ -49,7 +52,12 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <LoanCalculator />
+      <HomepageContent />
     </>
   );
 }
