@@ -252,7 +252,10 @@ export default async function BlogPostPage({ params }: Props) {
           {post.image ? (
             <Image
               src={post.image}
-              alt={post.title}
+              alt={
+                post.imageAlt ??
+                `${post.title} — editorial illustration for LastEMI, India's honest debt freedom platform`
+              }
               width={1200}
               height={630}
               priority

@@ -9,6 +9,8 @@ export interface BlogPostFrontmatter {
   featured: boolean;
   relatedCalculator?: string;
   image?: string;
+  /** Custom alt text for the header image. Falls back to title + brand context. */
+  imageAlt?: string;
   seoKeyword?: string;
   searchVolume?: number;
   tier?: number;

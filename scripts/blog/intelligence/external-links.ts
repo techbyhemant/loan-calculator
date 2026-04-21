@@ -180,6 +180,53 @@ export const EXTERNAL_LINKS: ExternalLink[] = [
     category: "government",
     maxUsesPerArticle: 1,
   },
+
+  // ── Filler keywords for posts that otherwise match nothing ────
+  // These catch common phrases in car-loan, credit-card, and personal-loan
+  // posts that were slipping through with zero citations. Registry priority
+  // is longest-match-wins, so specific keywords above still take precedence.
+  {
+    keyword: "prepayment penalty",
+    url: "https://cleartax.in/s/loan-prepayment-penalty",
+    anchor: "ClearTax — Loan prepayment penalty explained",
+    category: "educational",
+    maxUsesPerArticle: 1,
+  },
+  {
+    keyword: "balance transfer",
+    url: "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12016",
+    anchor: "RBI — Home loan transfer guidelines",
+    category: "government",
+    maxUsesPerArticle: 1,
+  },
+  {
+    keyword: "credit card debt",
+    url: "https://www.cibil.com/resources/articles/credit-card-debt-management",
+    anchor: "CIBIL — Credit card debt management",
+    category: "reference",
+    maxUsesPerArticle: 1,
+  },
+  {
+    keyword: "debt consolidation",
+    url: "https://cleartax.in/s/debt-consolidation",
+    anchor: "ClearTax — Debt consolidation guide",
+    category: "educational",
+    maxUsesPerArticle: 1,
+  },
+  {
+    keyword: "foreclosure",
+    url: "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=7730",
+    anchor: "RBI — Foreclosure charges on floating loans",
+    category: "government",
+    maxUsesPerArticle: 1,
+  },
+  {
+    keyword: "credit score",
+    url: "https://www.cibil.com/freecibilscore",
+    anchor: "CIBIL — Free credit score",
+    category: "reference",
+    maxUsesPerArticle: 1,
+  },
 ];
 
 // Blocked domains — never link to competitors

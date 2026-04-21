@@ -17,7 +17,7 @@ export function BlogCard({ post }: BlogCardProps) {
         <div className="relative w-full aspect-video">
           <Image
             src={post.image}
-            alt={post.title}
+            alt={post.imageAlt ?? `${post.title} — read on LastEMI`}
             width={600}
             height={315}
             className="object-cover w-full h-full"
