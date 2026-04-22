@@ -1,62 +1,5 @@
 [
   {
-    "slug": "credit-card-gst-interest-hidden-cost",
-    "title": "The 18% GST Trap: Why Your Credit Card Interest is Actually 51% per Year",
-    "description": "Most banks quote 3.5% monthly, but after 18% GST on interest and compounding, the effective rate is staggering. See the exact ₹ amount you lose to tax alone.",
-    "seoKeyword": "credit card interest gst india",
-    "searchVolume": 4500,
-    "category": "Credit card debt",
-    "tags": [
-      "credit card interest",
-      "gst on loans",
-      "debt trap"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/credit-card-payoff",
-    "imagePrompt": "",
-    "imageMetaphor": "WARNING",
-    "discoveredAt": "2026-04-20T23:40:13.667Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "education-loan-80e-tax-strategy-8-years",
-    "title": "Section 80E Strategy: Why You Must Close Education Loans Within Exactly 96 Months",
-    "description": "The tax benefit for education loan interest vanishes after 8 years. Learn why aggressive prepayment in year 7 can save you ₹1.2 Lakhs more than standard EMI.",
-    "seoKeyword": "section 80e tax benefit limit",
-    "searchVolume": 8200,
-    "category": "Education loan planning",
-    "tags": [
-      "80E",
-      "tax savings",
-      "education loan"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/education-loan-80e",
-    "imagePrompt": "",
-    "imageMetaphor": "TIMELINE",
-    "discoveredAt": "2026-04-20T23:40:13.667Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "consumer-emi-processing-fees-hidden-math",
-    "title": "Is 0% EMI Really Zero? The ₹4,500 Hidden Cost on Your New iPhone 17",
-    "description": "Between processing fees and lost upfront discounts, 'No Cost' EMIs often hide an effective interest rate of 15%+. We break down the invoice math.",
-    "seoKeyword": "no cost emi hidden charges",
-    "searchVolume": 15000,
-    "category": "Consumer EMI",
-    "tags": [
-      "0% emi",
-      "gadget loan",
-      "hidden costs"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/consumer-emi-true-cost",
-    "imagePrompt": "",
-    "imageMetaphor": "CALCULATION",
-    "discoveredAt": "2026-04-20T23:40:13.667Z",
-    "source": "discovered"
-  },
-  {
     "slug": "home-loan-balance-transfer-fee-analysis",
     "title": "Balance Transfer Math: Does a 0.40% Rate Drop Justify ₹25,000 in Processing Fees?",
     "description": "Don't switch for a headline rate. If your remaining tenure is under 10 years, the transfer costs might outweigh the savings. Calculate your 'Break-Even' month.",
@@ -281,6 +224,44 @@
     "relatedCalculator": "/calculators/sip-vs-prepayment",
     "imagePrompt": "",
     "imageMetaphor": "FORK",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "education-loan-80e-tax-strategy-8-years",
+    "title": "Section 80E Strategy: Why You Must Close Education Loans Within Exactly 96 Months",
+    "description": "The tax benefit for education loan interest vanishes after 8 years. Learn why aggressive prepayment in year 7 can save you ₹1.2 Lakhs more than standard EMI.",
+    "seoKeyword": "section 80e tax benefit limit",
+    "searchVolume": 8200,
+    "category": "Education loan planning",
+    "tags": [
+      "80E",
+      "tax savings",
+      "education loan"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/education-loan-80e",
+    "imagePrompt": "",
+    "imageMetaphor": "TIMELINE",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "consumer-emi-processing-fees-hidden-math",
+    "title": "Is 0% EMI Really Zero? The ₹4,500 Hidden Cost on Your New iPhone 17",
+    "description": "Between processing fees and lost upfront discounts, 'No Cost' EMIs often hide an effective interest rate of 15%+. We break down the invoice math.",
+    "seoKeyword": "no cost emi hidden charges",
+    "searchVolume": 15000,
+    "category": "Consumer EMI",
+    "tags": [
+      "0% emi",
+      "gadget loan",
+      "hidden costs"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/consumer-emi-true-cost",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
     "discoveredAt": "2026-04-20T23:40:13.667Z",
     "source": "discovered"
   }
