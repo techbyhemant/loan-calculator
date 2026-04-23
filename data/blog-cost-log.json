@@ -106,5 +106,29 @@
     "action": "generate",
     "slug": "credit-card-gst-interest-hidden-cost",
     "tokensUsed": 3500
+  },
+  {
+    "date": "2026-04-23T06:08:21.792Z",
+    "action": "discover",
+    "slug": "on-demand-discovery",
+    "tokensUsed": 4000
+  },
+  {
+    "date": "2026-04-23T06:08:57.171Z",
+    "action": "generate",
+    "slug": "home-loan-balance-transfer-fee-analysis",
+    "tokensUsed": 3500
+  },
+  {
+    "date": "2026-04-23T06:09:08.968Z",
+    "action": "generate",
+    "slug": "central-govt-da-hike-loan-prepayment-strategy",
+    "tokensUsed": 1000
+  },
+  {
+    "date": "2026-04-23T06:10:00.175Z",
+    "action": "generate",
+    "slug": "rbi-e-mandate-recurring-payment-audit",
+    "tokensUsed": 3500
   }
 ]

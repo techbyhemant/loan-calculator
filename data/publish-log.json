@@ -112,5 +112,24 @@
     "generatedAt": "2026-04-22T06:03:49.914Z",
     "qualityScore": 10,
     "published": true
+  },
+  {
+    "slug": "home-loan-balance-transfer-fee-analysis",
+    "generatedAt": "2026-04-23T06:08:57.171Z",
+    "qualityScore": 10,
+    "published": true
+  },
+  {
+    "slug": "central-govt-da-hike-loan-prepayment-strategy",
+    "generatedAt": "2026-04-23T06:09:08.967Z",
+    "qualityScore": 0,
+    "published": false,
+    "error": "Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent: [503 Service Unavailable] This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+  },
+  {
+    "slug": "rbi-e-mandate-recurring-payment-audit",
+    "generatedAt": "2026-04-23T06:10:00.175Z",
+    "qualityScore": 11,
+    "published": true
   }
 ]

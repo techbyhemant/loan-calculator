@@ -1,62 +1,5 @@
 [
   {
-    "slug": "home-loan-balance-transfer-fee-analysis",
-    "title": "Balance Transfer Math: Does a 0.40% Rate Drop Justify ₹25,000 in Processing Fees?",
-    "description": "Don't switch for a headline rate. If your remaining tenure is under 10 years, the transfer costs might outweigh the savings. Calculate your 'Break-Even' month.",
-    "seoKeyword": "home loan balance transfer calculator",
-    "searchVolume": 22000,
-    "category": "Home loan strategies",
-    "tags": [
-      "balance transfer",
-      "refinancing",
-      "interest rates"
-    ],
-    "tier": 2,
-    "relatedCalculator": "/calculators/balance-transfer",
-    "imagePrompt": "",
-    "imageMetaphor": "COMPARISON",
-    "discoveredAt": "2026-04-20T23:40:13.667Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "credit-card-vs-personal-loan-consolidation",
-    "title": "Credit Card vs Personal Loan: Saving ₹85,000 by Switching to a 13% Interest Rate",
-    "description": "If you are carrying a ₹3 Lakh balance at 42%, a personal loan is 3x cheaper. We show the math including processing fees and GST differences.",
-    "seoKeyword": "convert credit card to personal loan",
-    "searchVolume": 9800,
-    "category": "Debt payoff strategy",
-    "tags": [
-      "debt consolidation",
-      "personal loan",
-      "interest reduction"
-    ],
-    "tier": 2,
-    "relatedCalculator": "/calculators/cc-vs-personal-loan",
-    "imagePrompt": "",
-    "imageMetaphor": "DECLINE",
-    "discoveredAt": "2026-04-20T23:40:13.667Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "car-loan-prepayment-depreciation-math",
-    "title": "The Car Loan Trap: Why Paying Extra EMIs is Better Than a 7% Fixed Deposit",
-    "description": "Car loans are usually 9.5%+. Paying ₹50,000 extra today reduces your total interest by ₹18,000 and helps you beat vehicle depreciation.",
-    "seoKeyword": "car loan part payment benefits",
-    "searchVolume": 5400,
-    "category": "Car/two-wheeler loan strategies",
-    "tags": [
-      "car loan",
-      "prepayment",
-      "interest savings"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/car-loan-prepayment",
-    "imagePrompt": "",
-    "imageMetaphor": "GROWTH",
-    "discoveredAt": "2026-04-20T23:40:13.667Z",
-    "source": "discovered"
-  },
-  {
     "slug": "multi-loan-snowball-vs-avalanche-india",
     "title": "Debt Avalanche vs Snowball: How to Clear 4 Loans 18 Months Faster",
     "description": "Comparing the math of paying your 18% Personal Loan vs your 42% Credit Card first. We prove why the 'Avalanche' method saves more cash in the Indian tax context.",
@@ -262,6 +205,191 @@
     "relatedCalculator": "/calculators/consumer-emi-true-cost",
     "imagePrompt": "",
     "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "credit-card-gst-interest-trap-india",
+    "title": "The 18% GST Trap: Why Your 42% Credit Card Interest is Actually 49.5%",
+    "description": "Most Indian banks hide the 18% GST on interest charges in fine print. See how a ₹50,000 balance turns into a debt spiral faster than you think when the government's cut is added.",
+    "seoKeyword": "gst on credit card interest",
+    "searchVolume": 3200,
+    "category": "Credit Cards",
+    "tags": [
+      "Credit Card GST",
+      "Hidden Charges",
+      "Debt Trap"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/minimum-due-trap",
+    "imagePrompt": "",
+    "imageMetaphor": "decline",
+    "discoveredAt": "2026-04-23T06:08:21.792Z",
+    "source": "discovered",
+    "newsRelevance": 0,
+    "newsHook": ""
+  },
+  {
+    "slug": "stock-market-loss-tax-harvesting-loan-prepayment",
+    "title": "Stock Market Losses? Convert Your ₹50,000 Capital Loss into a Home Loan Win",
+    "description": "Using tax-loss harvesting to reduce your tax liability? Redirect those 'tax savings' into a one-time home loan part payment to save 3x the amount in long-term interest.",
+    "seoKeyword": "tax loss harvesting india 2026",
+    "searchVolume": 1800,
+    "category": "Home Loan",
+    "tags": [
+      "Tax Saving",
+      "Capital Gains",
+      "Prepayment"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/sip-vs-prepayment",
+    "imagePrompt": "",
+    "imageMetaphor": "pivot",
+    "discoveredAt": "2026-04-23T06:08:21.792Z",
+    "source": "discovered",
+    "newsRelevance": 1,
+    "newsHook": "Triggered by: 'Stock market losses can ease your tax burden if you don’t ignore this crucial caveat' (LiveMint)"
+  },
+  {
+    "slug": "april-prepayment-rule-home-loan-interest",
+    "title": "The April Prepayment Rule: Why ₹1 Lakh Paid Today Beats ₹1 Lakh in December",
+    "description": "Interest is calculated on a reducing balance. Prepaying at the start of the financial year (April) saves significantly more than prepaying at the end (March). See the math.",
+    "seoKeyword": "home loan part payment timing",
+    "searchVolume": 2500,
+    "category": "Home Loan",
+    "tags": [
+      "Prepayment Timing",
+      "Reducing Balance",
+      "Interest Savings"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/",
+    "imagePrompt": "",
+    "imageMetaphor": "rise",
+    "discoveredAt": "2026-04-23T06:08:21.792Z",
+    "source": "discovered",
+    "newsRelevance": 0,
+    "newsHook": ""
+  },
+  {
+    "slug": "foir-ratio-loan-rejection-reasons",
+    "title": "Salary of ₹1 Lakh but Loan Rejected? Decoding the 40% FOIR Rule for 2026",
+    "description": "Banks don't just look at your CIBIL. Learn how the Fixed Obligation to Income Ratio (FOIR) determines your eligibility and how to fix it before applying.",
+    "seoKeyword": "foir ratio for home loan",
+    "searchVolume": 3900,
+    "category": "Loan Planning",
+    "tags": [
+      "Loan Eligibility",
+      "FOIR",
+      "Debt to Income"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/home-loan-eligibility",
+    "imagePrompt": "",
+    "imageMetaphor": "pivot",
+    "discoveredAt": "2026-04-23T06:08:21.792Z",
+    "source": "discovered",
+    "newsRelevance": 1,
+    "newsHook": "Triggered by: 'How much EMI is too much? Experts say keep it within 30% of your income' (LiveMint)"
+  },
+  {
+    "slug": "education-loan-80e-vs-prepayment-math",
+    "title": "Education Loan 80E: Is Your ₹50,000 Tax Deduction Worth the 11% Interest?",
+    "description": "Many graduates hold onto education loans for the Section 80E benefit. We calculate if the tax saved is actually higher than the interest you're bleeding to the bank.",
+    "seoKeyword": "section 80e tax benefit calculator",
+    "searchVolume": 2100,
+    "category": "Education Loan",
+    "tags": [
+      "Section 80E",
+      "Tax vs Interest",
+      "Repayment Strategy"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/education-loan-80e",
+    "imagePrompt": "",
+    "imageMetaphor": "pivot",
+    "discoveredAt": "2026-04-23T06:08:21.792Z",
+    "source": "discovered",
+    "newsRelevance": 0,
+    "newsHook": ""
+  },
+  {
+    "slug": "car-loan-depreciation-vs-interest-trap",
+    "title": "Why a 7-Year Car Loan is a Financial Trap (Even at 8.5% Interest)",
+    "description": "A car loses 20% value the moment it leaves the showroom. By Year 4, you might owe the bank more than the car is worth. Learn why 3-5 years is the debt 'sweet spot'.",
+    "seoKeyword": "car loan tenure calculator india",
+    "searchVolume": 6700,
+    "category": "Car Loan",
+    "tags": [
+      "Car Loan",
+      "Depreciation",
+      "Negative Equity"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/car-loan-prepayment",
+    "imagePrompt": "",
+    "imageMetaphor": "decline",
+    "discoveredAt": "2026-04-23T06:08:21.792Z",
+    "source": "discovered",
+    "newsRelevance": 0,
+    "newsHook": ""
+  },
+  {
+    "slug": "home-loan-balance-transfer-fee-analysis",
+    "title": "Balance Transfer Math: Does a 0.5% Rate Drop Save Money After 2% Fees?",
+    "description": "Banks make balance transfers sound like free money. We factor in processing fees, MODT charges, and legal fees to see if you actually break even.",
+    "seoKeyword": "home loan balance transfer process",
+    "searchVolume": 12000,
+    "category": "Home Loan",
+    "tags": [
+      "Balance Transfer",
+      "Interest Rates",
+      "Switching Banks"
+    ],
+    "tier": 3,
+    "relatedCalculator": "/calculators/balance-transfer",
+    "imagePrompt": "",
+    "imageMetaphor": "pivot",
+    "discoveredAt": "2026-04-23T06:08:21.792Z",
+    "source": "discovered",
+    "newsRelevance": 0,
+    "newsHook": ""
+  },
+  {
+    "slug": "credit-card-vs-personal-loan-consolidation",
+    "title": "Credit Card vs Personal Loan: Saving ₹85,000 by Switching to a 13% Interest Rate",
+    "description": "If you are carrying a ₹3 Lakh balance at 42%, a personal loan is 3x cheaper. We show the math including processing fees and GST differences.",
+    "seoKeyword": "convert credit card to personal loan",
+    "searchVolume": 9800,
+    "category": "Debt payoff strategy",
+    "tags": [
+      "debt consolidation",
+      "personal loan",
+      "interest reduction"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/calculators/cc-vs-personal-loan",
+    "imagePrompt": "",
+    "imageMetaphor": "DECLINE",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "car-loan-prepayment-depreciation-math",
+    "title": "The Car Loan Trap: Why Paying Extra EMIs is Better Than a 7% Fixed Deposit",
+    "description": "Car loans are usually 9.5%+. Paying ₹50,000 extra today reduces your total interest by ₹18,000 and helps you beat vehicle depreciation.",
+    "seoKeyword": "car loan part payment benefits",
+    "searchVolume": 5400,
+    "category": "Car/two-wheeler loan strategies",
+    "tags": [
+      "car loan",
+      "prepayment",
+      "interest savings"
+    ],
+    "tier": 1,
+    "relatedCalculator": "/calculators/car-loan-prepayment",
+    "imagePrompt": "",
+    "imageMetaphor": "GROWTH",
     "discoveredAt": "2026-04-20T23:40:13.667Z",
     "source": "discovered"
   }
