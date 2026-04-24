@@ -42,6 +42,32 @@ export interface ChatCompleteResult {
   tokensUsed: number
 }
 
+// Thrown when the upstream Gemini API is temporarily unavailable (overloaded,
+// rate-limited, or 5xx) after all retries are exhausted. Callers can catch
+// this to distinguish "try again later" from real bugs.
+export class TransientLLMError extends Error {
+  readonly status: number
+  constructor(status: number, message: string) {
+    super(message)
+    this.name = 'TransientLLMError'
+    this.status = status
+  }
+}
+
+const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504])
+const RETRY_DELAYS_MS = [5_000, 15_000, 45_000] // 3 attempts after the initial try
+
+function isRetryable(err: unknown): { retry: boolean; status: number } {
+  // @google/generative-ai attaches `status` on GoogleGenerativeAIFetchError
+  const status =
+    typeof err === 'object' && err !== null && 'status' in err
+      ? Number((err as { status: unknown }).status)
+      : 0
+  return { retry: RETRYABLE_STATUSES.has(status), status }
+}
+
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
+
 // Gemini uses its own role naming ("user"/"model") and separates the system
 // instruction. This wrapper translates the Groq-style message array to
 // Gemini's expected shape.
@@ -84,13 +110,38 @@ export async function chatComplete(
   if (!lastMessage) throw new Error('chatComplete: no user/assistant messages')
 
   const chat = generativeModel.startChat({ history })
-  const result = await chat.sendMessage(lastMessage.content)
-  const response = result.response
-  const text = response.text()
 
-  const usage = response.usageMetadata
-  const tokensUsed =
-    (usage?.promptTokenCount ?? 0) + (usage?.candidatesTokenCount ?? 0)
+  let lastStatus = 0
+  let lastError: unknown = null
+  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
+    try {
+      const result = await chat.sendMessage(lastMessage.content)
+      const response = result.response
+      const text = response.text()
 
-  return { text, tokensUsed }
+      const usage = response.usageMetadata
+      const tokensUsed =
+        (usage?.promptTokenCount ?? 0) + (usage?.candidatesTokenCount ?? 0)
+
+      return { text, tokensUsed }
+    } catch (err) {
+      const { retry, status } = isRetryable(err)
+      lastStatus = status
+      lastError = err
+      if (!retry || attempt === RETRY_DELAYS_MS.length) break
+      const delay = RETRY_DELAYS_MS[attempt]
+      console.warn(
+        `   ⚠️  Gemini ${status} — retrying in ${delay / 1000}s (attempt ${attempt + 1}/${RETRY_DELAYS_MS.length})`,
+      )
+      await sleep(delay)
+    }
+  }
+
+  if (RETRYABLE_STATUSES.has(lastStatus)) {
+    throw new TransientLLMError(
+      lastStatus,
+      `Gemini upstream unavailable (${lastStatus}) after retries: ${String(lastError)}`,
+    )
+  }
+  throw lastError instanceof Error ? lastError : new Error(String(lastError))
 }

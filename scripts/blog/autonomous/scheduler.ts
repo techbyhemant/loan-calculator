@@ -30,6 +30,7 @@ import { scanForStaleContent, getMostUrgentUpdate } from '../intelligence/freshn
 import { updatePost, type UpdateResult } from '../intelligence/update-generator'
 import { generateBlogPost } from '../generate-post'
 import { checkPostQuality } from '../check-quality'
+import { TransientLLMError } from '../lib/llm'
 
 // ─── Constants ─────────────────────────────────────────
 const SPRINT_POST_THRESHOLD = 90
@@ -118,7 +119,7 @@ function financeEventToQueuedPost(event: FinanceEvent): QueuedPost {
 
 // ─── Core: Generate a new post ─────────────────────────
 
-async function generateNewPost(post: QueuedPost): Promise<{ success: boolean; tokensUsed: number }> {
+async function generateNewPost(post: QueuedPost): Promise<{ success: boolean; tokensUsed: number; transient?: boolean }> {
   let tokensUsed = 0
 
   try {
@@ -187,7 +188,12 @@ async function generateNewPost(post: QueuedPost): Promise<{ success: boolean; to
       published: false,
       error: String(err),
     })
-    return { success: false, tokensUsed: 1000 }
+    // Re-queue so tomorrow's run retries this topic.
+    enqueue([{ ...post, discoveredAt: new Date().toISOString() }])
+    const transient =
+      (err instanceof TransientLLMError) ||
+      (err instanceof Error && err.name === 'TransientLLMError')
+    return { success: false, tokensUsed: 1000, transient }
   }
 }
 
@@ -223,9 +229,10 @@ async function refreshStalePost(): Promise<UpdateResult | null> {
 
 // ─── Main scheduler ────────────────────────────────────
 
-async function run(): Promise<{ generationAttempted: boolean; generationSucceeded: boolean }> {
+async function run(): Promise<{ generationAttempted: boolean; generationSucceeded: boolean; transientFailure: boolean }> {
   let generationAttempted = false
   let generationSucceeded = false
+  let transientFailure = false
   console.log('\n' + '='.repeat(60))
   console.log('LASTEMI AUTONOMOUS BLOG ENGINE')
   console.log(`Date: ${new Date().toISOString()}`)
@@ -375,6 +382,7 @@ async function run(): Promise<{ generationAttempted: boolean; generationSucceede
       generationAttempted = true
       const result = await generateNewPost(nextPost)
       if (result.success) generationSucceeded = true
+      if (result.transient) transientFailure = true
       logCost({
         date: new Date().toISOString(),
         action: 'generate',
@@ -427,6 +435,7 @@ async function run(): Promise<{ generationAttempted: boolean; generationSucceede
         generationAttempted = true
         const result = await generateNewPost(nextPost)
         generationSucceeded = result.success
+        if (result.transient) transientFailure = true
         logCost({
           date: new Date().toISOString(),
           action: 'generate',
@@ -481,18 +490,33 @@ async function run(): Promise<{ generationAttempted: boolean; generationSucceede
   console.log('SCHEDULER RUN COMPLETE')
   console.log('='.repeat(60))
 
-  return { generationAttempted, generationSucceeded }
+  return { generationAttempted, generationSucceeded, transientFailure }
 }
 
 run().then(result => {
   // Fail the workflow if we tried to generate a new post but didn't produce one.
-  // This surfaces API errors, quality failures, etc. as red X's in GitHub Actions
-  // instead of silently committing empty "daily-update" markers.
+  // This surfaces real API errors and quality failures as red X's in GitHub
+  // Actions. Exception: if the only failure was upstream Gemini being
+  // temporarily unavailable (5xx/429), soft-fail with exit 0 — the post is
+  // back on the queue and tomorrow's run will retry it.
   if (result.generationAttempted && !result.generationSucceeded) {
+    if (result.transientFailure) {
+      console.warn(
+        '\n⚠️  Generation failed due to transient Gemini unavailability. ' +
+        'Post is back on the queue. Exiting 0 to avoid false-alarm CI failure.',
+      )
+      return
+    }
     console.error('\n❌ Generation attempted but failed — exiting 1 to fail CI.')
     process.exit(1)
   }
 }).catch(err => {
+  // Also soft-fail on top-level transient errors (e.g. topic discovery
+  // retry-exhausted). Anything else is a real bug.
+  if (err instanceof TransientLLMError || (err instanceof Error && err.name === 'TransientLLMError')) {
+    console.warn('\n⚠️  Scheduler hit transient Gemini error — exiting 0.')
+    return
+  }
   console.error('Fatal error in scheduler:', err)
   process.exit(1)
 })
