@@ -9,7 +9,39 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Old site URL patterns (games/video site with Thai content)
 const OLD_PATH_PREFIXES = ["/video", "/game", "/games"];
-const OLD_QUERY_PARAMS = ["juth"];
+// Query params that signal a ghost URL from the prior domain owner → 410 Gone
+const GONE_QUERY_PARAMS = ["video", "juth"];
+
+// Known-good query params used by the app. Anything outside this set on an
+// otherwise-valid page triggers X-Robots-Tag: noindex, nofollow (page still
+// renders for users, but search engines won't index the variant).
+const ALLOWED_QUERY_PARAMS = new Set<string>([
+  // Shareable calculator token
+  "s",
+  // User-facing calculator inputs (reserved for future shareable-link params)
+  "amount",
+  "rate",
+  "tenure",
+  "start",
+  "emi",
+  "type",
+  // Attribution / affiliate
+  "ref",
+  // Marketing / ads
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+  "gclid",
+  "fbclid",
+  "msclkid",
+  // Next.js / auth
+  "callbackUrl",
+  "error",
+  "code",
+  "state",
+]);
 
 function goneHTML(path: string): string {
   return `<!DOCTYPE html>
@@ -54,11 +86,11 @@ export function middleware(request: NextRequest) {
   const isOldPath = OLD_PATH_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(prefix + "/"),
   );
-  const hasOldQueryParam = OLD_QUERY_PARAMS.some((param) =>
+  const hasGoneQueryParam = GONE_QUERY_PARAMS.some((param) =>
     searchParams.has(param),
   );
 
-  if (isOldPath || hasOldQueryParam) {
+  if (isOldPath || hasGoneQueryParam) {
     return new NextResponse(goneHTML(pathname), {
       status: 410,
       headers: {
@@ -69,8 +101,19 @@ export function middleware(request: NextRequest) {
     });
   }
 
-  // 3. Continue to Next.js routing for valid paths
+  // 3. For valid paths with unknown query params, still serve the page but
+  //    tell search engines not to index that variant. The canonical tag on
+  //    the page points to the clean URL, so link equity is preserved.
   const response = NextResponse.next();
+
+  const paramKeys = Array.from(searchParams.keys());
+  const hasUnknownParam = paramKeys.some(
+    (key) => !ALLOWED_QUERY_PARAMS.has(key),
+  );
+  if (paramKeys.length > 0 && hasUnknownParam) {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  }
+
   return response;
 }
 

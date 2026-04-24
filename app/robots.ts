@@ -13,6 +13,11 @@ export default function robots(): MetadataRoute.Robots {
           "/video/",
           "/game/",
           "/games/",
+          // Ghost video query params from prior domain owner
+          "/*?video=*",
+          "/*&video=*",
+          "/*?juth=*",
+          "/*&juth=*",
         ],
       },
       // Allow AI crawlers explicitly for GEO
@@ -36,7 +41,14 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "Googlebot",
         allow: "/",
-        disallow: ["/api/", "/video/", "/game/", "/games/"],
+        disallow: [
+          "/api/",
+          "/video/",
+          "/game/",
+          "/games/",
+          "/*?video=*",
+          "/*&video=*",
+        ],
       },
     ],
     sitemap: "https://lastemi.com/sitemap.xml",
