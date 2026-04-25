@@ -217,31 +217,50 @@ export function LoanSummary() {
         </div>
       )}
 
-      {/* Insight line — shown when total interest > 5L and no simulations */}
+      {/* Smart Insight — the page's hero value proposition. Large, branded,
+          impossible to miss. Shown when total interest > 5L and no simulations. */}
       {!hasSimulations && result.totalInterest > 500000 && (
-        <div className="p-3 rounded-lg bg-warning/10 border border-warning/20 text-sm flex items-start gap-2">
-          <span className="text-warning mt-0.5 flex-shrink-0">&#x26A0;</span>
-          <div>
-            <span className="text-foreground font-medium">
-              You&apos;ll pay {formatINR(result.totalInterest)} in interest.
-            </span>{" "}
-            <span className="text-muted-foreground">
-              A &#x20B9;5L part payment in year 3 could save{" "}
-              <span className="text-positive font-medium">&#x20B9;12L+</span>{" "}
-              and cut{" "}
-              <span className="text-positive font-medium">2+ years</span> off
-              your tenure.
-            </span>{" "}
-            <button
-              onClick={() => {
-                document
-                  .getElementById("amortization-table")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="text-primary underline underline-offset-2 hover:no-underline"
-            >
-              Simulate it &rarr;
-            </button>
+        <div className="relative overflow-hidden rounded-xl border border-primary/30 bg-gradient-to-br from-primary/10 via-amber-50 to-warning/15 dark:from-primary/15 dark:via-warning/10 dark:to-warning/15 p-4 sm:p-5 shadow-sm">
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 text-2xl sm:text-3xl" aria-hidden="true">
+              &#128161;
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs sm:text-sm uppercase tracking-wide text-primary font-semibold mb-1">
+                Smart Insight
+              </p>
+              <p className="text-sm sm:text-base text-foreground leading-snug mb-2">
+                You&apos;re paying{" "}
+                <span className="font-bold text-warning">
+                  {formatINR(result.totalInterest)}
+                </span>{" "}
+                in interest over the life of this loan.
+              </p>
+              <p className="text-sm sm:text-base text-foreground leading-snug mb-3">
+                A{" "}
+                <span className="font-semibold">&#x20B9;5L part payment</span>{" "}
+                in year 3 could save you{" "}
+                <span className="text-lg sm:text-xl font-bold text-positive">
+                  &#x20B9;12L+
+                </span>{" "}
+                and cut{" "}
+                <span className="text-lg sm:text-xl font-bold text-positive">
+                  2+ years
+                </span>{" "}
+                off your tenure.
+              </p>
+              <button
+                onClick={() => {
+                  document
+                    .getElementById("amortization-table")
+                    ?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-4 py-2 text-sm font-semibold transition-colors shadow-sm"
+              >
+                Simulate it now
+                <span aria-hidden="true">&rarr;</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
