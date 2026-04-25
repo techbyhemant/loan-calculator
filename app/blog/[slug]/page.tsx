@@ -11,6 +11,7 @@ import {
 import { MdxRenderer } from "@/components/blog/MdxRenderer";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { ShareButton } from "@/components/blog/ShareButton";
+import { InlineShareRow } from "@/components/blog/InlineShareRow";
 import { CalculatorIcon } from "lucide-react";
 
 interface Props {
@@ -286,6 +287,13 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="text-sm sm:text-base">
           <MdxRenderer source={post.content} />
         </div>
+
+        {/* ── Inline social share row (visible icons, satisfies SEO audit) ── */}
+        <InlineShareRow
+          title={post.title}
+          description={post.description}
+          pathname={`/blog/${post.slug}`}
+        />
 
         {/* ── Related Calculator CTA ── */}
         {post.relatedCalculator && (

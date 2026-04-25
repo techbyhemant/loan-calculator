@@ -4,10 +4,33 @@ import { useState, useEffect } from "react";
 import { LoanCalculatorProvider, useLoanCalculator } from "./context/LoanCalculatorContext";
 import { LoanInputForm } from "./components/LoanInputForm";
 import { LoanSummary } from "./components/LoanSummary";
-import { AmortizationSection } from "./components/AmortizationSection";
-import { DownloadButtons } from "./components/DownloadButtons";
 import { ShieldCheck, Ruler, Target } from "lucide-react";
 import dynamic from "next/dynamic";
+
+// Below-the-fold sections: defer to keep the initial mobile bundle small.
+// Audit flagged 1.8s mobile JS execution; these dynamic boundaries are the
+// biggest lever — the amortization table, modals, and PDF/Excel download
+// machinery only matter after the user has seen their EMI.
+const AmortizationSection = dynamic(
+  () =>
+    import("./components/AmortizationSection").then((m) => ({
+      default: m.AmortizationSection,
+    })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-64 bg-muted rounded-lg animate-pulse mt-6" />
+    ),
+  }
+);
+
+const DownloadButtons = dynamic(
+  () =>
+    import("./components/DownloadButtons").then((m) => ({
+      default: m.DownloadButtons,
+    })),
+  { ssr: false, loading: () => null }
+);
 
 const YearlyBreakdownSection = dynamic(
   () =>

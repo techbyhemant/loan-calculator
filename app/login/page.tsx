@@ -39,8 +39,8 @@ function LoginContent() {
       <div className="w-full max-w-sm">
         {/* Logo / Brand */}
         <div className="text-center mb-8">
-          <Image src="/long-logo-light.png" alt="LastEMI" width={160} height={46} className="mx-auto h-10 w-auto dark:hidden" />
-          <Image src="/long-logo-dark.png" alt="LastEMI" width={160} height={46} className="mx-auto h-10 w-auto hidden dark:block" />
+          <Image src="/long-logo-light.png" alt="LastEMI — Free EMI Calculator for India" width={160} height={46} className="mx-auto h-10 w-auto dark:hidden" />
+          <Image src="/long-logo-dark.png" alt="LastEMI — Free EMI Calculator for India" width={160} height={46} className="mx-auto h-10 w-auto hidden dark:block" />
           <p className="text-sm text-muted-foreground mt-2">
             Track all your loans. Become debt-free faster.
           </p>

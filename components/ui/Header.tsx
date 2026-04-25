@@ -71,7 +71,7 @@ export function Header() {
           <Link href="/" className="shrink-0">
             <Image
               src="/long-logo-light.png"
-              alt="LastEMI"
+              alt="LastEMI — Free EMI Calculator for India"
               width={120}
               height={34}
               className="h-8 w-auto dark:hidden"
@@ -79,7 +79,7 @@ export function Header() {
             />
             <Image
               src="/long-logo-dark.png"
-              alt="LastEMI"
+              alt="LastEMI — Free EMI Calculator for India"
               width={120}
               height={34}
               className="h-8 w-auto hidden dark:block"

@@ -25,10 +25,12 @@ export interface PageSEO {
 export function buildMetadata(page: PageSEO): Metadata {
   const url = `${SITE.url}${page.path}`;
   const image = page.image ?? `${SITE.url}/images/og-default.png`;
-  const fullTitle =
-    page.path === "/"
-      ? `${SITE.name} — Find Your Debt-Free Date`
-      : `${page.title} | ${SITE.name}`;
+  // Suffix with brand name unless the title already contains it (avoids
+  // "LastEMI ... | LastEMI"). Homepage previously hardcoded a brand-first
+  // title; that pattern hurt rankings because the target keyword
+  // "EMI Calculator" never appeared at the start. Now caller controls it.
+  const titleHasBrand = page.title.toLowerCase().includes(SITE.name.toLowerCase());
+  const fullTitle = titleHasBrand ? page.title : `${page.title} | ${SITE.name}`;
 
   return {
     title: fullTitle,

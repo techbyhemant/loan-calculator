@@ -4,7 +4,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getFAQSchema, getSpeakableSchema } from "@/lib/seo/schema";
 
 export const metadata = buildMetadata({
-  title: "EMI Calculator with Part Payment Simulator | Find Your Debt-Free Date",
+  title: "EMI Calculator — Free, No Phone Number, No Spam | LastEMI",
   description:
     "Free EMI calculator for home loans, personal loans, car loans & credit cards. Simulate part payments, find your debt-free date — no phone number, no spam calls.",
   path: "/",
