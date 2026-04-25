@@ -1,62 +1,5 @@
 [
   {
-    "slug": "multi-loan-snowball-vs-avalanche-india",
-    "title": "Debt Avalanche vs Snowball: How to Clear 4 Loans 18 Months Faster",
-    "description": "Comparing the math of paying your 18% Personal Loan vs your 42% Credit Card first. We prove why the 'Avalanche' method saves more cash in the Indian tax context.",
-    "seoKeyword": "debt payoff strategy india",
-    "searchVolume": 3200,
-    "category": "Debt payoff strategy",
-    "tags": [
-      "debt snowball",
-      "debt avalanche",
-      "financial freedom"
-    ],
-    "tier": 1,
-    "relatedCalculator": "/calculators/multi-loan-planner",
-    "imagePrompt": "",
-    "imageMetaphor": "FREEDOM",
-    "discoveredAt": "2026-04-20T23:40:13.667Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "salary-to-emi-ratio-lifestyle-inflation",
-    "title": "The 40% Rule: Why Your EMIs Shouldn't Cross ₹60,000 on a ₹1.5 Lakh Salary",
-    "description": "Banks will approve 55% FOIR, but your lifestyle will suffer. We calculate the 'Safety Margin' you need for emergency funds and future goals.",
-    "seoKeyword": "ideal emi to salary ratio",
-    "searchVolume": 6700,
-    "category": "Income-based loan planning",
-    "tags": [
-      "financial planning",
-      "emi calculator",
-      "salary"
-    ],
-    "tier": 3,
-    "relatedCalculator": "/calculators/salary-to-emi",
-    "imagePrompt": "",
-    "imageMetaphor": "CALCULATION",
-    "discoveredAt": "2026-04-20T23:40:13.667Z",
-    "source": "discovered"
-  },
-  {
-    "slug": "home-loan-prepayment-on-day-one",
-    "title": "Day 1 Prepayment: How ₹1 Lakh Paid in Month 1 Saves More Than ₹5 Lakhs in Year 10",
-    "description": "The power of compounding works against you in a loan. Learn why early part-payments are 4x more effective than late-stage prepayments.",
-    "seoKeyword": "best time to prepay home loan",
-    "searchVolume": 11000,
-    "category": "Home loan strategies",
-    "tags": [
-      "home loan tips",
-      "prepayment timing",
-      "emi math"
-    ],
-    "tier": 2,
-    "relatedCalculator": "/",
-    "imagePrompt": "",
-    "imageMetaphor": "TIMELINE",
-    "discoveredAt": "2026-04-20T23:40:13.667Z",
-    "source": "discovered"
-  },
-  {
     "slug": "multi-loan-payoff-strategy",
     "title": "Paying Off Multiple Loans: A Step-by-Step Guide to Saving ₹50,000",
     "description": "Learn how to pay off multiple loans and calculate your savings using our multi-loan planner calculator.",
@@ -390,6 +333,44 @@
     "relatedCalculator": "/calculators/car-loan-prepayment",
     "imagePrompt": "",
     "imageMetaphor": "GROWTH",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "salary-to-emi-ratio-lifestyle-inflation",
+    "title": "The 40% Rule: Why Your EMIs Shouldn't Cross ₹60,000 on a ₹1.5 Lakh Salary",
+    "description": "Banks will approve 55% FOIR, but your lifestyle will suffer. We calculate the 'Safety Margin' you need for emergency funds and future goals.",
+    "seoKeyword": "ideal emi to salary ratio",
+    "searchVolume": 6700,
+    "category": "Income-based loan planning",
+    "tags": [
+      "financial planning",
+      "emi calculator",
+      "salary"
+    ],
+    "tier": 3,
+    "relatedCalculator": "/calculators/salary-to-emi",
+    "imagePrompt": "",
+    "imageMetaphor": "CALCULATION",
+    "discoveredAt": "2026-04-20T23:40:13.667Z",
+    "source": "discovered"
+  },
+  {
+    "slug": "home-loan-prepayment-on-day-one",
+    "title": "Day 1 Prepayment: How ₹1 Lakh Paid in Month 1 Saves More Than ₹5 Lakhs in Year 10",
+    "description": "The power of compounding works against you in a loan. Learn why early part-payments are 4x more effective than late-stage prepayments.",
+    "seoKeyword": "best time to prepay home loan",
+    "searchVolume": 11000,
+    "category": "Home loan strategies",
+    "tags": [
+      "home loan tips",
+      "prepayment timing",
+      "emi math"
+    ],
+    "tier": 2,
+    "relatedCalculator": "/",
+    "imagePrompt": "",
+    "imageMetaphor": "TIMELINE",
     "discoveredAt": "2026-04-20T23:40:13.667Z",
     "source": "discovered"
   }

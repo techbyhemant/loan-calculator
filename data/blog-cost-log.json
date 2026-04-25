@@ -130,5 +130,11 @@
     "action": "generate",
     "slug": "rbi-e-mandate-recurring-payment-audit",
     "tokensUsed": 3500
+  },
+  {
+    "date": "2026-04-25T05:51:36.880Z",
+    "action": "generate",
+    "slug": "multi-loan-snowball-vs-avalanche-india",
+    "tokensUsed": 3500
   }
 ]
