@@ -19,6 +19,23 @@ export async function createContext(): Promise<Context> {
 
 const t = initTRPC.context<Context>().create({
   transformer: superjson,
+  // Drizzle wraps Postgres errors as `Failed query: ...` and hides the real
+  // cause. This formatter surfaces the underlying error message (and code,
+  // for postgres-js errors) so we can debug from the network response.
+  errorFormatter({ shape, error }) {
+    const cause = error.cause as
+      | { message?: string; code?: string; detail?: string }
+      | undefined;
+    return {
+      ...shape,
+      data: {
+        ...shape.data,
+        causeMessage: cause?.message,
+        pgErrorCode: cause?.code,
+        pgErrorDetail: cause?.detail,
+      },
+    };
+  },
 });
 
 export const router = t.router;
