@@ -133,14 +133,34 @@ This is the "right" answer long-term but the wrong answer for this week.
 
 ---
 
-## Recommendation for LastEMI
+## Recommendation for LastEMI (Indian audience)
 
-**Do Option A (free) immediately.** US-East Supabase + US-East Vercel = same
-region = ~10ms latency. The extra ~150ms for Indian users on the network is
-unavoidable on the free tier and dwarfed by what we just fixed.
+LastEMI's users are in India. That changes the math: every API call has
+two latencies — user-to-Vercel and Vercel-to-DB. We have to optimize both.
 
-When LastEMI hits ~10K MAU and revenue justifies it, upgrade to Vercel Pro
-and switch to Option B for sub-100ms Indian-user load times.
+| Setup | Indian user round-trip | Cost |
+|---|---|---|
+| Mumbai Vercel + Mumbai DB | ~70ms ✅ | $20/mo (Pro) |
+| US-East Vercel + US-East DB | ~520ms | Free |
+| **Current** (US-East Vercel + Mumbai DB) | ~750ms+ | Free |
+| Edge runtime + Mumbai DB | ~80ms ✅ | Free, but refactor |
+
+**Don't do Option A blindly.** US-East-only is worse for Indian users than
+fixing the database round-trips with the in-code optimizations alone,
+because users still cross the Pacific. It only wins when application logic
+makes many DB calls (which the dashboard does).
+
+**Pragmatic path:**
+
+1. **Ship the in-code fixes (already done)** + run the indexes SQL. See if
+   real-user dashboard load is acceptable. Likely ~700ms — functional, not
+   delightful.
+2. **When revenue justifies $20/mo, do Option B.** This is the right
+   architecture for the long term: both function and DB in Mumbai, sub-100ms
+   user-perceived latency.
+3. **If you must stay free and the latency hurts conversions,** invest a
+   couple days in Option C (Edge runtime + Supabase JS client). It's the
+   only free way to get sub-100ms for Indian users.
 
 ---
 
