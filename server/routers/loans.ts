@@ -22,11 +22,16 @@ function serializeLoan(row: typeof loans.$inferSelect) {
 
 export const loansRouter = router({
   getAll: protectedProcedure.query(async ({ ctx }) => {
+    // Temp perf logging — strip once latency is acceptable.
+    const t0 = Date.now();
     const rows = await db
       .select()
       .from(loans)
       .where(and(eq(loans.userId, ctx.userId), eq(loans.isActive, true)))
       .orderBy(desc(loans.createdAt));
+    console.log(
+      `[perf loans.getAll] db=${Date.now() - t0}ms rows=${rows.length}`,
+    );
     return rows.map(serializeLoan);
   }),
 
