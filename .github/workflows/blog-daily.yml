@@ -1,9 +1,9 @@
 name: LastEMI Daily Blog Engine
 
 on:
-  schedule:
-    # Runs daily at 4:00 AM UTC = 9:30 AM IST
-    - cron: '0 4 * * *'
+  # Daily schedule paused. To re-enable, uncomment the cron line below.
+  # schedule:
+  #   - cron: '0 4 * * *'  # daily 4:00 AM UTC = 9:30 AM IST
   workflow_dispatch:
     inputs:
       force:
