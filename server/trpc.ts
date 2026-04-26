@@ -1,5 +1,5 @@
 import { initTRPC, TRPCError } from "@trpc/server";
-import { auth } from "@/lib/auth";
+import { authEdge as auth } from "@/lib/auth/edge";
 import superjson from "superjson";
 
 export interface Context {

@@ -1,45 +1,63 @@
 import { z } from "zod";
 import { router, protectedProcedure } from "@/server/trpc";
 import { TRPCError } from "@trpc/server";
-import { db } from "@/lib/db";
-import { users } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { supabaseAdmin } from "@/lib/supabase/admin";
+
+// Migrated to Supabase JS for Edge-runtime compatibility. Drizzle remains
+// the source of truth for schema (lib/db/schema.ts) and migrations; queries
+// at runtime go through the HTTP-based PostgREST API which works on Edge.
 
 export const userRouter = router({
   getProfile: protectedProcedure.query(async ({ ctx }) => {
-    const rows = await db
-      .select({
-        id: users.id,
-        email: users.email,
-        name: users.name,
-        image: users.image,
-        plan: users.plan,
-        planExpiry: users.planExpiry,
-      })
-      .from(users)
-      .where(eq(users.id, ctx.userId));
+    const { data, error } = await supabaseAdmin
+      .from("users")
+      .select("id, email, name, image, plan, plan_expiry")
+      .eq("id", ctx.userId)
+      .maybeSingle();
 
-    if (rows.length === 0) throw new TRPCError({ code: "NOT_FOUND" });
-    return rows[0];
+    if (error)
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: error.message,
+        cause: error,
+      });
+    if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+
+    return {
+      id: data.id,
+      email: data.email,
+      name: data.name,
+      image: data.image,
+      plan: data.plan,
+      planExpiry: data.plan_expiry,
+    };
   }),
 
   updateName: protectedProcedure
     .input(z.object({ name: z.string().min(1).max(100) }))
     .mutation(async ({ ctx, input }) => {
-      const rows = await db
-        .update(users)
-        .set({ name: input.name.trim(), updatedAt: new Date() })
-        .where(eq(users.id, ctx.userId))
-        .returning({
-          id: users.id,
-          email: users.email,
-          name: users.name,
-          image: users.image,
-          plan: users.plan,
-          planExpiry: users.planExpiry,
-        });
+      const { data, error } = await supabaseAdmin
+        .from("users")
+        .update({ name: input.name.trim(), updated_at: new Date().toISOString() })
+        .eq("id", ctx.userId)
+        .select("id, email, name, image, plan, plan_expiry")
+        .maybeSingle();
 
-      if (rows.length === 0) throw new TRPCError({ code: "NOT_FOUND" });
-      return rows[0];
+      if (error)
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: error.message,
+          cause: error,
+        });
+      if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+
+      return {
+        id: data.id,
+        email: data.email,
+        name: data.name,
+        image: data.image,
+        plan: data.plan,
+        planExpiry: data.plan_expiry,
+      };
     }),
 });

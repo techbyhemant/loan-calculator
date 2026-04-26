@@ -1,9 +1,7 @@
 import { z } from "zod";
 import { router, protectedProcedure, proProcedure } from "@/server/trpc";
 import { TRPCError } from "@trpc/server";
-import { db } from "@/lib/db";
-import { creditCards } from "@/lib/db/schema";
-import { eq, and, desc, sql } from "drizzle-orm";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import { FREE_LIMITS } from "@/lib/utils/planGating";
 import { CreditCardInputSchema } from "@/lib/validators/creditCardSchema";
 import {
@@ -13,69 +11,90 @@ import {
   CC_DEFAULTS,
 } from "@/lib/calculations/creditCardCalcs";
 
-/**
- * Convert Drizzle numeric string columns to numbers for client consumption.
- * Also maps Drizzle column names back to the API-facing field names.
- */
-function serializeCard(row: typeof creditCards.$inferSelect) {
+type CreditCardRow = {
+  id: string;
+  user_id: string;
+  name: string;
+  bank: string;
+  last_4_digits: string | null;
+  credit_limit: string;
+  outstanding: string;
+  monthly_interest_rate: string;
+  minimum_due_percent: string;
+  billing_date: number | null;
+  due_date: number | null;
+  last_statement_balance: string | null;
+  is_active: boolean;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+function serializeCard(row: CreditCardRow) {
   return {
     _id: row.id,
     id: row.id,
-    userId: row.userId,
+    userId: row.user_id,
     name: row.name,
     issuer: row.bank,
-    creditLimit: Number(row.creditLimit),
+    creditLimit: Number(row.credit_limit),
     currentOutstanding: Number(row.outstanding),
-    monthlyRate: Number(row.monthlyInterestRate),
-    minimumDuePercent: Number(row.minimumDuePercent),
-    billingDate: row.billingDate,
-    dueDate: row.dueDate,
-    isActive: row.isActive,
+    monthlyRate: Number(row.monthly_interest_rate),
+    minimumDuePercent: Number(row.minimum_due_percent),
+    billingDate: row.billing_date,
+    dueDate: row.due_date,
+    isActive: row.is_active,
     notes: row.notes ?? "",
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
   };
+}
+
+function throwSupabaseError(error: { message: string; code?: string }): never {
+  throw new TRPCError({
+    code: "INTERNAL_SERVER_ERROR",
+    message: error.message,
+    cause: error,
+  });
 }
 
 export const creditCardsRouter = router({
   getAll: protectedProcedure.query(async ({ ctx }) => {
-    const rows = await db
-      .select()
-      .from(creditCards)
-      .where(
-        and(eq(creditCards.userId, ctx.userId), eq(creditCards.isActive, true)),
-      )
-      .orderBy(desc(creditCards.outstanding));
-    return rows.map(serializeCard);
+    const { data, error } = await supabaseAdmin
+      .from("credit_cards")
+      .select("*")
+      .eq("user_id", ctx.userId)
+      .eq("is_active", true)
+      .order("outstanding", { ascending: false });
+    if (error) throwSupabaseError(error);
+    return (data as CreditCardRow[]).map(serializeCard);
   }),
 
   getById: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const rows = await db
-        .select()
-        .from(creditCards)
-        .where(
-          and(eq(creditCards.id, input.id), eq(creditCards.userId, ctx.userId)),
-        );
-      if (rows.length === 0) throw new TRPCError({ code: "NOT_FOUND" });
-      return serializeCard(rows[0]);
+      const { data, error } = await supabaseAdmin
+        .from("credit_cards")
+        .select("*")
+        .eq("id", input.id)
+        .eq("user_id", ctx.userId)
+        .maybeSingle();
+      if (error) throwSupabaseError(error);
+      if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+      return serializeCard(data as CreditCardRow);
     }),
 
   create: protectedProcedure
     .input(CreditCardInputSchema)
     .mutation(async ({ ctx, input }) => {
       if (ctx.userPlan === "free") {
-        const [{ count }] = await db
-          .select({ count: sql<number>`count(*)::int` })
-          .from(creditCards)
-          .where(
-            and(
-              eq(creditCards.userId, ctx.userId),
-              eq(creditCards.isActive, true),
-            ),
-          );
-        if (count >= FREE_LIMITS.maxCreditCards) {
+        const { count, error: countError } = await supabaseAdmin
+          .from("credit_cards")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", ctx.userId)
+          .eq("is_active", true);
+        if (countError) throwSupabaseError(countError);
+        if ((count ?? 0) >= FREE_LIMITS.maxCreditCards) {
           throw new TRPCError({
             code: "FORBIDDEN",
             message: `Free plan allows max ${FREE_LIMITS.maxCreditCards} credit cards. Upgrade to Pro.`,
@@ -83,22 +102,24 @@ export const creditCardsRouter = router({
         }
       }
 
-      const [newCard] = await db
-        .insert(creditCards)
-        .values({
-          userId: ctx.userId,
+      const { data, error } = await supabaseAdmin
+        .from("credit_cards")
+        .insert({
+          user_id: ctx.userId,
           name: input.name,
           bank: input.issuer ?? "",
-          creditLimit: String(input.creditLimit),
-          outstanding: String(input.currentOutstanding),
-          monthlyInterestRate: String(input.monthlyRate),
-          minimumDuePercent: String(input.minimumDuePercent),
-          billingDate: input.billingDate,
-          dueDate: input.dueDate,
+          credit_limit: input.creditLimit,
+          outstanding: input.currentOutstanding,
+          monthly_interest_rate: input.monthlyRate,
+          minimum_due_percent: input.minimumDuePercent,
+          billing_date: input.billingDate,
+          due_date: input.dueDate,
           notes: input.notes ?? "",
         })
-        .returning();
-      return serializeCard(newCard);
+        .select("*")
+        .single();
+      if (error) throwSupabaseError(error);
+      return serializeCard(data as CreditCardRow);
     }),
 
   update: protectedProcedure
@@ -109,57 +130,58 @@ export const creditCardsRouter = router({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const setData: Record<string, unknown> = { updatedAt: new Date() };
+      const setData: Record<string, unknown> = {
+        updated_at: new Date().toISOString(),
+      };
 
       if (input.data.name !== undefined) setData.name = input.data.name;
       if (input.data.issuer !== undefined) setData.bank = input.data.issuer;
       if (input.data.creditLimit !== undefined)
-        setData.creditLimit = String(input.data.creditLimit);
+        setData.credit_limit = input.data.creditLimit;
       if (input.data.currentOutstanding !== undefined)
-        setData.outstanding = String(input.data.currentOutstanding);
+        setData.outstanding = input.data.currentOutstanding;
       if (input.data.monthlyRate !== undefined)
-        setData.monthlyInterestRate = String(input.data.monthlyRate);
+        setData.monthly_interest_rate = input.data.monthlyRate;
       if (input.data.minimumDuePercent !== undefined)
-        setData.minimumDuePercent = String(input.data.minimumDuePercent);
+        setData.minimum_due_percent = input.data.minimumDuePercent;
       if (input.data.billingDate !== undefined)
-        setData.billingDate = input.data.billingDate;
-      if (input.data.dueDate !== undefined)
-        setData.dueDate = input.data.dueDate;
+        setData.billing_date = input.data.billingDate;
+      if (input.data.dueDate !== undefined) setData.due_date = input.data.dueDate;
       if (input.data.notes !== undefined) setData.notes = input.data.notes;
 
-      const rows = await db
-        .update(creditCards)
-        .set(setData)
-        .where(
-          and(eq(creditCards.id, input.id), eq(creditCards.userId, ctx.userId)),
-        )
-        .returning();
-
-      if (rows.length === 0) throw new TRPCError({ code: "NOT_FOUND" });
-      return serializeCard(rows[0]);
+      const { data, error } = await supabaseAdmin
+        .from("credit_cards")
+        .update(setData)
+        .eq("id", input.id)
+        .eq("user_id", ctx.userId)
+        .select("*")
+        .maybeSingle();
+      if (error) throwSupabaseError(error);
+      if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+      return serializeCard(data as CreditCardRow);
     }),
 
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      await db
-        .update(creditCards)
-        .set({ isActive: false, updatedAt: new Date() })
-        .where(
-          and(eq(creditCards.id, input.id), eq(creditCards.userId, ctx.userId)),
-        );
+      const { error } = await supabaseAdmin
+        .from("credit_cards")
+        .update({ is_active: false, updated_at: new Date().toISOString() })
+        .eq("id", input.id)
+        .eq("user_id", ctx.userId);
+      if (error) throwSupabaseError(error);
       return { success: true };
     }),
 
   getStats: protectedProcedure.query(async ({ ctx }) => {
-    const rows = await db
-      .select()
-      .from(creditCards)
-      .where(
-        and(eq(creditCards.userId, ctx.userId), eq(creditCards.isActive, true)),
-      );
+    const { data, error } = await supabaseAdmin
+      .from("credit_cards")
+      .select("*")
+      .eq("user_id", ctx.userId)
+      .eq("is_active", true);
+    if (error) throwSupabaseError(error);
 
-    const cards = rows.map(serializeCard);
+    const cards = (data as CreditCardRow[]).map(serializeCard);
 
     const totalOutstanding = cards.reduce(
       (sum, c) => sum + c.currentOutstanding,
@@ -214,15 +236,16 @@ export const creditCardsRouter = router({
   calculatePayoff: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const rows = await db
-        .select()
-        .from(creditCards)
-        .where(
-          and(eq(creditCards.id, input.id), eq(creditCards.userId, ctx.userId)),
-        );
-      if (rows.length === 0) throw new TRPCError({ code: "NOT_FOUND" });
+      const { data, error } = await supabaseAdmin
+        .from("credit_cards")
+        .select("*")
+        .eq("id", input.id)
+        .eq("user_id", ctx.userId)
+        .maybeSingle();
+      if (error) throwSupabaseError(error);
+      if (!data) throw new TRPCError({ code: "NOT_FOUND" });
 
-      const card = serializeCard(rows[0]);
+      const card = serializeCard(data as CreditCardRow);
       return calculateCCScenarios({
         outstanding: card.currentOutstanding,
         monthlyRate: card.monthlyRate,
@@ -232,18 +255,15 @@ export const creditCardsRouter = router({
   getMultiCardPlan: proProcedure
     .input(z.object({ totalMonthlyBudget: z.number().positive() }))
     .query(async ({ ctx, input }) => {
-      const rows = await db
-        .select()
-        .from(creditCards)
-        .where(
-          and(
-            eq(creditCards.userId, ctx.userId),
-            eq(creditCards.isActive, true),
-          ),
-        );
+      const { data, error } = await supabaseAdmin
+        .from("credit_cards")
+        .select("*")
+        .eq("user_id", ctx.userId)
+        .eq("is_active", true);
+      if (error) throwSupabaseError(error);
 
       // Filter to cards with outstanding > 0
-      const cardsWithBalance = rows.filter(
+      const cardsWithBalance = (data as CreditCardRow[]).filter(
         (r) => Number(r.outstanding) > 0,
       );
 
@@ -251,7 +271,7 @@ export const creditCardsRouter = router({
         cardsWithBalance.map((c) => ({
           name: c.name,
           outstanding: Number(c.outstanding),
-          monthlyRate: Number(c.monthlyInterestRate),
+          monthlyRate: Number(c.monthly_interest_rate),
         })),
         input.totalMonthlyBudget,
       );
