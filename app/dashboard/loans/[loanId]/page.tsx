@@ -18,6 +18,7 @@ import type { LoanType } from "@/lib/calculations/loanTypeConfig";
 import { LoanTypeIcon } from "@/components/ui/LoanTypeIcon";
 import { RefreshFromStatementModal } from "@/components/dashboard/RefreshFromStatementModal";
 import { RateHistoryTimeline } from "@/components/dashboard/RateHistoryTimeline";
+import { LoanSimulator } from "@/components/dashboard/LoanSimulator";
 
 function SkeletonBlock() {
   return (
@@ -409,6 +410,15 @@ export default function LoanDetailPage() {
           </div>
         );
       })()}
+
+      {/* What-if simulator — predictions only, no DB writes. */}
+      <div className="mb-6">
+        <LoanSimulator
+          outstanding={actualOutstanding}
+          interestRate={loan.interestRate}
+          emi={computedEmi || loan.emiAmount}
+        />
+      </div>
 
       {/* Part Payment Logger */}
       <div className="mb-6">
