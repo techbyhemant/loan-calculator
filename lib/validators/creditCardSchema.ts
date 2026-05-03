@@ -9,7 +9,10 @@ export const CreditCardInputSchema = z.object({
   minimumDuePercent: z.number().min(0.01).max(0.5).default(0.05),
   billingDate: z.number().int().min(1).max(28).default(1),
   dueDate: z.number().int().min(1).max(28).default(20),
-  notes: z.string().max(500).optional(),
+  // Accept null too — superjson can serialize empty/undefined as null in
+  // some setups, and Zod's plain .optional() rejects null. Same defensive
+  // pattern used on loanSchema's optional string fields.
+  notes: z.string().max(500).optional().nullable(),
 });
 
 export type CreditCardInput = z.infer<typeof CreditCardInputSchema>;

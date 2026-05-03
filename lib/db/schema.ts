@@ -109,6 +109,10 @@ export const loans = pgTable(
       scale: 2,
     }).default("0"),
     moratoriumEndDate: timestamp("moratorium_end_date", { mode: "date" }),
+    // When was `currentOutstanding` last verified against the bank? Anchor
+    // for forward projections. NULL means never verified (auto-computed
+    // value from creation time).
+    outstandingAsOf: timestamp("outstanding_as_of", { mode: "date" }),
     isActive: boolean("is_active").default(true).notNull(),
     notes: text("notes").default(""),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -123,6 +127,40 @@ export const loans = pgTable(
       table.isActive,
       table.createdAt,
     ),
+  ],
+);
+
+// ── Loan Rate History ──────────────────────────────────────
+// Log of every interest-rate revision on a loan. Critical for floating-
+// rate loans which change every time RBI moves the repo rate. Each row
+// captures the old → new rate transition and what was adjusted on the
+// borrower's side (EMI changed vs tenure changed).
+
+export const loanRateHistory = pgTable(
+  "loan_rate_history",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    loanId: uuid("loan_id")
+      .notNull()
+      .references(() => loans.id, { onDelete: "cascade" }),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    oldRate: numeric("old_rate", { precision: 5, scale: 2 }).notNull(),
+    newRate: numeric("new_rate", { precision: 5, scale: 2 }).notNull(),
+    effectiveDate: timestamp("effective_date", { mode: "date" }).notNull(),
+    // "emi" → bank kept tenure, EMI changed
+    // "tenure" → bank kept EMI, tenure changed
+    // "both" → unusual; user manually changed both
+    adjusted: varchar("adjusted", { length: 10 }).notNull().default("emi"),
+    newEmi: numeric("new_emi", { precision: 12, scale: 2 }),
+    newTenureMonths: integer("new_tenure_months"),
+    note: text("note").default(""),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("idx_rate_history_loan_date").on(table.loanId, table.effectiveDate),
+    index("idx_rate_history_user").on(table.userId),
   ],
 );
 

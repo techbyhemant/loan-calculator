@@ -18,6 +18,7 @@ import { formatINR } from "@/lib/utils/formatters";
 import { trpcReact } from "@/lib/trpc/hooks";
 
 import NumericInput from "@/components/ui/NumericInput";
+import { EmiVerifier } from "@/components/dashboard/EmiVerifier";
 
 const LOAN_TYPES: { value: LoanType; label: string; icon: string }[] = (
   Object.keys(LOAN_TYPE_DISPLAY) as LoanType[]
@@ -324,6 +325,29 @@ export default function NewLoanPage() {
             )}
           </div>
         </div>
+
+        {/* EMI verifier — surfaces the bank's hidden spread when the user
+            enters their actual EMI from a bank statement, and optionally
+            lets them anchor the outstanding to the bank's exact figure. */}
+        {emi && calculatedEMI > 0 && originalAmount && totalTenureMonths > 0 && (
+          <EmiVerifier
+            principal={originalAmount as number}
+            tenureMonths={totalTenureMonths}
+            contractRate={rate as number}
+            calculatedEmi={calculatedEMI}
+            actualEmi={emi as number}
+            onUseEffectiveRate={(effectiveRate) => setRate(effectiveRate)}
+            onUseActualOutstanding={(amount) => {
+              setOutstanding(amount);
+              setOutstandingManuallySet(true);
+            }}
+            computedOutstanding={
+              typeof computedOutstanding === "number"
+                ? computedOutstanding
+                : undefined
+            }
+          />
+        )}
 
         {/* EMI Date + Start Date */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

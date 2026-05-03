@@ -3,7 +3,10 @@ import { router, protectedProcedure } from "@/server/trpc";
 import { TRPCError } from "@trpc/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { FREE_LIMITS } from "@/lib/utils/planGating";
-import { LoanInputSchema } from "@/lib/validators/loanSchema";
+import {
+  LoanInputSchema,
+  RefreshFromStatementSchema,
+} from "@/lib/validators/loanSchema";
 import { isRBIZeroPenaltyApplicable } from "@/lib/calculations/loanTypeConfig";
 
 // Postgres returns snake_case from PostgREST; the rest of the app expects
@@ -24,6 +27,7 @@ type LoanRow = {
   rate_type: string | null;
   prepayment_penalty: string | null;
   moratorium_end_date: string | null;
+  outstanding_as_of: string | null;
   is_active: boolean;
   notes: string | null;
   created_at: string;
@@ -47,6 +51,7 @@ function serializeLoan(row: LoanRow) {
     rateType: row.rate_type ?? "floating",
     prepaymentPenalty: Number(row.prepayment_penalty ?? 0),
     moratoriumEndDate: row.moratorium_end_date,
+    outstandingAsOf: row.outstanding_as_of,
     isActive: row.is_active,
     notes: row.notes ?? "",
     createdAt: row.created_at,
@@ -140,6 +145,9 @@ export const loansRouter = router({
           moratorium_end_date: input.moratoriumEndDate
             ? new Date(input.moratoriumEndDate).toISOString()
             : null,
+          outstanding_as_of: input.outstandingAsOf
+            ? new Date(input.outstandingAsOf).toISOString()
+            : null,
           notes: input.notes ?? "",
         })
         .select("*")
@@ -185,6 +193,10 @@ export const loansRouter = router({
         setData.moratorium_end_date = input.data.moratoriumEndDate
           ? new Date(input.data.moratoriumEndDate).toISOString()
           : null;
+      if (input.data.outstandingAsOf !== undefined)
+        setData.outstanding_as_of = input.data.outstandingAsOf
+          ? new Date(input.data.outstandingAsOf).toISOString()
+          : null;
       if (input.data.notes !== undefined) setData.notes = input.data.notes;
 
       const { data, error } = await supabaseAdmin
@@ -211,5 +223,36 @@ export const loansRouter = router({
 
       if (error) throwSupabaseError(error);
       return { success: true };
+    }),
+
+  // "Refresh from bank statement" — single-call mutation that updates the
+  // three things a user reads off their latest statement: current
+  // outstanding, current EMI, and (optionally) the back-solved effective
+  // interest rate. Stamps `outstanding_as_of` so we know how fresh the
+  // anchor is. This is the dashboard's primary "keep my loan honest" UX.
+  refreshFromStatement: protectedProcedure
+    .input(RefreshFromStatementSchema)
+    .mutation(async ({ ctx, input }) => {
+      const setData: Record<string, unknown> = {
+        current_outstanding: input.currentOutstanding,
+        emi_amount: input.emiAmount,
+        outstanding_as_of: new Date(input.asOfDate).toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      if (typeof input.newInterestRate === "number") {
+        setData.interest_rate = input.newInterestRate;
+      }
+
+      const { data, error } = await supabaseAdmin
+        .from("loans")
+        .update(setData)
+        .eq("id", input.loanId)
+        .eq("user_id", ctx.userId)
+        .select("*")
+        .maybeSingle();
+
+      if (error) throwSupabaseError(error);
+      if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+      return serializeLoan(data as LoanRow);
     }),
 });

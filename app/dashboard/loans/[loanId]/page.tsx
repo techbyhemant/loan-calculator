@@ -16,6 +16,8 @@ import { PartPaymentLogger, PartPaymentHistory } from "@/components/dashboard/Pa
 import { LOAN_TYPE_DISPLAY, LOAN_TYPE_FINANCIALS, isRBIZeroPenaltyApplicable } from "@/lib/calculations/loanTypeConfig";
 import type { LoanType } from "@/lib/calculations/loanTypeConfig";
 import { LoanTypeIcon } from "@/components/ui/LoanTypeIcon";
+import { RefreshFromStatementModal } from "@/components/dashboard/RefreshFromStatementModal";
+import { RateHistoryTimeline } from "@/components/dashboard/RateHistoryTimeline";
 
 function SkeletonBlock() {
   return (
@@ -42,6 +44,7 @@ export default function LoanDetailPage() {
   const utils = trpcReact.useUtils();
 
   const [editing, setEditing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [editOutstanding, setEditOutstanding] = useState<number | "">(0);
   const [editRate, setEditRate] = useState<number | "">(0);
   const [editEmi, setEditEmi] = useState<number | "">(0);
@@ -199,6 +202,13 @@ export default function LoanDetailPage() {
         </div>
         <div className="flex items-center gap-2">
           <button
+            onClick={() => setRefreshing(true)}
+            className="flex items-center gap-1.5 text-sm font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg transition-colors"
+            title="Update outstanding, EMI, and rate from your latest bank statement"
+          >
+            ↻ Refresh from statement
+          </button>
+          <button
             onClick={startEditing}
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground bg-muted hover:bg-accent px-3 py-1.5 rounded-lg transition-colors"
           >
@@ -212,6 +222,23 @@ export default function LoanDetailPage() {
           </button>
         </div>
       </div>
+
+      {/* Refresh from bank statement modal */}
+      <RefreshFromStatementModal
+        open={refreshing}
+        onClose={() => setRefreshing(false)}
+        loan={{
+          id: loan.id,
+          originalAmount: loan.originalAmount,
+          tenureMonths: loan.tenureMonths,
+          interestRate: loan.interestRate,
+          currentOutstanding: loan.currentOutstanding,
+          emiAmount: loan.emiAmount,
+          outstandingAsOf:
+            (loan as Loan & { outstandingAsOf?: string | null })
+              .outstandingAsOf ?? null,
+        }}
+      />
 
       {/* Edit Panel */}
       {editing && (
@@ -391,6 +418,16 @@ export default function LoanDetailPage() {
       {/* Part Payment History */}
       <div className="mb-6">
         <PartPaymentHistory loanId={loanId} />
+      </div>
+
+      {/* Rate revision history — most useful for floating-rate loans */}
+      <div className="mb-6">
+        <RateHistoryTimeline
+          loanId={loanId}
+          currentRate={loan.interestRate}
+          currentEmi={loan.emiAmount}
+          currentTenureMonths={loan.tenureMonths}
+        />
       </div>
 
       {/* Amortization Schedule */}
