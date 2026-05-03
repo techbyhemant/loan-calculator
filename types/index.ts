@@ -88,6 +88,14 @@ export interface AttackOrderItem {
   reason: string;
 }
 
+export interface PayoffMilestone {
+  loanId: string;
+  loanName: string;
+  monthsFromNow: number;
+  payoffDate: Date;
+  freedEmi: number;
+}
+
 export interface PayoffResult {
   strategy: "avalanche" | "snowball" | "current";
   totalInterest: number;
@@ -95,6 +103,7 @@ export interface PayoffResult {
   debtFreeDate: Date;
   monthsEarlier: number;
   attackOrder: AttackOrderItem[];
+  milestones: PayoffMilestone[];
 }
 
 export interface StrategyComparison {
@@ -105,6 +114,7 @@ export interface StrategyComparison {
   interestDifference: number;
   monthsDifference: number;
   explanation: string;
+  currentMonthlyOutflow: number;
 }
 
 export interface ConsolidationAnalysis {

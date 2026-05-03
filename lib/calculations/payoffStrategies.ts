@@ -8,16 +8,25 @@ import type {
   PayoffResult,
   StrategyComparison,
   AttackOrderItem,
+  PayoffMilestone,
 } from "@/types";
 
 import { calculateAmortization } from "./loanCalcs";
+
+interface SimulationOutput {
+  totalInterest: number;
+  months: number;
+  // month index (1-based) at which each loan was fully paid off
+  payoffMonth: Map<string, number>;
+}
 
 function simulatePayoff(
   loans: Loan[],
   monthlyExtra: number,
   order: Loan[],
-): { totalInterest: number; months: number } {
+): SimulationOutput {
   const balances = new Map<string, number>();
+  const payoffMonth = new Map<string, number>();
   loans.forEach((l) => balances.set(l.id, l.currentOutstanding));
 
   let totalInterest = 0;
@@ -41,7 +50,9 @@ function simulatePayoff(
       balances.set(loan.id, Math.max(0, balance - principalPaid));
     }
 
-    // Apply extra payment in priority order
+    // Apply extra payment in priority order. As loans die, the freed EMI
+    // also rolls in (snowball effect): we add the EMIs of paid-off loans
+    // back into the extra pool starting next month.
     for (const loan of order) {
       if (extraRemaining <= 0) break;
       const balance = balances.get(loan.id) ?? 0;
@@ -50,14 +61,43 @@ function simulatePayoff(
       balances.set(loan.id, Math.max(0, balance - payment));
       extraRemaining -= payment;
     }
+
+    // Stamp payoff month for any loan that died this cycle.
+    for (const loan of activeLoans) {
+      if ((balances.get(loan.id) ?? 0) <= 0.01 && !payoffMonth.has(loan.id)) {
+        payoffMonth.set(loan.id, months);
+      }
+    }
   }
 
-  return { totalInterest, months };
+  return { totalInterest, months, payoffMonth };
+}
+
+function buildMilestones(
+  loans: Loan[],
+  payoffMonth: Map<string, number>,
+): PayoffMilestone[] {
+  const now = new Date();
+  return loans
+    .map((l) => {
+      const m = payoffMonth.get(l.id) ?? 0;
+      const date = new Date(now);
+      date.setMonth(date.getMonth() + m);
+      return {
+        loanId: l.id,
+        loanName: l.name,
+        monthsFromNow: m,
+        payoffDate: date,
+        freedEmi: l.emiAmount,
+      };
+    })
+    .sort((a, b) => a.monthsFromNow - b.monthsFromNow);
 }
 
 function calculateCurrentPayoff(loans: Loan[]): PayoffResult {
   let totalInterest = 0;
   let maxMonths = 0;
+  const payoffMonth = new Map<string, number>();
 
   for (const loan of loans) {
     const rows = calculateAmortization(
@@ -67,6 +107,7 @@ function calculateCurrentPayoff(loans: Loan[]): PayoffResult {
       new Date(loan.startDate),
     );
     totalInterest += rows.reduce((sum, r) => sum + r.interest, 0);
+    payoffMonth.set(loan.id, rows.length);
     maxMonths = Math.max(maxMonths, rows.length);
   }
 
@@ -88,6 +129,7 @@ function calculateCurrentPayoff(loans: Loan[]): PayoffResult {
     debtFreeDate,
     monthsEarlier: 0,
     attackOrder,
+    milestones: buildMilestones(loans, payoffMonth),
   };
 }
 
@@ -110,7 +152,7 @@ function buildPayoffResult(
     reasonTemplate = "Smallest balance";
   }
 
-  const { totalInterest, months } = simulatePayoff(
+  const { totalInterest, months, payoffMonth } = simulatePayoff(
     loans,
     monthlyExtra,
     orderedLoans,
@@ -143,6 +185,7 @@ function buildPayoffResult(
       ),
     ),
     attackOrder,
+    milestones: buildMilestones(loans, payoffMonth),
   };
 }
 
@@ -168,12 +211,14 @@ export function compareStrategies(
   let explanation: string;
   if (interestDifference < 5000) {
     explanation =
-      "Both strategies save nearly the same amount. Pick snowball if you want the motivation of quick wins, or avalanche for the mathematically optimal result.";
+      "Both strategies finish nearly the same. Pick snowball if you want quick wins, or avalanche for the math-optimal result.";
   } else if (recommended === "avalanche") {
-    explanation = `Avalanche saves you ${formatINRSimple(interestDifference)} more in interest by targeting your highest-rate loan first. It's the mathematically optimal approach.`;
+    explanation = `Avalanche saves ${formatINRSimple(interestDifference)} more in interest by attacking your highest-rate loan first.`;
   } else {
-    explanation = `Snowball gets you debt-free ${monthsDifference} months earlier by clearing small loans first, building momentum and freeing up EMI capacity faster.`;
+    explanation = `Snowball clears small loans first, freeing up EMI capacity faster and finishing ${monthsDifference} months earlier.`;
   }
+
+  const currentMonthlyOutflow = active.reduce((sum, l) => sum + l.emiAmount, 0);
 
   return {
     current,
@@ -183,6 +228,7 @@ export function compareStrategies(
     interestDifference,
     monthsDifference,
     explanation,
+    currentMonthlyOutflow,
   };
 }
 
