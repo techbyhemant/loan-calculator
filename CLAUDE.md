@@ -151,7 +151,8 @@ loan-calculator/
 │   ├── trpc.ts                       Instance, context, auth middleware
 │   └── routers/
 │       ├── _app.ts                   Root router
-│       ├── loans.ts                  CRUD for loans
+│       ├── loans.ts                  CRUD for loans + refreshFromStatement
+│       ├── loanRateHistory.ts        Rate revision CRUD (floating-rate lifecycle)
 │       ├── partPayments.ts           Log/list/delete part payments
 │       ├── creditCards.ts            Card management
 │       └── user.ts                   User plan, profile
@@ -236,6 +237,32 @@ Located under `app/dashboard/`. Auth-guarded by the layout.
   loans, max 5 part-payment logs.
 - **Pro features** wrapped client-side with `<ProGate feature="…">`.
 
+### Floating-rate loan lifecycle (added May 2026)
+
+Three interconnected features for keeping dashboard loans honest:
+
+1. **EMI Verifier** (`components/dashboard/EmiVerifier.tsx`) — on the
+   new-loan form, compares the user's actual bank EMI against the
+   mathematically computed EMI. Uses `calculateEffectiveRate()` (bisection
+   solver in `lib/calculations/loanCalcs.ts`) to back-solve the hidden
+   spread banks bake in via day-count conventions. Offers to adopt the
+   effective rate.
+
+2. **Refresh from Statement** (`components/dashboard/RefreshFromStatementModal.tsx`)
+   — modal on loan detail page. User enters the three numbers from their
+   latest bank statement (outstanding, EMI, date). Single tRPC mutation
+   `loans.refreshFromStatement` updates the loan and stamps
+   `outstanding_as_of` as the anchor date for forward projections.
+
+3. **Rate History Timeline** (`components/dashboard/RateHistoryTimeline.tsx`)
+   — visualizes every interest-rate revision on a loan. Backed by
+   `loan_rate_history` table and `loanRateHistory` tRPC router. Critical
+   for floating-rate loans that change every time RBI moves the repo rate.
+
+**DB migration:** `drizzle/migrations/2026-05-03-rate-history-and-anchors.sql`
+adds the `loan_rate_history` table and `outstanding_as_of` column to `loans`.
+Run it on Supabase before these features go live.
+
 ---
 
 ## SMART INSIGHT CALLOUT PATTERN
@@ -277,7 +304,7 @@ A persistent code graph lives at `graphify-out/` (gitignored).
 - **After significant code changes:** the post-commit hook auto-rebuilds
   the AST portion. For doc/MDX changes, run `/graphify --update`.
 
-The graph captured 580 nodes and 496 edges across 25 communities. Top
+The graph captured 621 nodes and 523 edges across 208 communities. Top
 communities: Core Loan Calculations, Blog Automation Pipeline, SEO Schema
 Generators, tRPC Migration & Architecture, Dashboard Pages.
 
@@ -340,6 +367,9 @@ Phases 1–4 are complete. The site is live, indexed, has 22+ blog posts,
 11 new programmatic SEO landing pages (April 2026), and is generating
 traffic. Active priorities:
 
+- **Floating-rate lifecycle** — EMI verifier, rate history, statement
+  refresh are built but need the DB migration run on Supabase and
+  end-to-end testing in the live dashboard
 - **Dashboard polish** — UI refinement, empty states, error states
 - **Conversion** — the funnel from calculator to dashboard sign-up
 - **Authority building** — backlinks, brand mentions, social presence
