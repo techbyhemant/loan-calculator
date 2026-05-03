@@ -1,19 +1,20 @@
 import type { NextAuthConfig } from "next-auth";
 import Google from "next-auth/providers/google";
-import Resend from "next-auth/providers/resend";
 
 // Edge-compatible NextAuth config. NO adapter, NO DB import. JWT-only.
 // This file is safe to import from any runtime (Edge, Node, middleware).
 //
-// The Drizzle adapter and DB-touching providers live in `lib/auth.ts` which
-// is the *full* config used during sign-in flows that need to write to DB.
-// For session validation (which is what every tRPC request does), JWT
-// strategy means no DB touch — just JWT cookie decode. So this slim config
-// is enough for `auth()` calls in Edge contexts.
+// IMPORTANT: only providers that DON'T require a DB adapter belong here.
+// Resend (email magic link) writes verification tokens to the DB, so its
+// presence triggers a `MissingAdapter` error at NextAuth construction time
+// — even if we never actively call the email flow from Edge. The full
+// provider list lives in `lib/auth.ts` (Node runtime), which `[...nextauth]`
+// route imports directly for sign-in flows.
 //
-// Why this matters: the tRPC route runs on Edge runtime, so its createContext
-// must use an auth() that doesn't transitively import postgres-js (which
-// uses Node TCP and crashes Edge). This file is that import boundary.
+// For session validation (which is what every tRPC request does), JWT
+// strategy means no DB touch — just JWT cookie decode. Google as the only
+// provider here is enough for NextAuth to construct cleanly; we don't
+// actually invoke any provider, just validate the existing JWT cookie.
 
 export const authConfig: NextAuthConfig = {
   trustHost: true,
@@ -29,14 +30,6 @@ export const authConfig: NextAuthConfig = {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
-    ...(process.env.RESEND_API_KEY
-      ? [
-          Resend({
-            apiKey: process.env.RESEND_API_KEY,
-            from: process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev",
-          }),
-        ]
-      : []),
   ],
   callbacks: {
     jwt: async ({ token, user }) => {
