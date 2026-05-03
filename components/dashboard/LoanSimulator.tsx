@@ -206,6 +206,29 @@ export function LoanSimulator({
   );
 }
 
+// month index is 1-based and counted from the *current* calendar month.
+// startMonth = 1 means "this month", startMonth = 2 means "next month", etc.
+// Helpers convert between that internal model and the YYYY-MM format the
+// native <input type="month"> picker uses.
+function monthIndexToYYYYMM(monthIndex: number): string {
+  const d = new Date();
+  d.setDate(1);
+  d.setMonth(d.getMonth() + Math.max(0, monthIndex - 1));
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  return `${yyyy}-${mm}`;
+}
+
+function yyyymmToMonthIndex(value: string): number {
+  const [y, m] = value.split("-").map(Number);
+  if (!y || !m) return 1;
+  const now = new Date();
+  const diff =
+    (y - now.getFullYear()) * 12 + (m - 1 - now.getMonth());
+  // Clamp to >= 1 — past dates collapse to "this month".
+  return Math.max(1, diff + 1);
+}
+
 function ScenarioRow({
   scenario,
   onChange,
@@ -216,6 +239,12 @@ function ScenarioRow({
   onRemove?: () => void;
 }) {
   const isRecurring = scenario.type === "recurring";
+  const minMonth = monthIndexToYYYYMM(1);
+  const monthsLabel =
+    scenario.startMonth === 1
+      ? "this month"
+      : `in ${scenario.startMonth - 1} month${scenario.startMonth - 1 === 1 ? "" : "s"}`;
+
   return (
     <div className="flex flex-wrap items-center gap-2 bg-muted/40 border border-border rounded-lg p-2.5">
       <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground px-1.5 py-0.5 rounded bg-background">
@@ -234,18 +263,19 @@ function ScenarioRow({
       <span className="text-xs text-muted-foreground">
         {isRecurring ? "starting" : "in"}
       </span>
-      <div className="flex items-center gap-1">
-        <span className="text-xs text-muted-foreground">month</span>
+      <div className="flex flex-col">
         <input
-          type="number"
-          min={1}
-          max={600}
-          value={scenario.startMonth}
+          type="month"
+          min={minMonth}
+          value={monthIndexToYYYYMM(scenario.startMonth)}
           onChange={(e) =>
-            onChange({ startMonth: Math.max(1, Number(e.target.value) || 1) })
+            onChange({ startMonth: yyyymmToMonthIndex(e.target.value) })
           }
-          className="w-16 rounded-md border border-border bg-card px-2 py-1 text-sm text-foreground focus:border-ring focus:ring-1 focus:ring-ring outline-none"
+          className="rounded-md border border-border bg-card px-2 py-1 text-sm text-foreground focus:border-ring focus:ring-1 focus:ring-ring outline-none"
         />
+        <span className="text-[10px] text-muted-foreground mt-0.5 px-0.5">
+          {monthsLabel}
+        </span>
       </div>
       {onRemove && (
         <button
