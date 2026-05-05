@@ -3,6 +3,21 @@ import { loanTypeConfigs, LoanType } from "../loanTypeConfigs";
 import { calculateLoan } from "@/lib/utils";
 import type { AmortizationRowWithExtras } from "../AmortizationTable";
 
+// Module-scope Intl formatters. Constructing Intl.DateTimeFormat and
+// Intl.NumberFormat is expensive (~0.5–2ms each on mobile) and was the
+// dominant TBT contributor on the homepage: scheduleWithCalendar ran
+// 2 toLocaleDateString calls per amortization row — each builds a
+// fresh formatter under the hood — so a 30-year loan triggered ~720
+// Intl constructions every time the schedule recomputed. Hoisting
+// them once cuts that work to a one-time cost paid at module load.
+const MONTH_SHORT_FMT = new Intl.DateTimeFormat("en-US", { month: "short" });
+const INR_FMT = new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
 // Types
 type TenureUnit = "years" | "months";
 
@@ -213,35 +228,41 @@ export function LoanCalculatorProvider({
   ]);
 
   const scheduleWithCalendar = React.useMemo(() => {
+    // Parse the start date once outside the loop instead of per-row.
+    const startDateObj = new Date(state.startDate);
+    const startYear = startDateObj.getFullYear();
+    const startMonth = startDateObj.getMonth();
+
     return result.schedule.map((row, idx) => {
-      const startDateObj = new Date(state.startDate);
-      const currentDate = new Date(startDateObj);
-      currentDate.setMonth(currentDate.getMonth() + idx);
+      // Compute the calendar position by integer math instead of
+      // mutating a Date inside the loop. Avoids the per-row Date
+      // construction and setMonth call that previously triggered
+      // additional Date normalization across year boundaries.
+      const totalMonths = startMonth + idx;
+      const calendarYear = startYear + Math.floor(totalMonths / 12);
+      const calendarMonthIndex = ((totalMonths % 12) + 12) % 12;
+      // Use the cached formatter — each .format() call reuses the
+      // existing instance instead of allocating a new one.
+      const calendarMonth = MONTH_SHORT_FMT.format(
+        new Date(calendarYear, calendarMonthIndex, 1),
+      );
 
       return {
         ...row,
         idx,
-        calendarYear: currentDate.getFullYear(),
-        // 0-based month index (0 = Jan, 3 = Apr)
-        calendarMonthIndex: currentDate.getMonth(),
-        calendarMonth: currentDate.toLocaleDateString("en-US", {
-          month: "short",
-        }),
-        calendarLabel: `${currentDate.toLocaleDateString("en-US", {
-          month: "short",
-        })}, ${currentDate.getFullYear()}`,
+        calendarYear,
+        calendarMonthIndex,
+        calendarMonth,
+        calendarLabel: `${calendarMonth}, ${calendarYear}`,
       };
     });
   }, [result.schedule, state.startDate]);
 
   // Utility functions
   const formatINR = React.useCallback((value: number) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
+    // Reuse the module-scope formatter; constructing one per call was
+    // a hot-path allocation across hundreds of amortization cells.
+    return INR_FMT.format(value);
   }, []);
 
   const loanPaidPct = React.useCallback(

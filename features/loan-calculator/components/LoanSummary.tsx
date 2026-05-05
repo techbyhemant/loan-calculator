@@ -3,6 +3,14 @@ import dynamic from "next/dynamic";
 import { useLoanCalculator } from "../context/LoanCalculatorContext";
 import { calculateLoan } from "@/lib/utils";
 
+// Module-scope formatter — see LoanCalculatorContext for the reasoning.
+// Constructing Intl.DateTimeFormat per render adds up across multiple
+// summary cards on the homepage.
+const SHORT_DATE_FMT = new Intl.DateTimeFormat("en-IN", {
+  month: "short",
+  year: "numeric",
+});
+
 const PaymentBreakdownPie = dynamic(
   () =>
     import("../charts/PaymentBreakdownPie").then((m) => ({
@@ -66,8 +74,7 @@ export function LoanSummary() {
     return end;
   }, [startDate, result.schedule.length]);
 
-  const formatShortDate = (d: Date) =>
-    d.toLocaleDateString("en-IN", { month: "short", year: "numeric" });
+  const formatShortDate = (d: Date) => SHORT_DATE_FMT.format(d);
 
   const monthsSaved = hasSimulations
     ? Math.max(0, tenureMonths - result.schedule.length)

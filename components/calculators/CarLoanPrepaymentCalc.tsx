@@ -3,6 +3,14 @@
 import { useState, useMemo } from "react";
 import { formatINR, formatLakhs, formatMonths } from "@/lib/utils/formatters";
 import NumericInput from "@/components/ui/NumericInput";
+
+// Module-scope formatter — see PersonalLoanPayoffCalc for reasoning.
+// The schedule loop is up to 600 iterations and was building a fresh
+// Intl.DateTimeFormat each time.
+const SHORT_DATE_FMT = new Intl.DateTimeFormat("en-IN", {
+  month: "short",
+  year: "numeric",
+});
 import {
   CALC_INPUT_CLASS,
   CalcSection,
@@ -46,10 +54,12 @@ function generateSchedule(params: {
   const rows: MonthRow[] = [];
   const startDate = startMonth ? new Date(startMonth + "-01") : new Date();
 
+  const baseYear = startDate.getFullYear();
+  const baseMonth = startDate.getMonth();
   for (let m = 1; balance > 0.01 && m <= 600; m++) {
-    const d = new Date(startDate);
-    d.setMonth(d.getMonth() + m - 1);
-    const label = d.toLocaleDateString("en-IN", { month: "short", year: "numeric" });
+    const totalMonths = baseMonth + m - 1;
+    const d = new Date(baseYear + Math.floor(totalMonths / 12), ((totalMonths % 12) + 12) % 12, 1);
+    const label = SHORT_DATE_FMT.format(d);
 
     const interest = balance * monthlyRate;
     const principalPaid = Math.min(emi - interest, balance);
