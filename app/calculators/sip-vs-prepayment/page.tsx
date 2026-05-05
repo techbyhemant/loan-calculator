@@ -5,9 +5,13 @@ import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "SIP vs Home Loan Prepayment Calculator — Which is Better?",
+  // Page is ranking on page 1 (avg position 8) but getting 0 clicks on
+  // 136 impressions per GSC. Old title was a question with no payoff
+  // hint; rewrite emphasises the unique value vs competitor calculators
+  // (after-tax math, no DSA capture) so it earns the click at position 8.
+  title: "SIP vs Home Loan Prepayment: Free Calculator with Tax Math",
   description:
-    "Should you invest your extra money in SIP mutual funds or prepay your home loan? Compare returns after LTCG tax, interest saved, and find the optimal split.",
+    "Compare investing extra ₹ in SIP vs prepaying your home loan with full after-tax math — LTCG, Section 24(b), 80C. See exact rupee outcomes over 10, 15, or 20 years. No phone number ever.",
   path: "/calculators/sip-vs-prepayment",
   keywords: [
     "sip vs home loan prepayment",
@@ -15,6 +19,8 @@ export const metadata = buildMetadata({
     "invest or prepay home loan",
     "mutual fund vs loan prepayment",
     "extra money invest or prepay",
+    "sip vs prepayment after tax",
+    "home loan prepayment vs mutual fund",
   ],
 });
 
