@@ -20,6 +20,12 @@ export const users = pgTable("users", {
   emailVerified: timestamp("email_verified", { mode: "date" }),
   image: text("image"),
   plan: varchar("plan", { length: 10 }).default("free").notNull(), // "free" | "pro"
+  // Billing cadence for Pro users. "monthly" / "yearly" are recurring
+  // Razorpay subscriptions; "lifetime" is a one-time order with no
+  // expiry. NULL for free users.
+  planType: varchar("plan_type", { length: 20 }),
+  // Expiry only meaningful for monthly/yearly. Lifetime users have
+  // NULL here and isProActive() treats them as always active.
   planExpiry: timestamp("plan_expiry", { mode: "date" }),
   razorpayCustomerId: text("razorpay_customer_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),

@@ -36,6 +36,16 @@ export const authConfig: NextAuthConfig = {
       if (user) {
         token.id = user.id;
         token.plan = (user as { plan?: string }).plan ?? "free";
+        // planType + planExpiry let the gating helpers detect lifetime
+        // users and check expiry without an extra DB hit on every request.
+        token.planType =
+          (user as { planType?: string | null }).planType ?? null;
+        const expiry = (user as { planExpiry?: Date | string | null }).planExpiry;
+        token.planExpiry = expiry
+          ? expiry instanceof Date
+            ? expiry.toISOString()
+            : expiry
+          : null;
         token.email = user.email;
         token.name = user.name;
       }
@@ -46,6 +56,10 @@ export const authConfig: NextAuthConfig = {
       session.user.email = token.email as string;
       session.user.name = token.name as string;
       (session.user as { plan?: string }).plan = token.plan as string;
+      (session.user as { planType?: string | null }).planType =
+        (token.planType as string | null) ?? null;
+      (session.user as { planExpiry?: string | null }).planExpiry =
+        (token.planExpiry as string | null) ?? null;
       return session;
     },
   },

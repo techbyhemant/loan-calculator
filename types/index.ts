@@ -5,6 +5,8 @@ export type LoanType = _LoanType;
 export type RateType = "fixed" | "floating";
 export type ReduceType = "emi" | "tenure";
 export type UserPlan = "free" | "pro";
+// Billing cadence for paid users. Lifetime users never expire.
+export type PlanType = "monthly" | "yearly" | "lifetime";
 export type TaxRegime = "old" | "new";
 export type ConsolidationVerdict =
   | "BENEFICIAL"
