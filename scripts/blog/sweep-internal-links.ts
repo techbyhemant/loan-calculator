@@ -60,8 +60,13 @@ const PAGE_TARGETS: LinkTarget[] = [
     ],
   },
   {
+    // Home-loan-specific calculator. Bare "balance transfer" is too
+    // generic — credit-card content uses the same phrase to mean
+    // shifting CC debt to a personal loan, which is a different
+    // calculator (/calculators/cc-vs-personal-loan). Match only on
+    // home-loan-qualified phrases here.
     url: "/calculators/balance-transfer",
-    keywords: ["balance transfer calculator", "balance transfer"],
+    keywords: ["home loan balance transfer", "home-loan balance transfer"],
   },
   {
     url: "/calculators/home-loan-eligibility",
