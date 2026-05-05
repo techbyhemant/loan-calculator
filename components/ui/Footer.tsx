@@ -53,6 +53,11 @@ export function Footer() {
             </h3>
             <ul className="space-y-2">
               <li>
+                <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground">
+                  Blog
+                </Link>
+              </li>
+              <li>
                 <Link href="/rbi-rates" className="text-sm text-muted-foreground hover:text-foreground">
                   RBI Repo Rate
                 </Link>
@@ -60,6 +65,16 @@ export function Footer() {
               <li>
                 <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground">
                   Pricing
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground">
+                  About LastEMI
+                </Link>
+              </li>
+              <li>
+                <Link href="/editorial-standards" className="text-sm text-muted-foreground hover:text-foreground">
+                  Editorial Standards
                 </Link>
               </li>
             </ul>
