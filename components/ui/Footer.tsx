@@ -77,6 +77,11 @@ export function Footer() {
                   Editorial Standards
                 </Link>
               </li>
+              <li>
+                <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground">
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
 

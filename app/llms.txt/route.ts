@@ -135,6 +135,9 @@ export function GET() {
     `- [Editorial Standards](${BASE}/editorial-standards): How LastEMI sources, fact-checks, and updates content.`,
   );
   lines.push(`- [About](${BASE}/about): The team and mission.`);
+  lines.push(
+    `- [Contact](${BASE}/contact): How to reach the LastEMI team — email, response times, and what we can/cannot help with.`,
+  );
   lines.push("");
 
   // Blog content — these are the long-form citations an AI search would

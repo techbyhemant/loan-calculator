@@ -36,7 +36,7 @@ const orgJsonLd = {
   contactPoint: [
     {
       "@type": "ContactPoint",
-      email: "hello@lastemi.com",
+      email: "contact@lastemi.com",
       contactType: "customer support",
       availableLanguage: ["English", "Hindi"],
     },
@@ -113,10 +113,10 @@ export default function AboutPage() {
           <p>
             Reach the team directly at{" "}
             <a
-              href="mailto:hello@lastemi.com"
+              href="mailto:contact@lastemi.com"
               className="text-primary underline"
             >
-              hello@lastemi.com
+              contact@lastemi.com
             </a>
             . Real replies, no auto-responders.
           </p>
@@ -178,8 +178,8 @@ export default function AboutPage() {
             No DSA commissions. If someone offers you a loan because of
             something you did on LastEMI, it was not us. Forward the SMS
             to{" "}
-            <a href="mailto:hello@lastemi.com" className="text-primary underline">
-              hello@lastemi.com
+            <a href="mailto:contact@lastemi.com" className="text-primary underline">
+              contact@lastemi.com
             </a>{" "}
             so we can investigate.
           </p>
@@ -230,10 +230,10 @@ export default function AboutPage() {
             For product feedback, errors, partnership questions, or
             anything else, write to{" "}
             <a
-              href="mailto:hello@lastemi.com"
+              href="mailto:contact@lastemi.com"
               className="text-primary underline"
             >
-              hello@lastemi.com
+              contact@lastemi.com
             </a>
             . Replies come from a real person, usually within a working
             day.

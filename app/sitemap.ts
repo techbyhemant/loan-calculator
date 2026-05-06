@@ -163,6 +163,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
     {
+      url: `${baseUrl}/contact`,
+      files: ["app/contact/page.tsx"],
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
       url: `${baseUrl}/privacy`,
       files: ["app/privacy/page.tsx"],
       changeFrequency: "yearly",
