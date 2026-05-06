@@ -52,6 +52,12 @@ export default async function AdminLayout({
                 >
                   Users
                 </Link>
+                <Link
+                  href="/admin/admins"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Admins
+                </Link>
               </nav>
             </div>
             <div className="text-xs text-muted-foreground">

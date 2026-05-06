@@ -12,6 +12,7 @@ type UserRow = {
   plan_type: string | null;
   plan_expiry: string | null;
   razorpay_customer_id: string | null;
+  is_admin: boolean | null;
   created_at: string;
   updated_at: string;
 };
@@ -25,6 +26,7 @@ function serializeUser(row: UserRow) {
     planType: row.plan_type,
     planExpiry: row.plan_expiry,
     razorpayCustomerId: row.razorpay_customer_id,
+    isAdmin: row.is_admin === true,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -213,5 +215,48 @@ export const adminRouter = router({
         .limit(input.limit);
       throwIfError(error);
       return ((data ?? []) as UserRow[]).map(serializeUser);
+    }),
+
+  // List current admins (users.is_admin = true).
+  listAdmins: adminProcedure.query(async () => {
+    const { data, error } = await supabaseAdmin
+      .from("users")
+      .select("*")
+      .eq("is_admin", true)
+      .order("created_at", { ascending: true });
+    throwIfError(error);
+    return ((data ?? []) as UserRow[]).map(serializeUser);
+  }),
+
+  // Promote / demote a user as admin. Self-protection: refuses to
+  // demote the caller (prevents accidental lockout). To swap admins,
+  // promote the new one first, sign in as them, then demote yourself.
+  setAdmin: adminProcedure
+    .input(
+      z.object({
+        userId: z.string().min(1),
+        isAdmin: z.boolean(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (input.userId === ctx.userId && !input.isAdmin) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            "You cannot revoke your own admin access. Have another admin do it after you've handed over.",
+        });
+      }
+      const { data, error } = await supabaseAdmin
+        .from("users")
+        .update({
+          is_admin: input.isAdmin,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", input.userId)
+        .select("*")
+        .maybeSingle();
+      throwIfError(error);
+      if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+      return serializeUser(data as UserRow);
     }),
 });

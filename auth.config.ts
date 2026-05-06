@@ -49,10 +49,13 @@ export const authConfig: NextAuthConfig = {
           : null;
         token.email = user.email;
         token.name = user.name;
-        // isAdmin is computed at sign-in time from the email's membership
-        // in ADMIN_EMAILS. Cheap to recompute, but caching in JWT means
-        // every server request can branch on isAdmin without an env read.
-        token.isAdmin = isAdminEmail(user.email);
+        // isAdmin: prefer the persisted DB flag (users.is_admin) so
+        // promotions/demotions from the /admin/admins UI take effect on
+        // next sign-in without any code change. Fall back to the env
+        // bootstrap list so a brand-new admin can always self-promote
+        // by signing in once their email is in ADMIN_EMAILS.
+        const dbIsAdmin = (user as { isAdmin?: boolean }).isAdmin === true;
+        token.isAdmin = dbIsAdmin || isAdminEmail(user.email);
       }
       return token;
     },

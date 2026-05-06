@@ -28,6 +28,9 @@ export const users = pgTable("users", {
   // NULL here and isProActive() treats them as always active.
   planExpiry: timestamp("plan_expiry", { mode: "date" }),
   razorpayCustomerId: text("razorpay_customer_id"),
+  // Admin flag. Bootstrapped from ADMIN_EMAILS env on sign-in, then
+  // managed in the /admin/admins UI without further deploys.
+  isAdmin: boolean("is_admin").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
