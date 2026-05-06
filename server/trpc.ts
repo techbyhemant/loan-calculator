@@ -5,6 +5,7 @@ import superjson from "superjson";
 export interface Context {
   userId: string | null;
   userPlan: "free" | "pro";
+  isAdmin: boolean;
 }
 
 export async function createContext(): Promise<Context> {
@@ -14,6 +15,7 @@ export async function createContext(): Promise<Context> {
     userPlan: (((session?.user as { plan?: string })?.plan ?? "free") as
       | "free"
       | "pro"),
+    isAdmin: Boolean((session?.user as { isAdmin?: boolean })?.isAdmin),
   };
 }
 
@@ -57,6 +59,20 @@ export const proProcedure = t.procedure.use(({ ctx, next }) => {
       code: "FORBIDDEN",
       message: "This feature requires a Pro plan. Upgrade at /pricing.",
     });
+  }
+  return next({ ctx: { ...ctx, userId: ctx.userId } });
+});
+
+// Admin procedures — gated on isAdmin from the session JWT, which itself
+// is computed from ADMIN_EMAILS at sign-in time. Every admin mutation
+// must use this procedure, not protectedProcedure, so a regular signed-in
+// user can't call admin endpoints by URL.
+export const adminProcedure = t.procedure.use(({ ctx, next }) => {
+  if (!ctx.userId) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  if (!ctx.isAdmin) {
+    throw new TRPCError({ code: "FORBIDDEN", message: "Admin access only." });
   }
   return next({ ctx: { ...ctx, userId: ctx.userId } });
 });

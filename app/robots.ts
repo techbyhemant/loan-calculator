@@ -9,6 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           "/api/",
           "/dashboard/",
+          "/admin/",
           // Old site URL patterns — save crawl budget
           "/video/",
           "/game/",
@@ -24,17 +25,17 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "GPTBot",
         allow: "/",
-        disallow: ["/api/", "/dashboard/", "/video/", "/game/", "/games/"],
+        disallow: ["/api/", "/dashboard/", "/admin/", "/video/", "/game/", "/games/"],
       },
       {
         userAgent: "ClaudeBot",
         allow: "/",
-        disallow: ["/api/", "/dashboard/", "/video/", "/game/", "/games/"],
+        disallow: ["/api/", "/dashboard/", "/admin/", "/video/", "/game/", "/games/"],
       },
       {
         userAgent: "PerplexityBot",
         allow: "/",
-        disallow: ["/api/", "/dashboard/", "/video/", "/game/", "/games/"],
+        disallow: ["/api/", "/dashboard/", "/admin/", "/video/", "/game/", "/games/"],
       },
       { userAgent: "Applebot", allow: "/" },
       { userAgent: "Bingbot", allow: "/" },
@@ -43,6 +44,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: [
           "/api/",
+          "/admin/",
           "/video/",
           "/game/",
           "/games/",

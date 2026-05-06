@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Landmark, CreditCard, Target, ArrowLeftRight, Receipt, Trophy, Menu } from "lucide-react";
+import { LayoutDashboard, Landmark, CreditCard, Target, ArrowLeftRight, Receipt, Trophy, Menu, ShieldCheck } from "lucide-react";
 
 import { TRPCProvider } from "@/lib/trpc/provider";
 
@@ -22,6 +22,7 @@ interface DashboardShellProps {
   userName: string;
   userEmail: string;
   userPlan: "free" | "pro";
+  isAdmin?: boolean;
 }
 
 export function DashboardShell({
@@ -29,6 +30,7 @@ export function DashboardShell({
   userName,
   userEmail,
   userPlan,
+  isAdmin = false,
 }: DashboardShellProps) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -78,6 +80,17 @@ export function DashboardShell({
             )}
           </Link>
         ))}
+
+        {isAdmin && (
+          <Link
+            href="/admin"
+            onClick={() => setSidebarOpen(false)}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-foreground hover:bg-accent mt-4 border-t border-border pt-4"
+          >
+            <ShieldCheck className="w-4 h-4 flex-shrink-0 text-positive" />
+            Admin Panel
+          </Link>
+        )}
       </nav>
 
     </div>

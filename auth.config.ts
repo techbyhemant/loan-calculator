@@ -1,5 +1,6 @@
 import type { NextAuthConfig } from "next-auth";
 import Google from "next-auth/providers/google";
+import { isAdminEmail } from "@/lib/utils/admin";
 
 // Edge-compatible NextAuth config. NO adapter, NO DB import. JWT-only.
 // This file is safe to import from any runtime (Edge, Node, middleware).
@@ -48,6 +49,10 @@ export const authConfig: NextAuthConfig = {
           : null;
         token.email = user.email;
         token.name = user.name;
+        // isAdmin is computed at sign-in time from the email's membership
+        // in ADMIN_EMAILS. Cheap to recompute, but caching in JWT means
+        // every server request can branch on isAdmin without an env read.
+        token.isAdmin = isAdminEmail(user.email);
       }
       return token;
     },
@@ -60,6 +65,8 @@ export const authConfig: NextAuthConfig = {
         (token.planType as string | null) ?? null;
       (session.user as { planExpiry?: string | null }).planExpiry =
         (token.planExpiry as string | null) ?? null;
+      (session.user as { isAdmin?: boolean }).isAdmin =
+        Boolean(token.isAdmin);
       return session;
     },
   },
