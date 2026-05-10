@@ -5,6 +5,7 @@ import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/se
 
 import MultiCardPayoffCalc from "@/components/calculators/MultiCardPayoffCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
+import { LastReviewed } from "@/components/ui/LastReviewed";
 
 export const metadata = buildMetadata({
   title:
@@ -20,6 +21,8 @@ export const metadata = buildMetadata({
     "debt payoff order",
   ],
 });
+
+const LAST_REVIEWED = "2026-05-10";
 
 const faqs = [
   {
@@ -65,6 +68,9 @@ export default function MultiCardPayoffPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
+        <div className="mb-3">
+          <LastReviewed date={LAST_REVIEWED} />
+        </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Multi-Card Payoff Calculator: Avalanche vs Snowball
         </h1>

@@ -5,6 +5,7 @@ import { getFAQSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { LoanCalculatorTool } from "@/features/loan-calculator/LoanCalculatorTool";
+import { LastReviewed } from "@/components/ui/LastReviewed";
 
 export const metadata = buildMetadata({
   title: "Gold Loan EMI Calculator — Rates, LTV, Repayment Options",
@@ -19,6 +20,8 @@ export const metadata = buildMetadata({
     "gold loan ltv calculator",
   ],
 });
+
+const LAST_REVIEWED = "2026-05-10";
 
 const SAMPLE_AMOUNT = 500_000;
 const RATES = [9, 12, 15];
@@ -89,6 +92,9 @@ export default function GoldLoanEmiPage() {
             { name: "Gold Loan EMI", href: "/calculators/gold-loan-emi" },
           ]}
         />
+        <div className="mb-3">
+          <LastReviewed date={LAST_REVIEWED} />
+        </div>
 
         <h1 className="text-2xl sm:text-4xl font-bold text-foreground mt-3 mb-3">
           Gold Loan EMI Calculator

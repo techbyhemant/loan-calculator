@@ -5,6 +5,7 @@ import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema, getHowToSchema,
 
 import CCPayoffCalc from "@/components/calculators/CCPayoffCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
+import { LastReviewed } from "@/components/ui/LastReviewed";
 
 export const metadata = buildMetadata({
   title: "Credit Card Payoff Calculator — How Long to Clear Your Balance?",
@@ -19,6 +20,8 @@ export const metadata = buildMetadata({
     "42% credit card interest",
   ],
 });
+
+const LAST_REVIEWED = "2026-05-10";
 
 const faqs = [
   {
@@ -78,6 +81,9 @@ export default function CreditCardPayoffPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }} />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
+        <div className="mb-3">
+          <LastReviewed date={LAST_REVIEWED} />
+        </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Credit Card Payoff Calculator: How Long to Clear Your Balance?
         </h1>

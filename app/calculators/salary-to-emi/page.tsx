@@ -5,6 +5,7 @@ import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/se
 
 import SalaryToEmiCalc from "@/components/calculators/SalaryToEmiCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
+import { LastReviewed } from "@/components/ui/LastReviewed";
 
 export const metadata = buildMetadata({
   title: "How Much Home Loan Can I Get on My Salary? — Calculator",
@@ -19,6 +20,8 @@ export const metadata = buildMetadata({
     "home loan eligibility salary",
   ],
 });
+
+const LAST_REVIEWED = "2026-05-10";
 
 const faqs = [
   {
@@ -55,6 +58,9 @@ export default function SalaryToEmiPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
+        <div className="mb-3">
+          <LastReviewed date={LAST_REVIEWED} />
+        </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           How Much Home Loan Can I Get on My Salary?
         </h1>

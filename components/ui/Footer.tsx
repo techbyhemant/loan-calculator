@@ -58,6 +58,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/glossary" className="text-sm text-muted-foreground hover:text-foreground">
+                  Glossary
+                </Link>
+              </li>
+              <li>
                 <Link href="/rbi-rates" className="text-sm text-muted-foreground hover:text-foreground">
                   RBI Repo Rate
                 </Link>
@@ -120,9 +125,10 @@ export function Footer() {
           <p className="text-xs text-muted-foreground">
             &copy; 2026 LastEMI. All rights reserved.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-wrap">
             <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground">Privacy Policy</Link>
             <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground">Terms of Service</Link>
+            <Link href="/refund-policy" className="text-xs text-muted-foreground hover:text-foreground">Refund &amp; Cancellation</Link>
           </div>
         </div>
       </div>

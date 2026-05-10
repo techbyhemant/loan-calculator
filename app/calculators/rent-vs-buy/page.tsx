@@ -5,6 +5,7 @@ import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/se
 
 import RentVsBuyCalc from "@/components/calculators/RentVsBuyCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
+import { LastReviewed } from "@/components/ui/LastReviewed";
 
 export const metadata = buildMetadata({
   title: "Rent vs Buy Calculator — Should You Buy a House in India?",
@@ -18,6 +19,8 @@ export const metadata = buildMetadata({
     "home buying vs renting comparison",
   ],
 });
+
+const LAST_REVIEWED = "2026-05-10";
 
 const faqs = [
   {
@@ -53,6 +56,9 @@ export default function RentVsBuyPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
+        <div className="mb-3">
+          <LastReviewed date={LAST_REVIEWED} />
+        </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Rent vs Buy: Should You Buy a House in India?
         </h1>

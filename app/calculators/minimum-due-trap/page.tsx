@@ -5,6 +5,7 @@ import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema, getHowToSchema,
 
 import MinimumDueTrapCalc from "@/components/calculators/MinimumDueTrapCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
+import { LastReviewed } from "@/components/ui/LastReviewed";
 
 export const metadata = buildMetadata({
   title:
@@ -20,6 +21,8 @@ export const metadata = buildMetadata({
     "credit card debt calculator",
   ],
 });
+
+const LAST_REVIEWED = "2026-05-10";
 
 const faqs = [
   {
@@ -100,6 +103,9 @@ export default function MinimumDueTrapPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
+        <div className="mb-3">
+          <LastReviewed date={LAST_REVIEWED} />
+        </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Minimum Due Trap Calculator: What Paying 5% Actually Costs You
         </h1>

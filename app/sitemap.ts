@@ -173,6 +173,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/glossary`,
+      files: ["app/glossary/page.tsx"],
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/about`,
       files: ["app/about/page.tsx"],
       changeFrequency: "monthly",
@@ -195,6 +201,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       files: ["app/privacy/page.tsx"],
       changeFrequency: "yearly",
       priority: 0.4,
+    },
+    {
+      url: `${baseUrl}/refund-policy`,
+      files: ["app/refund-policy/page.tsx"],
+      changeFrequency: "yearly",
+      priority: 0.5,
     },
     {
       url: `${baseUrl}/terms`,

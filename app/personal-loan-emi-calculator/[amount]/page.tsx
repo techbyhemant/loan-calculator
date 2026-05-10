@@ -9,6 +9,9 @@ import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { LoanCalculatorTool } from "@/features/loan-calculator/LoanCalculatorTool";
 import { AmountSiblingNav } from "@/components/ui/AmountSiblingNav";
+import { LastReviewed } from "@/components/ui/LastReviewed";
+
+const LAST_REVIEWED = "2026-05-10";
 
 // ─── Programmatic SEO config ─────────────────────────
 // One template, 6 statically-generated pages targeting long-tail
@@ -198,7 +201,10 @@ export default async function PersonalLoanAmountPage({
           ]}
         />
 
-        <h1 className="text-2xl sm:text-4xl font-bold text-foreground mt-3 mb-3">
+        <div className="mt-3 mb-3">
+          <LastReviewed date={LAST_REVIEWED} />
+        </div>
+        <h1 className="text-2xl sm:text-4xl font-bold text-foreground mb-3">
           ₹{config.displayLabel} Personal Loan EMI Calculator
         </h1>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">

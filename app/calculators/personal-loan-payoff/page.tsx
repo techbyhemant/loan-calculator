@@ -5,6 +5,7 @@ import { getCalculatorSchema, getBreadcrumbSchema, getFAQSchema } from "@/lib/se
 
 import PersonalLoanPayoffCalc from "@/components/calculators/PersonalLoanPayoffCalc";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
+import { LastReviewed } from "@/components/ui/LastReviewed";
 
 export const metadata = buildMetadata({
   title:
@@ -20,6 +21,8 @@ export const metadata = buildMetadata({
     "should I prepay personal loan",
   ],
 });
+
+const LAST_REVIEWED = "2026-05-10";
 
 const faqs = [
   {
@@ -71,6 +74,9 @@ export default function PersonalLoanPayoffPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
+        <div className="mb-3">
+          <LastReviewed date={LAST_REVIEWED} />
+        </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           Personal Loan Prepayment Calculator: Is It Worth the Penalty?
         </h1>

@@ -162,6 +162,12 @@ export function GET() {
   lines.push(
     `- [Contact](${BASE}/contact): How to reach the LastEMI team — email, response times, and what we can/cannot help with.`,
   );
+  lines.push(
+    `- [Glossary](${BASE}/glossary): Plain-English definitions of Indian loan and banking terms (EMI, FOIR, EBLR, MCLR, CIBIL, LTV, repo rate, prepayment penalty, etc).`,
+  );
+  lines.push(
+    `- [Refund & Cancellation Policy](${BASE}/refund-policy): Per-SKU refund terms (monthly/yearly/lifetime) and how to cancel.`,
+  );
   lines.push("");
 
   // Blog content — these are the long-form citations an AI search would

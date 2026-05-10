@@ -5,6 +5,7 @@ import { getFAQSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { LoanCalculatorTool } from "@/features/loan-calculator/LoanCalculatorTool";
+import { LastReviewed } from "@/components/ui/LastReviewed";
 
 export const metadata = buildMetadata({
   title: "Personal Loan EMI Calculator — Reducing Balance, India 2026",
@@ -19,6 +20,8 @@ export const metadata = buildMetadata({
     "personal loan emi formula",
   ],
 });
+
+const LAST_REVIEWED = "2026-05-10";
 
 const SAMPLE_AMOUNT = 500_000; // 5 lakh
 const RATES = [10.5, 14, 18];
@@ -90,6 +93,9 @@ export default function PersonalLoanEmiPage() {
             { name: "Personal Loan EMI", href: "/calculators/personal-loan-emi" },
           ]}
         />
+        <div className="mb-3">
+          <LastReviewed date={LAST_REVIEWED} />
+        </div>
 
         <h1 className="text-2xl sm:text-4xl font-bold text-foreground mt-3 mb-3">
           Personal Loan EMI Calculator

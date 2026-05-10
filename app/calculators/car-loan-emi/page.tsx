@@ -5,6 +5,7 @@ import { getFAQSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { LoanCalculatorTool } from "@/features/loan-calculator/LoanCalculatorTool";
+import { LastReviewed } from "@/components/ui/LastReviewed";
 
 export const metadata = buildMetadata({
   title: "Car Loan EMI Calculator — New Car & Used Car, India 2026",
@@ -19,6 +20,8 @@ export const metadata = buildMetadata({
     "new car loan emi calculator",
   ],
 });
+
+const LAST_REVIEWED = "2026-05-10";
 
 const SAMPLE_AMOUNT = 1_000_000; // 10 lakh
 const RATES = [8.5, 10, 12]; // new, mid, used
@@ -89,6 +92,9 @@ export default function CarLoanEmiPage() {
             { name: "Car Loan EMI", href: "/calculators/car-loan-emi" },
           ]}
         />
+        <div className="mb-3">
+          <LastReviewed date={LAST_REVIEWED} />
+        </div>
 
         <h1 className="text-2xl sm:text-4xl font-bold text-foreground mt-3 mb-3">
           Car Loan EMI Calculator — New & Used

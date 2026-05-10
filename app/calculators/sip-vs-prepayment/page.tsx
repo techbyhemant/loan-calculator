@@ -3,6 +3,7 @@ import SipVsPrepaymentCalc from "@/components/calculators/SipVsPrepaymentCalc";
 import { getFAQSchema, getHowToSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { buildMetadata } from "@/lib/seo/metadata";
+import { LastReviewed } from "@/components/ui/LastReviewed";
 
 export const metadata = buildMetadata({
   // Page is ranking on page 1 (avg position 8) but getting 0 clicks on
@@ -23,6 +24,8 @@ export const metadata = buildMetadata({
     "home loan prepayment vs mutual fund",
   ],
 });
+
+const LAST_REVIEWED = "2026-05-10";
 
 const faqs = [
   {
@@ -87,6 +90,9 @@ export default function SipVsPrepaymentPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
       <main className="max-w-4xl mx-auto py-6 px-3 sm:px-6">
+        <div className="mb-3">
+          <LastReviewed date={LAST_REVIEWED} />
+        </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           SIP vs Home Loan Prepayment: Which is Better for You?
         </h1>
