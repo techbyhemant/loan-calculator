@@ -16,7 +16,16 @@ export async function GET() {
     headers: {
       "Content-Type": "text/html; charset=utf-8",
       "X-Robots-Tag": "noindex, nofollow",
-      "Cache-Control": "public, max-age=86400, s-maxage=86400",
+      // Short cache (5 min) instead of 24h. Reason: when we add a new
+      // route (e.g. /personal-loan-emi-calculator/[amount]), this catch-all
+      // runs for that URL on requests made BEFORE the new build deploys.
+      // Vercel caches that 410 response with the TTL set here. If the TTL
+      // is 24h, new pages stay locked out of the cache for a day even
+      // after they've shipped. 5 min is short enough that a fresh deploy
+      // unsticks naturally without manual cache purges, but long enough
+      // that the genuine ghost URLs from the prior domain owner still
+      // benefit from edge caching during a single user's session.
+      "Cache-Control": "public, max-age=300, s-maxage=300",
     },
   });
 }

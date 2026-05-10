@@ -102,7 +102,10 @@ export function middleware(request: NextRequest) {
       headers: {
         "Content-Type": "text/html; charset=utf-8",
         "X-Robots-Tag": "noindex, nofollow",
-        "Cache-Control": "public, max-age=86400, s-maxage=86400",
+        // Same short-TTL reasoning as app/[...catchAll]/route.ts —
+        // 24h cache on 410 responses means any URL that ever 410'd stays
+        // 410 for a day even if a route is later added matching it.
+        "Cache-Control": "public, max-age=300, s-maxage=300",
       },
     });
   }
