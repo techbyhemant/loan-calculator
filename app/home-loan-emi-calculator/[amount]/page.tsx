@@ -110,26 +110,62 @@ export default async function AmountLandingPage({
   const interestSaved = Math.max(0, baseTotalInterest - newTotalInterest);
   const monthsSaved = Math.max(0, 20 * 12 - newTenureMonths);
 
+  // Tenure-specific FAQ entries — generated from real EMI math at 8.5%
+  // for the page's specific amount. These target the long-tail queries
+  // GSC shows borrowers actually search for (e.g. "1 crore home loan emi
+  // for 20 years" — 7 impressions/month at position 60).
+  const refRate = 8.5;
+  const emi10 = calculateEMI(config.amountInRupees, refRate, 120);
+  const emi15 = calculateEMI(config.amountInRupees, refRate, 180);
+  const emi20 = calculateEMI(config.amountInRupees, refRate, 240);
+  const emi25 = calculateEMI(config.amountInRupees, refRate, 300);
+  const emi30 = calculateEMI(config.amountInRupees, refRate, 360);
+  const int10 = emi10 * 120 - config.amountInRupees;
+  const int15 = emi15 * 180 - config.amountInRupees;
+  const int20 = emi20 * 240 - config.amountInRupees;
+  const int25 = emi25 * 300 - config.amountInRupees;
+  const int30 = emi30 * 360 - config.amountInRupees;
+
   const faqs = [
     {
-      question: `What is the EMI for a ₹${config.displayLabel} home loan?`,
-      answer: `The EMI for a ₹${config.displayLabel} home loan depends on the interest rate and tenure. At 9% for 20 years, the EMI is approximately ${formatINR(calculateEMI(config.amountInRupees, 9, 240))}. At 8.5% for 30 years, it drops to ${formatINR(calculateEMI(config.amountInRupees, 8.5, 360))}. Use the calculator on the homepage to see your exact EMI for any rate and tenure combination.`,
+      question: `What is the EMI on a ₹${config.displayLabel} home loan for 30 years?`,
+      answer: `At 8.5% interest, the EMI on a ₹${config.displayLabel} home loan for 30 years is ${formatINR(emi30)}. Total interest over the full tenure works out to ${formatLakhs(int30)}, which is roughly ${Math.round((int30 / config.amountInRupees) * 100)}% of the principal. 30 years gives you the lowest monthly EMI but the highest interest cost overall.`,
+    },
+    {
+      question: `What is the EMI on a ₹${config.displayLabel} home loan for 25 years?`,
+      answer: `EMI at 8.5% over 25 years comes to ${formatINR(emi25)}. You'll pay ${formatLakhs(int25)} in total interest, which is ${formatLakhs(int30 - int25)} less than what a 30-year tenure costs. Most borrowers don't realise how much that small difference in tenure saves over the long run.`,
+    },
+    {
+      question: `What is the EMI on a ₹${config.displayLabel} home loan for 20 years?`,
+      answer: `For 20 years at 8.5%, the EMI is ${formatINR(emi20)} and total interest is ${formatLakhs(int20)}. This is the most common tenure choice for first-time buyers in India — it balances a manageable EMI with sensible interest cost.`,
+    },
+    {
+      question: `What is the EMI on a ₹${config.displayLabel} home loan for 15 years?`,
+      answer: `15 years at 8.5% gives you an EMI of ${formatINR(emi15)} and total interest of ${formatLakhs(int15)}. That's ${formatLakhs(int20 - int15)} less interest than the 20-year option. If your salary supports the higher monthly outgo, 15 years is almost always the better pick on paper.`,
+    },
+    {
+      question: `What is the EMI on a ₹${config.displayLabel} home loan for 10 years?`,
+      answer: `A 10-year tenure at 8.5% means an EMI of ${formatINR(emi10)} and total interest of just ${formatLakhs(int10)}. The monthly payment is steep, but you finish the loan in a third of the time of a 30-year tenure and save nearly ${formatLakhs(int30 - int10)} in interest. Best suited for borrowers in the second half of their career.`,
+    },
+    {
+      question: `Should I pick 20 years or 30 years for a ₹${config.displayLabel} home loan?`,
+      answer: `30 years gives you a smaller EMI (${formatINR(emi30)} vs ${formatINR(emi20)}) but you end up paying ${formatLakhs(int30 - int20)} more in interest over the loan's life. The Section 24(b) tax benefit is capped at ₹2 lakh of interest per year regardless of how long your tenure is, so dragging the loan out doesn't translate into a bigger tax shield. If your cash flow handles the 20-year EMI without strain, take the shorter tenure.`,
     },
     {
       question: `What salary do I need for a ₹${config.displayLabel} home loan?`,
-      answer: `As a thumb rule, your EMI should not exceed 50% of your net monthly income. For a ₹${config.displayLabel} loan at 9% for 20 years, the EMI is around ${formatINR(headlineEmi)}, which means your minimum monthly take-home should be about ${formatINR(minMonthlyIncome)} (annual income of around ${formatINR(minAnnualIncome)}). Banks typically use a similar FOIR (Fixed Obligations to Income Ratio) of 40-50% when assessing eligibility.`,
+      answer: `Banks typically cap your EMI at 40-50% of your net monthly take-home (the FOIR rule). For a ₹${config.displayLabel} loan at 9% over 20 years, the EMI is around ${formatINR(headlineEmi)}, which means a take-home of about ${formatINR(minMonthlyIncome)} or higher gets you through. Existing EMIs eat directly into that ceiling, so closing a personal loan or car loan before applying can meaningfully boost your eligibility.`,
     },
     {
       question: `Can I prepay my ₹${config.displayLabel} home loan without penalty?`,
-      answer: `Yes. RBI mandates that floating-rate home loans in India have zero prepayment penalty. You can make part payments any time and reduce either your tenure or your EMI. For a ₹${config.displayLabel} loan, even a 10% part payment in year 3 can save you over ${formatLakhs(interestSaved)} in interest and cut around ${Math.round(monthsSaved / 12)} years off your tenure.`,
+      answer: `Yes. RBI rules prohibit prepayment penalty on floating-rate home loans for individual borrowers. You can make a part payment of any size, any time, with no extra charge. For a ₹${config.displayLabel} loan, even a 10% part payment in year 3 can save you over ${formatLakhs(interestSaved)} in interest and shorten the tenure by roughly ${Math.round(monthsSaved / 12)} years.`,
     },
     {
-      question: `Is it better to reduce EMI or tenure after part payment?`,
-      answer: `Reducing tenure almost always saves more interest because you pay off principal faster. Reducing EMI improves monthly cash flow but you continue paying interest for the original tenure. For most ₹${config.displayLabel} borrowers, keeping the EMI the same and shortening tenure is the math-optimal choice.`,
+      question: `Is it better to reduce EMI or tenure after a part payment?`,
+      answer: `Almost always tenure. Keeping the EMI fixed and shortening tenure means you knock off the highest-interest months at the end of the loan, which is where total interest savings come from. Reducing EMI feels nicer in your monthly cash flow but you keep paying interest for the full original tenure. Most banks default to the tenure option unless you specifically ask in writing for the EMI to drop.`,
     },
     {
-      question: `How is the EMI calculated for a home loan?`,
-      answer: `The standard formula is EMI = [P × R × (1+R)^N] / [(1+R)^N − 1], where P is the principal (₹${config.displayLabel} in your case), R is the monthly interest rate (annual rate ÷ 12 ÷ 100), and N is the tenure in months. This is the same reducing-balance formula every Indian bank uses, so your EMI will match your bank statement to the rupee.`,
+      question: `How is the EMI on a home loan actually calculated?`,
+      answer: `Indian banks use the standard reducing-balance formula: EMI = [P × R × (1+R)^N] / [(1+R)^N − 1]. P is the principal (₹${config.displayLabel} in your case), R is the monthly interest rate (annual rate ÷ 12 ÷ 100), and N is the tenure in months. This calculator uses the same formula, so the EMI shown matches your bank statement to the rupee.`,
     },
   ];
 
@@ -334,6 +370,82 @@ export default async function AmountLandingPage({
               home loan eligibility calculator
             </Link>{" "}
             for a precise number based on your salary, age, and existing EMIs.
+          </p>
+
+          <h2 className="text-xl font-semibold text-foreground">
+            EMI for ₹{config.displayLabel} at Every Common Tenure
+          </h2>
+          <p>
+            All numbers below assume an 8.5% floating rate (the rough floor for
+            prime salaried borrowers in 2026). Notice how dropping the tenure
+            from 30 years to 20 years pushes the EMI up by about
+            {" "}{formatINR(emi20 - emi30)}, but cuts your total interest cost by
+            roughly {formatLakhs(int30 - int20)}.
+          </p>
+          <div className="overflow-x-auto rounded-xl border border-border">
+            <table className="w-full text-sm">
+              <thead className="bg-muted">
+                <tr>
+                  <th className="text-left px-3 py-2 font-semibold text-foreground">Tenure</th>
+                  <th className="text-right px-3 py-2 font-semibold text-foreground">EMI</th>
+                  <th className="text-right px-3 py-2 font-semibold text-foreground">Total Interest</th>
+                  <th className="text-right px-3 py-2 font-semibold text-foreground">Total Payment</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { years: 10, emi: emi10, interest: int10 },
+                  { years: 15, emi: emi15, interest: int15 },
+                  { years: 20, emi: emi20, interest: int20 },
+                  { years: 25, emi: emi25, interest: int25 },
+                  { years: 30, emi: emi30, interest: int30 },
+                ].map((row) => (
+                  <tr key={row.years} className="border-t border-border">
+                    <td className="px-3 py-2 font-medium">{row.years} years</td>
+                    <td className="text-right px-3 py-2">{formatINR(row.emi)}</td>
+                    <td className="text-right px-3 py-2">{formatLakhs(row.interest)}</td>
+                    <td className="text-right px-3 py-2">{formatLakhs(row.interest + config.amountInRupees)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h2 className="text-xl font-semibold text-foreground">
+            Where the Rate on a ₹{config.displayLabel} Home Loan Comes From in 2026
+          </h2>
+          <p>
+            The rate your bank quotes is the RBI repo rate plus a spread the
+            lender chooses based on your CIBIL score, employer category, and the
+            loan-to-value ratio. As of mid-2026, indicative bands look like this:
+          </p>
+          <ul className="list-disc list-inside space-y-1.5">
+            <li>
+              <strong>Public sector banks</strong> — SBI, PNB, BoB, Canara: 8.40% to 8.75%
+              for prime borrowers. Government employees and PSU staff get the
+              floor.
+            </li>
+            <li>
+              <strong>Top private banks</strong> — HDFC, ICICI, Axis, Kotak: 8.55% to 9.10%.
+              The lower end requires CIBIL above 750 and an approved-employer tag.
+            </li>
+            <li>
+              <strong>Housing finance NBFCs</strong> — LIC HF, Bajaj Housing Finance:
+              9.00% to 9.50%. Easier approval but the spread costs you.
+            </li>
+          </ul>
+          <p>
+            On a ₹{config.displayLabel} loan, the difference between an 8.5% and a
+            9.0% rate over 20 years adds up. EMI moves from {formatINR(emi20)} to{" "}
+            {formatINR(calculateEMI(config.amountInRupees, 9, 240))}, and total
+            interest grows by{" "}
+            {formatLakhs(
+              calculateEMI(config.amountInRupees, 9, 240) * 240 -
+                config.amountInRupees -
+                int20,
+            )}{" "}
+            over the loan's life. Always negotiate the spread before signing — a
+            0.25% improvement is usually possible if your profile is clean.
           </p>
 
           <h2 className="text-xl font-semibold text-foreground">
