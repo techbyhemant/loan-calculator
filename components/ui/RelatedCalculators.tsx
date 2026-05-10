@@ -92,16 +92,49 @@ const RELATED_MAP: Record<string, RelatedCalc[]> = {
   ],
 };
 
-// Fallback for unmapped pages
+// Programmatic-family related sets. The amount-specific pages all share
+// the same downstream user intent (someone calculating an EMI for a
+// specific loan size), so they all surface the same set of follow-on
+// tools. Using shared lists avoids hardcoding 14+ identical path entries
+// above and lets new amount variants pick up the right links automatically.
+const HOME_LOAN_AMOUNT_RELATED: RelatedCalc[] = [
+  { href: "/calculators/home-loan-eligibility", label: "Eligibility Check", desc: "Will the bank approve?" },
+  { href: "/calculators/tax-benefit", label: "Tax Benefit", desc: "80C + 24(b) savings" },
+  { href: "/calculators/sip-vs-prepayment", label: "SIP vs Prepayment", desc: "Invest extra or prepay?" },
+  { href: "/calculators/balance-transfer", label: "Balance Transfer", desc: "Switch lenders worth it?" },
+];
+
+const PERSONAL_LOAN_AMOUNT_RELATED: RelatedCalc[] = [
+  { href: "/calculators/personal-loan-payoff", label: "Personal Loan Payoff", desc: "Prepay vs let it run" },
+  { href: "/calculators/cc-vs-personal-loan", label: "CC vs Personal Loan", desc: "Cheaper than card debt?" },
+  { href: "/calculators/multi-loan-planner", label: "Which Loan First?", desc: "Multiple loans?" },
+  { href: "/calculators/consumer-emi-true-cost", label: "0% EMI True Cost", desc: "Hidden charges" },
+];
+
+// Fallback for genuinely unmapped pages — kept conservative since this
+// is what gets shown when nothing more specific matches.
 const DEFAULT_RELATED: RelatedCalc[] = [
   { href: "/", label: "EMI Calculator", desc: "Calculate your monthly EMI" },
   { href: "/calculators/sip-vs-prepayment", label: "SIP vs Prepayment", desc: "Invest or prepay?" },
   { href: "/calculators/credit-card-payoff", label: "CC Payoff", desc: "Credit card payoff plan" },
 ];
 
+function pickRelated(pathname: string): RelatedCalc[] {
+  // Exact match wins
+  if (RELATED_MAP[pathname]) return RELATED_MAP[pathname];
+  // Family fallbacks for the programmatic amount pages
+  if (pathname.startsWith("/home-loan-emi-calculator")) {
+    return HOME_LOAN_AMOUNT_RELATED;
+  }
+  if (pathname.startsWith("/personal-loan-emi-calculator")) {
+    return PERSONAL_LOAN_AMOUNT_RELATED;
+  }
+  return DEFAULT_RELATED;
+}
+
 export function RelatedCalculators() {
   const pathname = usePathname();
-  const related = RELATED_MAP[pathname] ?? DEFAULT_RELATED;
+  const related = pickRelated(pathname);
 
   return (
     <div className="mt-8 pt-6 border-t border-border">

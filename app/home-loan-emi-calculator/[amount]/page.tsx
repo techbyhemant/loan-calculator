@@ -8,6 +8,7 @@ import { getFAQSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { LoanCalculatorTool } from "@/features/loan-calculator/LoanCalculatorTool";
+import { AmountSiblingNav } from "@/components/ui/AmountSiblingNav";
 
 // ─── Programmatic SEO config ─────────────────────────
 // One template, 8 statically-generated pages. Targets long-tail
@@ -233,7 +234,7 @@ export default async function AmountLandingPage({
             Loan type locked since the URL fixes the amount and the page
             identity is home-loan-specific. Users can change rate, tenure,
             and simulate part-payments freely without leaving the page. */}
-        <div className="mb-10">
+        <div className="mb-6">
           <LoanCalculatorTool
             initial={{
               loanType: "home",
@@ -244,6 +245,31 @@ export default async function AmountLandingPage({
             lockType
           />
         </div>
+
+        {/* Inline "Save this calculation" callout — non-sticky to avoid
+            UX clash with each amount page's own structure. The homepage's
+            sticky bar serves the same purpose for the universal calculator. */}
+        <div className="mb-10 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-sm text-foreground">
+            Track this ₹{config.displayLabel} loan in your dashboard — see
+            real-time payoff progress, log part-payments, get RBI rate alerts.
+          </p>
+          <Link
+            href="/login?ref=amount-page&save=true"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-3 py-1.5 text-sm font-medium transition-colors flex-shrink-0"
+          >
+            Save to dashboard &rarr;
+          </Link>
+        </div>
+
+        {/* Sibling amount navigation — lets users hop between common
+            home loan amounts without bouncing through the hub. */}
+        <AmountSiblingNav
+          basePath="/home-loan-emi-calculator"
+          currentSlug={config.slug}
+          amounts={AMOUNTS.map((a) => ({ slug: a.slug, label: a.displayLabel }))}
+          hubHref="/home-loan-emi-calculator"
+        />
 
         {/* EMI matrix — kept as a static reference table users can scan
             without interacting. Useful for "I just want to see all my

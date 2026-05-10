@@ -8,6 +8,7 @@ import { getFAQSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { LoanCalculatorTool } from "@/features/loan-calculator/LoanCalculatorTool";
+import { AmountSiblingNav } from "@/components/ui/AmountSiblingNav";
 
 // ─── Programmatic SEO config ─────────────────────────
 // One template, 6 statically-generated pages targeting long-tail
@@ -227,7 +228,7 @@ export default async function PersonalLoanAmountPage({
         </section>
 
         {/* Live calculator pre-set to this page's specific amount */}
-        <div className="mb-10">
+        <div className="mb-6">
           <LoanCalculatorTool
             initial={{
               loanType: "personal",
@@ -238,6 +239,28 @@ export default async function PersonalLoanAmountPage({
             lockType
           />
         </div>
+
+        {/* Inline "Save this calculation" callout */}
+        <div className="mb-10 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-sm text-foreground">
+            Track this ₹{config.displayLabel} loan in your dashboard — see
+            real-time payoff progress, log part-payments, get rate alerts.
+          </p>
+          <Link
+            href="/login?ref=amount-page&save=true"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-3 py-1.5 text-sm font-medium transition-colors flex-shrink-0"
+          >
+            Save to dashboard &rarr;
+          </Link>
+        </div>
+
+        {/* Sibling amount navigation */}
+        <AmountSiblingNav
+          basePath="/personal-loan-emi-calculator"
+          currentSlug={config.slug}
+          amounts={AMOUNTS.map((a) => ({ slug: a.slug, label: a.displayLabel }))}
+          hubHref="/personal-loan-emi-calculator"
+        />
 
         {/* Quick-reference matrix */}
         <section className="mt-8">
