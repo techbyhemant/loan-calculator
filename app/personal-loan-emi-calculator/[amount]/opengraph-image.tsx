@@ -4,6 +4,9 @@ export const runtime = "edge";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
+// NOTE: do NOT add generateStaticParams here — Edge runtime is
+// incompatible with that export. Renders on-demand from the `params`
+// arg, fast enough for OG generation.
 const AMOUNTS: Record<string, { label: string; short: string }> = {
   "1-lakh":  { label: "1 Lakh",  short: "1L" },
   "2-lakh":  { label: "2 Lakh",  short: "2L" },
@@ -13,14 +16,15 @@ const AMOUNTS: Record<string, { label: string; short: string }> = {
   "20-lakh": { label: "20 Lakh", short: "20L" },
 };
 
-export function generateStaticParams() {
-  return Object.keys(AMOUNTS).map((amount) => ({ amount }));
-}
-
 export const alt = "Personal Loan EMI Calculator — LastEMI";
 
-export default function Image({ params }: { params: { amount: string } }) {
-  const cfg = AMOUNTS[params.amount];
+export default async function Image({
+  params,
+}: {
+  params: Promise<{ amount: string }>;
+}) {
+  const { amount } = await params;
+  const cfg = AMOUNTS[amount];
   const label = cfg?.label ?? "Personal Loan";
   return generateOGImage({
     title: `₹${label} Personal Loan EMI`,

@@ -8,6 +8,11 @@ export const contentType = "image/png";
 // correct human-readable label for each programmatic page. Kept inline
 // here (instead of importing from page.tsx) because that page uses
 // non-edge-compatible helpers and would bloat the OG runtime bundle.
+//
+// NOTE: do NOT add generateStaticParams here — Edge runtime is
+// incompatible with that export. The OG image renders on-demand using
+// the `params` arg Next.js passes at request time. Generation is fast
+// enough (~50ms) that on-demand is fine.
 const AMOUNTS: Record<string, { label: string; short: string }> = {
   "15-lakh":  { label: "15 Lakh",  short: "15L" },
   "20-lakh":  { label: "20 Lakh",  short: "20L" },
@@ -19,14 +24,15 @@ const AMOUNTS: Record<string, { label: string; short: string }> = {
   "1-crore":  { label: "1 Crore",  short: "1Cr" },
 };
 
-export function generateStaticParams() {
-  return Object.keys(AMOUNTS).map((amount) => ({ amount }));
-}
-
 export const alt = "Home Loan EMI Calculator — LastEMI";
 
-export default function Image({ params }: { params: { amount: string } }) {
-  const cfg = AMOUNTS[params.amount];
+export default async function Image({
+  params,
+}: {
+  params: Promise<{ amount: string }>;
+}) {
+  const { amount } = await params;
+  const cfg = AMOUNTS[amount];
   const label = cfg?.label ?? "Home Loan";
   return generateOGImage({
     title: `₹${label} Home Loan EMI`,
