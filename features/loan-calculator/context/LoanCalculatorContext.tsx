@@ -67,6 +67,22 @@ interface LoanContextType extends LoanState {
   handleExportPDF: () => Promise<void>;
   handleExportExcel: () => void;
   handleShareURL: () => void;
+
+  // Embedded-mode flag — true when the tool is dropped into a contextual
+  // landing page (e.g. /home-loan-emi-calculator/50-lakh) where the loan
+  // type is fixed by the page's identity. Components like LoanInputForm
+  // read this and hide the loan-type tabs accordingly.
+  lockType: boolean;
+}
+
+// Initial-state override accepted by LoanCalculatorTool / Provider when
+// embedding the calculator on a contextual page.
+export interface LoanCalculatorInitial {
+  loanType?: LoanType;
+  amount?: number;
+  rate?: number;
+  tenure?: number;
+  tenureUnit?: TenureUnit;
 }
 
 // Action types
@@ -155,17 +171,44 @@ const LoanCalculatorContext = createContext<LoanContextType | undefined>(
 // Provider component
 interface LoanCalculatorProviderProps {
   children: ReactNode;
+  // Optional starting state — landing pages set these to make the tool
+  // open on the right loan type/amount/rate/tenure for that page's
+  // context. Homepage passes nothing and uses the historical defaults.
+  initial?: LoanCalculatorInitial;
+  // When true, the loan-type tabs are hidden inside the input form.
+  // Used by contextual landing pages where the type is fixed by the
+  // page's identity.
+  lockType?: boolean;
+  // When false, skip reading the shareable-token (?s=...) URL param.
+  // Embedded landing pages don't want their initial state overridden
+  // by a stale URL token from a different context. Defaults to true
+  // so the homepage preserves its existing share-link behaviour.
+  readUrlToken?: boolean;
 }
 
 export function LoanCalculatorProvider({
   children,
+  initial,
+  lockType = false,
+  readUrlToken = true,
 }: LoanCalculatorProviderProps) {
   const [state, dispatch] = useReducer(loanReducer, initialState, (init) => {
-    // Use a static default for SSR — real date is set in useEffect below
-    const merged = { ...init, startDate: "2026-03" };
+    // Apply caller-supplied defaults first so a contextual page's
+    // initial state takes precedence over the module defaults but is
+    // still overrideable by a share-link URL token (when enabled).
+    const merged = {
+      ...init,
+      startDate: "2026-03", // SSR-safe placeholder; client useEffect sets the real one
+      ...(initial?.loanType ? { loanType: initial.loanType } : {}),
+      ...(initial?.amount !== undefined ? { amount: initial.amount } : {}),
+      ...(initial?.rate !== undefined ? { rate: initial.rate } : {}),
+      ...(initial?.tenure !== undefined ? { tenure: initial.tenure } : {}),
+      ...(initial?.tenureUnit ? { tenureUnit: initial.tenureUnit } : {}),
+    };
 
     // Read shared token from URL on mount (e.g. ?s=<base64token>)
     if (typeof window === "undefined") return merged;
+    if (!readUrlToken) return merged;
     const params = new URLSearchParams(window.location.search);
 
     const token = params.get("s");
@@ -595,6 +638,7 @@ export function LoanCalculatorProvider({
     handleExportPDF,
     handleExportExcel,
     handleShareURL,
+    lockType,
   };
 
   return (

@@ -1,10 +1,10 @@
-import Link from "next/link";
 import { calculateEMI } from "@/lib/calculations/loanCalcs";
 import { formatINR } from "@/lib/utils/formatters";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { getFAQSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { LoanCalculatorTool } from "@/features/loan-calculator/LoanCalculatorTool";
 
 export const metadata = buildMetadata({
   title: "Personal Loan EMI Calculator — Reducing Balance, India 2026",
@@ -101,19 +101,19 @@ export default function PersonalLoanEmiPage() {
           interest rate.
         </p>
 
-        <Link
-          href="/?type=personal"
-          className="block bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-5 py-4 mb-10 text-center font-semibold shadow-sm transition-colors"
-        >
-          Open the Full Interactive Calculator &rarr;
-          <span className="block text-xs font-normal opacity-90 mt-1">
-            Try different amounts, rates, and tenures
-          </span>
-        </Link>
+        {/* Live calculator — pre-set to personal loan, ₹5L @ 14% for 5 years
+            (mid-market defaults). Loan type is locked since the page
+            identity is personal-loan-specific. */}
+        <div className="mb-10">
+          <LoanCalculatorTool
+            initial={{ loanType: "personal", amount: SAMPLE_AMOUNT, rate: 14, tenure: 5 }}
+            lockType
+          />
+        </div>
 
         <section className="mb-10">
           <h2 className="text-xl font-semibold text-foreground mb-3">
-            Sample EMI — ₹{(SAMPLE_AMOUNT / 100000).toFixed(0)} Lakh Personal Loan
+            Quick reference — EMI for ₹{(SAMPLE_AMOUNT / 100000).toFixed(0)} Lakh Personal Loan at common rates
           </h2>
           <p className="text-sm text-muted-foreground mb-3">
             10.5% is the floor for top-tier salaried borrowers. 14% is mid-market.

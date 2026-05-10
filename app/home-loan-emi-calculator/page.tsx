@@ -5,6 +5,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getFAQSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { LoanCalculatorTool } from "@/features/loan-calculator/LoanCalculatorTool";
 
 // Hub page for the amount-specific home loan EMI calculator family.
 // Targets the broad "home loan emi calculator india" head term.
@@ -106,19 +107,19 @@ export default function HomeLoanEmiCalculatorHub() {
           spam calls.
         </p>
 
-        <Link
-          href="/?type=home"
-          className="block bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-5 py-4 mb-10 text-center font-semibold shadow-sm transition-colors"
-        >
-          Open the Full Interactive Calculator &rarr;
-          <span className="block text-xs font-normal opacity-90 mt-1">
-            Adjust rate, tenure, simulate part payments live
-          </span>
-        </Link>
+        {/* Live calculator pre-set to home loan defaults (₹50L @ 8.5% / 20yr).
+            Loan type is locked since this is the home loan hub. Browsers
+            who want a specific amount can also use the cards below. */}
+        <div className="mb-10">
+          <LoanCalculatorTool
+            initial={{ loanType: "home", amount: 5_000_000, rate: 8.5, tenure: 20 }}
+            lockType
+          />
+        </div>
 
         <section>
           <h2 className="text-xl sm:text-2xl font-semibold text-foreground mb-3">
-            Pick Your Loan Amount
+            Or pick a common loan amount
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {AMOUNTS.map((a) => {

@@ -46,6 +46,7 @@ export function LoanInputForm() {
     setStartDate,
     handleTenureSlider,
     config,
+    lockType,
   } = useLoanCalculator();
 
   const loanTypeOptions = [
@@ -60,16 +61,20 @@ export function LoanInputForm() {
         Loan Details
       </h2>
 
-      {/* Loan Type Tabs */}
-      <div className="flex justify-center mb-2">
-        <CompactTabsToggle
-          label="Loan type"
-          value={loanType}
-          onValueChange={(value) => setLoanType(value as (typeof loanTypeOptions)[number]["value"])}
-          options={[...loanTypeOptions]}
-          className="justify-center"
-        />
-      </div>
+      {/* Loan Type Tabs — hidden when the calculator is embedded on a
+          contextual landing page (where the loan type is fixed by the
+          page's identity, e.g. /home-loan-emi-calculator/50-lakh). */}
+      {!lockType && (
+        <div className="flex justify-center mb-2">
+          <CompactTabsToggle
+            label="Loan type"
+            value={loanType}
+            onValueChange={(value) => setLoanType(value as (typeof loanTypeOptions)[number]["value"])}
+            options={[...loanTypeOptions]}
+            className="justify-center"
+          />
+        </div>
+      )}
 
       {/* Loan Amount */}
       <div className="flex flex-col gap-2">

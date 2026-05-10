@@ -1,10 +1,10 @@
-import Link from "next/link";
 import { calculateEMI } from "@/lib/calculations/loanCalcs";
 import { formatINR } from "@/lib/utils/formatters";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { getFAQSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { LoanCalculatorTool } from "@/features/loan-calculator/LoanCalculatorTool";
 
 export const metadata = buildMetadata({
   title: "Gold Loan EMI Calculator — Rates, LTV, Repayment Options",
@@ -99,19 +99,19 @@ export default function GoldLoanEmiPage() {
           rates Indian banks and NBFCs actually charge in 2026.
         </p>
 
-        <Link
-          href="/?type=gold"
-          className="block bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-5 py-4 mb-10 text-center font-semibold shadow-sm transition-colors"
-        >
-          Open the Full Interactive Calculator &rarr;
-          <span className="block text-xs font-normal opacity-90 mt-1">
-            Enter your gold loan details and simulate part payments
-          </span>
-        </Link>
+        {/* Live calculator — pre-set to gold loan, ₹5L @ 12% for 1 year
+            (matches the sample table below). Loan type is locked since the
+            page identity is gold-loan-specific. */}
+        <div className="mb-10">
+          <LoanCalculatorTool
+            initial={{ loanType: "gold", amount: SAMPLE_AMOUNT, rate: 12, tenure: 1 }}
+            lockType
+          />
+        </div>
 
         <section className="mb-10">
           <h2 className="text-xl font-semibold text-foreground mb-3">
-            Sample EMI Table — ₹{(SAMPLE_AMOUNT / 100000).toFixed(0)} Lakh Gold Loan
+            Quick reference — EMI for ₹{(SAMPLE_AMOUNT / 100000).toFixed(0)} Lakh Gold Loan at common rates
           </h2>
           <div className="overflow-x-auto rounded-xl border border-border">
             <table className="w-full text-sm">

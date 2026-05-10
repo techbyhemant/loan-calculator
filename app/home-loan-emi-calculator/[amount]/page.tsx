@@ -7,6 +7,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getFAQSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { LoanCalculatorTool } from "@/features/loan-calculator/LoanCalculatorTool";
 
 // ─── Programmatic SEO config ─────────────────────────
 // One template, 8 statically-generated pages. Targets long-tail
@@ -192,21 +193,28 @@ export default async function AmountLandingPage({
           </div>
         </section>
 
-        {/* Primary CTA to interactive calculator */}
-        <Link
-          href={`/?amount=${config.amountInRupees}&type=home`}
-          className="block bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-5 py-4 mb-10 text-center font-semibold shadow-sm transition-colors"
-        >
-          Open the Full Interactive Calculator &rarr;
-          <span className="block text-xs font-normal opacity-90 mt-1">
-            Adjust rate, tenure, and simulate part payments live
-          </span>
-        </Link>
+        {/* Live calculator pre-set to this page's specific amount @ 9% / 20yr.
+            Loan type locked since the URL fixes the amount and the page
+            identity is home-loan-specific. Users can change rate, tenure,
+            and simulate part-payments freely without leaving the page. */}
+        <div className="mb-10">
+          <LoanCalculatorTool
+            initial={{
+              loanType: "home",
+              amount: config.amountInRupees,
+              rate: 9,
+              tenure: 20,
+            }}
+            lockType
+          />
+        </div>
 
-        {/* EMI matrix */}
+        {/* EMI matrix — kept as a static reference table users can scan
+            without interacting. Useful for "I just want to see all my
+            options at a glance". */}
         <section className="mt-8">
           <h2 className="text-xl sm:text-2xl font-semibold text-foreground mb-3">
-            EMI for ₹{config.displayLabel} at Different Rates and Tenures
+            Quick reference — EMI for ₹{config.displayLabel} at common rates and tenures
           </h2>
           <p className="text-sm text-muted-foreground mb-4">
             Each cell shows your monthly EMI. Pick the closest combination to what
@@ -288,12 +296,12 @@ export default async function AmountLandingPage({
             <strong className="text-positive">{Math.round(monthsSaved / 12)} years</strong>{" "}
             sooner. RBI rules mean zero prepayment penalty on floating-rate home loans.
           </p>
-          <Link
-            href={`/?amount=${config.amountInRupees}&type=home`}
+          <a
+            href="#amortization-table"
             className="inline-flex items-center gap-1.5 bg-positive hover:bg-positive/90 text-white rounded-lg px-4 py-2 text-sm font-semibold transition-colors"
           >
-            Simulate part payments on this loan &rarr;
-          </Link>
+            Simulate part payments above &uarr;
+          </a>
         </section>
 
         {/* SEO body copy */}

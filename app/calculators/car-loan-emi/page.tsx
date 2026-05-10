@@ -1,10 +1,10 @@
-import Link from "next/link";
 import { calculateEMI } from "@/lib/calculations/loanCalcs";
 import { formatINR } from "@/lib/utils/formatters";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { getFAQSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { LoanCalculatorTool } from "@/features/loan-calculator/LoanCalculatorTool";
 
 export const metadata = buildMetadata({
   title: "Car Loan EMI Calculator — New Car & Used Car, India 2026",
@@ -99,19 +99,19 @@ export default function CarLoanEmiPage() {
           Run the math before you walk into the showroom.
         </p>
 
-        <Link
-          href="/?type=car"
-          className="block bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-5 py-4 mb-10 text-center font-semibold shadow-sm transition-colors"
-        >
-          Open the Full Interactive Calculator &rarr;
-          <span className="block text-xs font-normal opacity-90 mt-1">
-            Adjust loan amount, rate, tenure, simulate prepayments
-          </span>
-        </Link>
+        {/* Live calculator — pre-set to car loan, ₹10L @ 9% for 7 years
+            (typical new-car defaults). Loan type is locked since the
+            page identity is car-loan-specific. */}
+        <div className="mb-10">
+          <LoanCalculatorTool
+            initial={{ loanType: "car", amount: SAMPLE_AMOUNT, rate: 9, tenure: 7 }}
+            lockType
+          />
+        </div>
 
         <section className="mb-10">
           <h2 className="text-xl font-semibold text-foreground mb-3">
-            Sample EMI — ₹{(SAMPLE_AMOUNT / 100000).toFixed(0)} Lakh Car Loan
+            Quick reference — EMI for ₹{(SAMPLE_AMOUNT / 100000).toFixed(0)} Lakh Car Loan at common rates
           </h2>
           <p className="text-sm text-muted-foreground mb-3">
             8.5% is the typical new-car rate, 10% mid-tier, 12% used-car territory.
