@@ -12,9 +12,15 @@ const OLD_PATH_PREFIXES = ["/video", "/game", "/games"];
 // Query params that signal a ghost URL from the prior domain owner → 410 Gone
 const GONE_QUERY_PARAMS = ["video", "juth"];
 
-// Known-good query params used by the app. Anything outside this set on an
-// otherwise-valid page triggers X-Robots-Tag: noindex, nofollow (page still
-// renders for users, but search engines won't index the variant).
+// Query params used by the app at runtime — for shareable calculator
+// state, marketing attribution, auth flow etc. These render normally
+// for human users, but every one of them produces a URL variant whose
+// canonical tag points back to the clean URL. We don't want Google to
+// try to index those variants as separate pages: that's how GSC ends
+// up reporting them as "Page with redirect" validation failures.
+//
+// Kept as a documentation reference even though the noindex rule
+// below now fires on any non-empty query string.
 const ALLOWED_QUERY_PARAMS = new Set<string>([
   // Shareable calculator token
   "s",
@@ -101,17 +107,23 @@ export function middleware(request: NextRequest) {
     });
   }
 
-  // 3. For valid paths with unknown query params, still serve the page but
-  //    tell search engines not to index that variant. The canonical tag on
-  //    the page points to the clean URL, so link equity is preserved.
+  // 3. For any URL with query params, tell search engines not to index
+  //    that variant. The canonical tag on the page already points to
+  //    the clean URL, so link equity is preserved on the canonical and
+  //    Google stops trying (and failing) to validate query-string
+  //    variants as separate indexable pages.
+  //
+  //    Use noindex,follow (not nofollow) so Google still walks any
+  //    internal links on the page — only the URL itself is excluded.
+  //
+  //    The previous version of this rule only fired on UNKNOWN params
+  //    (anything outside ALLOWED_QUERY_PARAMS), which let "?amount=…&type=…"
+  //    and utm_* through with index,follow. Combined with canonical=/,
+  //    GSC then logged them as "Page with redirect" validation failures.
   const response = NextResponse.next();
 
-  const paramKeys = Array.from(searchParams.keys());
-  const hasUnknownParam = paramKeys.some(
-    (key) => !ALLOWED_QUERY_PARAMS.has(key),
-  );
-  if (paramKeys.length > 0 && hasUnknownParam) {
-    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  if (searchParams.toString().length > 0) {
+    response.headers.set("X-Robots-Tag", "noindex, follow");
   }
 
   return response;
