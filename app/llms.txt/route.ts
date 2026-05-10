@@ -105,6 +105,9 @@ export function GET() {
   // Programmatic home-loan landing pages.
   lines.push("## Home loan EMI by amount");
   lines.push("");
+  lines.push(
+    `- [Home Loan EMI Calculator (hub)](${BASE}/home-loan-emi-calculator): Pick your loan amount, see EMI / interest / salary needed at every common rate and tenure.`,
+  );
   for (const amount of [
     "15-lakh",
     "20-lakh",
@@ -118,6 +121,27 @@ export function GET() {
     const display = amount.replace("-", " ").replace("lakh", "Lakh").replace("crore", "Crore");
     lines.push(
       `- [${display.charAt(0).toUpperCase() + display.slice(1)} Home Loan EMI](${BASE}/home-loan-emi-calculator/${amount})`,
+    );
+  }
+  lines.push("");
+
+  // Programmatic personal-loan landing pages (mirrors the home loan family).
+  lines.push("## Personal loan EMI by amount");
+  lines.push("");
+  lines.push(
+    `- [Personal Loan EMI Calculator (hub)](${BASE}/personal-loan-emi-calculator): Pick your loan amount, see EMI / total interest / processing fee impact / salary needed.`,
+  );
+  for (const amount of [
+    "1-lakh",
+    "2-lakh",
+    "3-lakh",
+    "5-lakh",
+    "10-lakh",
+    "20-lakh",
+  ]) {
+    const display = amount.replace("-", " ").replace("lakh", "Lakh");
+    lines.push(
+      `- [${display.charAt(0).toUpperCase() + display.slice(1)} Personal Loan EMI](${BASE}/personal-loan-emi-calculator/${amount})`,
     );
   }
   lines.push("");

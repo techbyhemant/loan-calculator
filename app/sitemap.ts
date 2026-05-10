@@ -81,6 +81,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "lib/calculations/loanCalcs.ts",
   ];
 
+  const PROGRAMMATIC_PERSONAL_FILES = [
+    "app/personal-loan-emi-calculator/[amount]/page.tsx",
+    "lib/calculations/loanCalcs.ts",
+  ];
+
   const entries: Entry[] = [
     {
       url: baseUrl,
@@ -130,6 +135,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
         files: PROGRAMMATIC_HOME_FILES,
         changeFrequency: "monthly",
         priority: 0.85,
+      }),
+    ),
+    // Personal loan programmatic family — same pattern as home loan,
+    // amount-specific landing pages targeting "₹X lakh personal loan EMI"
+    // long-tail queries that GSC validated demand for.
+    {
+      url: `${baseUrl}/personal-loan-emi-calculator`,
+      files: ["app/personal-loan-emi-calculator/page.tsx"],
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    ...["1-lakh", "2-lakh", "3-lakh", "5-lakh", "10-lakh", "20-lakh"].map(
+      (amount): Entry => ({
+        url: `${baseUrl}/personal-loan-emi-calculator/${amount}`,
+        files: PROGRAMMATIC_PERSONAL_FILES,
+        changeFrequency: "monthly",
+        priority: 0.8,
       }),
     ),
     {
