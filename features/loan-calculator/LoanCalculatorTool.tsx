@@ -90,6 +90,18 @@ export function LoanCalculatorTool({
       lockType={lockType}
       readUrlToken={readUrlToken}
     >
+      {/* suppressHydrationWarning here intentionally.
+          The calculator renders heavily locale-formatted text — Intl
+          currency (₹50,000) and Intl date (Mar 2046) — both of which
+          can have tiny server-vs-client ICU rendering differences
+          (e.g. non-breaking space variants in currency). This subtree
+          is also fully client-stateful: every value here will be
+          recomputed from user input the moment hydration finishes, so
+          the server-rendered text is purely an SEO baseline. Reacting
+          to a transient text mismatch by throwing React error #418
+          and re-rendering the subtree wastes ~50ms of TBT for zero
+          user benefit. Suppression scoped to this wrapper only. */}
+      <div suppressHydrationWarning>
       {/* Top flex: Inputs and Pie+Summary */}
       <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
         <section className="flex-1 lg:flex-[2]">
@@ -110,6 +122,7 @@ export function LoanCalculatorTool({
 
       {/* Chart — below table and download buttons */}
       <YearlyBreakdownSection />
+      </div>
 
       {showStickyBar && <StickyBar />}
     </LoanCalculatorProvider>
