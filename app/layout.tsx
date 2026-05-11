@@ -21,9 +21,15 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+// Geist Mono is only used below the fold (RBI rates table, MDX <code> blocks,
+// calculator number inputs). next/font auto-preloads by default — disabling
+// preload here saves ~28 KB on the critical path. The font still loads when
+// CSS that references it parses; below-the-fold usage doesn't care about
+// the brief FOUT.
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  preload: false,
 });
 
 export const metadata = {
