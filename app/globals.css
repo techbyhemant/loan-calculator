@@ -72,10 +72,10 @@
 
   /* ── Semantic Text ───────────────────────────── */
   --muted:               210 16% 93%;   /* #EAECF0 */
-  --muted-foreground:    215 10% 44%;   /* #697180 */
+  --muted-foreground:    215 12% 36%;   /* #545C6B — bumped from 44% to 36% lightness so muted-foreground text passes WCAG AA on bg-muted and bg-card (was failing at 3.8:1 / 4.5:1 needed) */
 
   /* ── PRIMARY: Teal (logo top circle) ──────────── */
-  --primary:             190 84% 30%;   /* #0B7A8C */
+  --primary:             190 84% 26%;   /* #0A6B7A — darkened 30% → 26% so text-primary passes WCAG AA on bg-primary/10 backgrounds (badge etc.) without changing the teal identity */
   --primary-foreground:  0 0% 100%;
 
   /* ── Secondary ───────────────────────────────── */
@@ -118,9 +118,9 @@
   /* ══ CUSTOM SEMANTIC TOKENS ═══════════════════ */
 
   /* Financial data */
-  --positive:             162 66% 38%;  /* #1DA87D — mint for gains */
+  --positive:             162 70% 30%;  /* #178257 — darkened 38% → 30% so text-positive passes WCAG AA on bg-card and bg-positive/10 (was 3.4-3.5:1). Still reads as mint-green / "gain" colour. */
   --positive-foreground:  0 0% 100%;
-  --negative:             0 84% 60%;    /* #EF4444 — red for losses */
+  --negative:             0 78% 46%;    /* #D11F1F — darkened 60% → 46% so text-negative passes WCAG AA on bg-card (was 3.9:1). Still unmistakably red, just less of a bright alert-red. */
   --negative-foreground:  0 0% 100%;
   --warning:              38 92% 50%;   /* #F59E0B — amber for interest */
   --warning-foreground:   0 0% 100%;
