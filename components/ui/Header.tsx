@@ -67,8 +67,12 @@ export function Header() {
     <header className="bg-card border-b border-border sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="shrink-0">
+          {/* Logo — light is the LCP candidate (default theme), gets priority
+              + preload. Dark variant loads lazily and only when dark mode
+              flips on (CSS hides it otherwise). Previously both were
+              preloaded with `priority`, which wasted ~10-15KB of mobile
+              bandwidth on first paint for every user. */}
+          <Link href="/" className="shrink-0" aria-label="LastEMI home">
             <Image
               src="/long-logo-light.png"
               alt="LastEMI — Free EMI Calculator for India"
@@ -76,6 +80,7 @@ export function Header() {
               height={34}
               className="h-8 w-auto dark:hidden"
               priority
+              fetchPriority="high"
             />
             <Image
               src="/long-logo-dark.png"
@@ -83,7 +88,7 @@ export function Header() {
               width={120}
               height={34}
               className="h-8 w-auto hidden dark:block"
-              priority
+              loading="lazy"
             />
           </Link>
 
