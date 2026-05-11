@@ -40,7 +40,6 @@
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
     "file-saver": "^2.0.5",
-    "framer-motion": "^12.23.3",
     "gray-matter": "^4.0.3",
     "groq-sdk": "^1.1.1",
     "jspdf": "^4.2.1",
