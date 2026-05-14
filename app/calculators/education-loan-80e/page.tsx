@@ -77,10 +77,12 @@ export default function EducationLoan80EPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          Education Loan Section 80E Calculator: Tax Benefit &amp; Repayment
-          Planner
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Education Loan 80E Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          Tax benefit and repayment planner for India
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Education loans are unique &mdash; they come with a moratorium period
           (no EMIs while you study) and unlimited interest deduction under

@@ -65,9 +65,12 @@ export default function BalanceTransferPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          Home Loan Balance Transfer Calculator: Is It Worth Switching?
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Home Loan Balance Transfer Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          Is it worth switching your home loan to a lower rate?
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           A lower rate sounds great — but after processing fees, legal charges, and the hassle, is it actually worth it? Enter your numbers to find out.
         </p>

@@ -122,9 +122,12 @@ export default function HomeLoanEligibilityPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          Home Loan Eligibility Calculator: How Much Loan Can You Get?
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Home Loan Eligibility Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          How much home loan can you actually get on your salary?
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Find out the maximum home loan amount you qualify for based on your monthly
           income, existing obligations, and preferred tenure.

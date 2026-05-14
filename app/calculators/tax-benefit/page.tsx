@@ -87,9 +87,12 @@ export default function TaxBenefitPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          Home Loan Tax Benefit Calculator: How Much Tax Do You Save?
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Home Loan Tax Benefit Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          How much tax do you save under Section 80C and 24(b)?
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Find out how much tax you can save on your home loan under Section 80C
           (principal) and Section 24(b) (interest). Compare old regime vs new regime instantly.

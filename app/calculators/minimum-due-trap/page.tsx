@@ -106,9 +106,12 @@ export default function MinimumDueTrapPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          Minimum Due Trap Calculator: What Paying 5% Actually Costs You
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Minimum Due Trap Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          What paying only 5% minimum due actually costs you
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Banks want you to pay minimum due. It keeps you in debt for years and
           earns them massive interest. Enter your balance to see the real cost

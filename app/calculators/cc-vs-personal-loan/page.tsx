@@ -60,9 +60,12 @@ export default function CCvsPersonalLoanPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          Credit Card vs Personal Loan: Should You Switch?
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Credit Card vs Personal Loan Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          Should you switch credit card debt to a personal loan?
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Your credit card charges 3.5% per month (42% PA). A personal loan charges 12-18% PA. The rate gap is massive — but after processing fees and the fine print, is switching always the right move? Enter your numbers to find out.
         </p>

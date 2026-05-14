@@ -59,9 +59,12 @@ export default function RentVsBuyPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          Rent vs Buy: Should You Buy a House in India?
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Rent vs Buy Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          Should you buy a house in India — or keep renting?
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           The honest comparison: total cost of buying (EMI + interest + registration + maintenance) vs renting (rent + investing the difference). No bias — just math.
         </p>

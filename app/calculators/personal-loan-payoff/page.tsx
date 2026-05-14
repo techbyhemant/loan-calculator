@@ -77,9 +77,12 @@ export default function PersonalLoanPayoffPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          Personal Loan Prepayment Calculator: Is It Worth the Penalty?
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Personal Loan Prepayment Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          Is prepayment worth the foreclosure penalty?
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Personal loans carry high interest (11-24%) but also charge 2-5%
           foreclosure penalty. Enter your numbers to see if prepaying actually

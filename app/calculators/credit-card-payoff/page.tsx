@@ -84,9 +84,12 @@ export default function CreditCardPayoffPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          Credit Card Payoff Calculator: How Long to Clear Your Balance?
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Credit Card Payoff Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          How long will it take to clear your balance?
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Credit cards charge 3.5% per month — that&apos;s 42% per annum. Enter your balance and monthly payment to see exactly how long it will take to become debt-free, and how much interest you&apos;ll pay along the way.
         </p>

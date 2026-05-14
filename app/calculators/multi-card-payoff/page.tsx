@@ -71,9 +71,12 @@ export default function MultiCardPayoffPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          Multi-Card Payoff Calculator: Avalanche vs Snowball
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Multi-Card Payoff Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          Avalanche vs snowball — which strategy clears your cards faster?
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Juggling multiple credit cards? Enter your balances and monthly budget
           to see the smartest payoff order. We compare avalanche and snowball

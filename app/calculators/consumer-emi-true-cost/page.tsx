@@ -78,10 +78,12 @@ export default function ConsumerEMITrueCostPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          0% EMI True Cost Calculator: What &quot;No Cost EMI&quot; Actually
-          Costs
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          0% EMI True Cost Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          What &quot;No Cost EMI&quot; actually costs you
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           That &quot;0% interest&quot; offer on your new phone or laptop is not
           free. Sellers charge a processing fee of 1-3% upfront — which is the

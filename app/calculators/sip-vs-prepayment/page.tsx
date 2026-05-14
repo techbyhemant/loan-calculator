@@ -93,9 +93,12 @@ export default function SipVsPrepaymentPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          SIP vs Home Loan Prepayment: Which is Better for You?
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          SIP vs Home Loan Prepayment Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          Should you invest the extra money in SIP or prepay your home loan?
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Got extra cash each month? Use this calculator to compare whether investing
           in SIP mutual funds or prepaying your home loan builds more wealth for you.

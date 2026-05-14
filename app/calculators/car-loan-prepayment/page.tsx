@@ -78,9 +78,12 @@ export default function CarLoanPrepaymentPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          Car Loan Prepayment Calculator: Is It Worth the Penalty?
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Car Loan Prepayment Calculator
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          Is prepaying worth the 2–5% foreclosure penalty?
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Car loans in India carry 8.5-14% interest and most banks charge 2-5%
           prepayment penalty. Enter your numbers to see if prepaying actually

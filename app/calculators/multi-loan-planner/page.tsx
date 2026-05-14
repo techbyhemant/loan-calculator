@@ -72,9 +72,12 @@ export default function MultiLoanPlannerPage() {
         <div className="mb-3">
           <LastReviewed date={LAST_REVIEWED} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-          Which Loan Should You Pay Off First? Multi-Loan Payoff Planner
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Multi-Loan Payoff Planner
         </h1>
+        <p className="text-lg sm:text-xl text-muted-foreground font-medium mb-3">
+          Which loan should you pay off first? Find the optimal order.
+        </p>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Most people pay off whichever loan feels most annoying. But the mathematically
           optimal order depends on <strong>effective after-tax rates</strong>, not headline
