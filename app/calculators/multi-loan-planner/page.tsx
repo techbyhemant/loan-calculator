@@ -10,7 +10,7 @@ import { LastReviewed } from "@/components/ui/LastReviewed";
 export const metadata = buildMetadata({
   title: "Which Loan to Pay Off First? Multi-Loan Payoff Planner",
   description:
-    "Compare effective after-tax rates across all Indian loan types — home, personal, car, education, gold. Find the optimal payoff order using tax-adjusted rates and save lakhs in interest.",
+    "Compare after-tax rates across home, personal, car, education, and gold loans. Find the optimal payoff order with tax-adjusted math — save lakhs in interest.",
   path: "/calculators/multi-loan-planner",
   keywords: [
     "which loan to pay off first India",

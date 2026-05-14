@@ -10,7 +10,7 @@ import { LastReviewed } from "@/components/ui/LastReviewed";
 export const metadata = buildMetadata({
   title: "Gold Loan EMI Calculator — Rates, LTV, Repayment Options",
   description:
-    "Free gold loan EMI calculator for India. Compare bullet repayment, regular EMI, and overdraft schemes at 8–18% rates. Understand RBI's 75% LTV cap and avoid forced auctions.",
+    "Free gold loan EMI calculator. Compare bullet, regular EMI, and overdraft schemes at 8–18% rates. Understand RBI's 75% LTV cap and avoid auctions.",
   path: "/calculators/gold-loan-emi",
   keywords: [
     "gold loan emi calculator",

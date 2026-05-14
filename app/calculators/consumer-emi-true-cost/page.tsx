@@ -11,7 +11,7 @@ export const metadata = buildMetadata({
   title:
     "0% EMI True Cost Calculator — What 'No Cost EMI' Actually Costs",
   description:
-    "Uncover the hidden processing fees in 0% EMI offers. Enter the purchase price and tenure to see the effective annual interest rate, GST on fees, and total extra cost vs paying cash.",
+    "Uncover the hidden fees in 0% EMI offers. Enter purchase price and tenure to see the effective interest rate, GST on fees, and total extra cost vs paying cash.",
   path: "/calculators/consumer-emi-true-cost",
   keywords: [
     "no cost EMI hidden charges India",

@@ -10,7 +10,7 @@ import { LastReviewed } from "@/components/ui/LastReviewed";
 export const metadata = buildMetadata({
   title: "Credit Card Payoff Calculator — How Long to Clear Your Balance?",
   description:
-    "Calculate exactly how long it will take to pay off your credit card debt. Compare minimum due vs fixed payment strategies. See the real cost of credit card interest at 42% PA.",
+    "Calculate exactly how long to pay off your credit card debt at 42% PA. Compare minimum due vs fixed payment and see the true rupee interest cost.",
   path: "/calculators/credit-card-payoff",
   keywords: [
     "credit card payoff calculator India",

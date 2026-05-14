@@ -10,7 +10,7 @@ import { LastReviewed } from "@/components/ui/LastReviewed";
 export const metadata = buildMetadata({
   title: "Car Loan EMI Calculator — New Car & Used Car, India 2026",
   description:
-    "Free car loan EMI calculator. Compare new and used car loan rates (8–14%), down-payment scenarios, and total cost of ownership. RBI rules for floating-rate prepayment included.",
+    "Free car loan EMI calculator. Compare new vs used rates (8–14%), down-payment scenarios, and total cost of ownership. RBI floating-rate prepayment rules.",
   path: "/calculators/car-loan-emi",
   keywords: [
     "car loan emi calculator",

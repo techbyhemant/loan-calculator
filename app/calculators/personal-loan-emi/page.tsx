@@ -10,7 +10,7 @@ import { LastReviewed } from "@/components/ui/LastReviewed";
 export const metadata = buildMetadata({
   title: "Personal Loan EMI Calculator — Reducing Balance, India 2026",
   description:
-    "Free personal loan EMI calculator. Compare reducing-balance vs flat-rate, see processing fee impact, and find effective interest rate. Banks charge 10.5–24% — calculate before you sign.",
+    "Free personal loan EMI calculator at 10.5–24% rates. Compare reducing-balance vs flat-rate, see processing fee impact and the effective interest rate.",
   path: "/calculators/personal-loan-emi",
   keywords: [
     "personal loan emi calculator",

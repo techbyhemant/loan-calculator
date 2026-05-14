@@ -11,7 +11,7 @@ export const metadata = buildMetadata({
   title:
     "Multi-Card Payoff Calculator — Avalanche vs Snowball Strategy",
   description:
-    "Multiple credit cards? Compare avalanche (highest rate first) vs snowball (lowest balance first) strategies. See which one saves you more and plan your payoff order.",
+    "Multiple credit cards? Compare avalanche vs snowball payoff strategies. See which saves you more interest and get your exact payoff order — free.",
   path: "/calculators/multi-card-payoff",
   keywords: [
     "pay off multiple credit cards India",

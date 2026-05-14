@@ -11,7 +11,7 @@ export const metadata = buildMetadata({
   title:
     "Car Loan Prepayment Calculator — Is It Worth the Penalty?",
   description:
-    "Calculate if prepaying your car loan saves money after 2-5% penalty. See net savings, penalty amount, months reduced, and whether it's worth it for Indian car loans.",
+    "Calculate if prepaying your car loan saves money after 2–5% foreclosure penalty. See net savings, penalty amount, and months reduced — instantly.",
   path: "/calculators/car-loan-prepayment",
   keywords: [
     "car loan prepayment calculator India",

@@ -10,7 +10,7 @@ import { LastReviewed } from "@/components/ui/LastReviewed";
 export const metadata = buildMetadata({
   title: "How Much Home Loan Can I Get on My Salary? — Calculator",
   description:
-    "Enter your monthly salary and see exactly how much home loan you can get. Compare loan amounts across SBI, HDFC, ICICI rates. Uses the FOIR method banks actually use.",
+    "Enter your monthly salary, see exactly how much home loan you qualify for. Compare amounts at SBI, HDFC, ICICI rates using the FOIR method banks use.",
   path: "/calculators/salary-to-emi",
   keywords: [
     "how much home loan on my salary",

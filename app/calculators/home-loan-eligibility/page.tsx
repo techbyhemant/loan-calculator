@@ -8,7 +8,7 @@ import { LastReviewed } from "@/components/ui/LastReviewed";
 export const metadata = buildMetadata({
   title: "Home Loan Eligibility Calculator — Check Your Loan Amount",
   description:
-    "Check how much home loan you can get based on your salary, existing EMIs and interest rate. Compare eligibility across SBI, HDFC, ICICI, and Kotak with the FOIR method.",
+    "See how much home loan you qualify for based on salary, existing EMIs, and rate. Compare SBI, HDFC, ICICI, Kotak eligibility with the FOIR method.",
   path: "/calculators/home-loan-eligibility",
   keywords: [
     "home loan eligibility calculator",

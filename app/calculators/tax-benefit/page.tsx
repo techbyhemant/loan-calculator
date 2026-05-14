@@ -8,7 +8,7 @@ import { LastReviewed } from "@/components/ui/LastReviewed";
 export const metadata = buildMetadata({
   title: "Home Loan Tax Benefit Calculator — Section 80C & 24(b)",
   description:
-    "Calculate your home loan tax benefits under Section 80C and 24(b). Compare old vs new regime savings and find which tax regime saves you more money.",
+    "Calculate home loan tax savings under Section 80C (₹1.5L) and 24(b) (₹2L). Compare old vs new regime side-by-side and find which saves you more.",
   path: "/calculators/tax-benefit",
   keywords: [
     "home loan tax benefit calculator",

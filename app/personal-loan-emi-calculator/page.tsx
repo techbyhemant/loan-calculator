@@ -26,7 +26,7 @@ const AMOUNTS = [
 export const metadata = buildMetadata({
   title: "Personal Loan EMI Calculator India — All Amounts, Rates, Tenures",
   description:
-    "Free personal loan EMI calculator for India. Pick your loan amount — ₹1L, ₹3L, ₹5L, ₹10L, ₹20L — and see EMI, total interest, processing fee impact, and salary needed at every common rate. Honest math, no DSA calls.",
+    "Free personal loan EMI calculator. Pick ₹1L–₹20L and see EMI, total interest, processing fee impact, and salary needed at every common rate. No DSA calls.",
   path: "/personal-loan-emi-calculator",
   keywords: [
     "personal loan emi calculator",

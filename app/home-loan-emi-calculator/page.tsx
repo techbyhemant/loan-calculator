@@ -27,7 +27,7 @@ const AMOUNTS = [
 export const metadata = buildMetadata({
   title: "Home Loan EMI Calculator India — All Amounts, Rates, Tenures",
   description:
-    "Free home loan EMI calculator for India. Pick your loan amount — ₹15L, ₹25L, ₹50L, ₹1Cr — and see EMI, total interest, and salary needed at every common rate. RBI-accurate. No phone number.",
+    "Free home loan EMI calculator for India. Pick ₹15L–₹1Cr, see EMI, total interest, and salary needed at every common rate. RBI-accurate. No phone number.",
   path: "/home-loan-emi-calculator",
   keywords: [
     "home loan emi calculator",

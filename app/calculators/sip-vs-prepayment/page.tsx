@@ -12,7 +12,7 @@ export const metadata = buildMetadata({
   // (after-tax math, no DSA capture) so it earns the click at position 8.
   title: "SIP vs Home Loan Prepayment: Free Calculator with Tax Math",
   description:
-    "Compare investing extra ₹ in SIP vs prepaying your home loan with full after-tax math — LTCG, Section 24(b), 80C. See exact rupee outcomes over 10, 15, or 20 years. No phone number ever.",
+    "SIP vs home loan prepayment with full after-tax math — LTCG, Section 24(b), 80C. See exact ₹ outcomes over 10, 15, or 20 years. No phone number ever.",
   path: "/calculators/sip-vs-prepayment",
   keywords: [
     "sip vs home loan prepayment",

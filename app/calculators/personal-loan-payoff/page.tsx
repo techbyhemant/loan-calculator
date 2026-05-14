@@ -11,7 +11,7 @@ export const metadata = buildMetadata({
   title:
     "Personal Loan Prepayment Calculator — Is It Worth the Penalty?",
   description:
-    "Calculate if prepaying your personal loan saves money after foreclosure charges. See net savings, penalty amount, and months reduced instantly.",
+    "Calculate if prepaying your personal loan saves money after 2–5% foreclosure penalty. See net savings, penalty amount, and months reduced — free.",
   path: "/calculators/personal-loan-payoff",
   keywords: [
     "personal loan prepayment calculator India",

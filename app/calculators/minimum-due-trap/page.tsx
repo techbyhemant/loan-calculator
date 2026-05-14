@@ -11,7 +11,7 @@ export const metadata = buildMetadata({
   title:
     "Minimum Due Trap Calculator — What Paying 5% Actually Costs You",
   description:
-    "On ₹50,000 outstanding, paying only minimum due means 8+ years and ₹1.8L in interest. See exactly what the minimum due trap costs you and how much to pay instead.",
+    "On ₹50,000 outstanding, paying only minimum due = 8+ years and ₹1.8L in interest. See what the minimum due trap costs and how much to pay instead.",
   path: "/calculators/minimum-due-trap",
   keywords: [
     "credit card minimum due trap India",

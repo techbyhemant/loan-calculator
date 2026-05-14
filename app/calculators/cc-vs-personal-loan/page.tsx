@@ -8,9 +8,9 @@ import { RelatedCalculators } from "@/components/ui/RelatedCalculators";
 import { LastReviewed } from "@/components/ui/LastReviewed";
 
 export const metadata = buildMetadata({
-  title: "Credit Card vs Personal Loan — Should You Switch? Honest Calculator",
+  title: "Credit Card vs Personal Loan — Should You Switch? Calculator",
   description:
-    "Your credit card charges 42% PA. A personal loan charges 14%. Sounds obvious — but after processing fees, the math isn't always clear. See the honest comparison.",
+    "Credit card charges 42% PA. Personal loan charges 14%. Sounds obvious — but processing fees and tenure flip the math. See the honest comparison.",
   path: "/calculators/cc-vs-personal-loan",
   keywords: [
     "personal loan to clear credit card India",

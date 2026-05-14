@@ -10,7 +10,7 @@ import { LastReviewed } from "@/components/ui/LastReviewed";
 export const metadata = buildMetadata({
   title: "Rent vs Buy Calculator — Should You Buy a House in India?",
   description:
-    "Compare the true cost of renting vs buying a home in India. Factors in EMI, property appreciation, rent increases, stamp duty, and investment returns. Get an honest verdict.",
+    "Compare the true cost of renting vs buying in India. EMI, property appreciation, rent hikes, stamp duty, investment returns — get an honest verdict.",
   path: "/calculators/rent-vs-buy",
   keywords: [
     "rent vs buy calculator India",

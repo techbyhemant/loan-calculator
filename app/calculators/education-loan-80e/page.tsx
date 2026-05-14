@@ -9,9 +9,9 @@ import { LastReviewed } from "@/components/ui/LastReviewed";
 
 export const metadata = buildMetadata({
   title:
-    "Education Loan Section 80E Calculator — Tax Benefit & Repayment Planner",
+    "Education Loan 80E Calculator — Tax Benefit & Repayment Planner",
   description:
-    "Calculate Section 80E tax savings on your education loan. See effective interest rate after tax benefit, moratorium impact, and year-by-year deduction breakdown.",
+    "Calculate Section 80E tax savings on your education loan. See effective rate after tax benefit, moratorium impact, and year-by-year deduction breakdown.",
   path: "/calculators/education-loan-80e",
   keywords: [
     "education loan 80E calculator India",
